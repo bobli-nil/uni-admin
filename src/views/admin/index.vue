@@ -2,7 +2,8 @@
 import FTheme from '@/components/common/f-theme.vue'
 import FScreen from '@/components/common/f-screen.vue'
 import FMenu from "@/components/admin/f-menu.vue";
-import { collapsed } from "@/components/admin/f-menu.ts"
+import FBreadcrumb from "@/components/admin/f-breadcrumb.vue";
+import {collapsed} from "@/components/admin/f-menu.ts"
 </script>
 
 <template>
@@ -13,7 +14,7 @@ import { collapsed } from "@/components/admin/f-menu.ts"
     </div>
     <div class="f_main">
       <div class="f_head">
-        <div class="f_breadcrumbs"></div>
+        <f-breadcrumb />
         <div class="f_actions">
           <icon-home />
           <f-theme />
@@ -34,27 +35,33 @@ import { collapsed } from "@/components/admin/f-menu.ts"
   display: flex;
   background-color: var(--color-bg-1);
   color: @color-text-1;
+
   .f_aside {
     width: 240px;
     height: 100vh;
     overflow: hidden;
     border-right: @f_border;
     transition: width 0.1s;
+
     &.collapsed {
       width: 48px;
       transition: width 0.1s;
-      &+.f_main {
+
+      & + .f_main {
         width: calc(100% - 48px);
         transition: width 0.1s;
       }
     }
+
     .f_logo {
       height: 90px;
     }
   }
+
   .f_main {
     width: calc(100% - 240px);
     transition: width 0.1s;
+
     .f_head {
       display: flex;
       justify-content: space-between;
@@ -63,10 +70,12 @@ import { collapsed } from "@/components/admin/f-menu.ts"
       padding: 0 20px;
       border-bottom: @f_border;
     }
+
     .f_tabs {
       height: 30px;
       border-bottom: @f_border;
     }
+
     .f_container {
       height: calc(100vh - 90px);
       overflow-y: auto;

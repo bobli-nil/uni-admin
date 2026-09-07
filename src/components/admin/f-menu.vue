@@ -8,7 +8,6 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-console.log("route.matched", route.matched)
 const openKeys = ref<string[]>([])
 const selectedKeys = ref<string[]>([])
 
@@ -53,10 +52,6 @@ function menuItemClick(key: string) {
   })
 }
 
-function subMenuClick(key: string) {
-  console.log("subMenuClick", key)
-}
-
 function initRoutes() {
   const matched = route.matched
   if (matched.length === 3) {
@@ -64,7 +59,6 @@ function initRoutes() {
     openKeys.value = [targetSubmenuKey]
   }
   const selectedKey = matched[matched.length - 1]?.name as string
-  console.log("selectedKey", selectedKey)
   selectedKeys.value = [selectedKey]
 }
 initRoutes()
@@ -74,12 +68,11 @@ initRoutes()
 <template>
   <div class="f-menu scroll-bar">
     <a-menu
-        show-collapse-button
-        v-model:collapsed="collapsed"
-        v-model:open-keys="openKeys"
-        v-model:selected-keys="selectedKeys"
-        @menuItemClick="menuItemClick"
-        @sub-menu-click="subMenuClick"
+      show-collapse-button
+      v-model:collapsed="collapsed"
+      v-model:open-keys="openKeys"
+      v-model:selected-keys="selectedKeys"
+      @menuItemClick="menuItemClick"
     >
       <template v-for="menu in menuList">
         <a-menu-item v-if="!menu.children" :key="menu.name">

@@ -16,6 +16,9 @@ const router = createRouter({
     {
       name: 'admin',
       path: '/admin',
+      meta: {
+        title: "首页"
+      },
       component: () => import('@/views/admin/index.vue'),
       children: [
         {

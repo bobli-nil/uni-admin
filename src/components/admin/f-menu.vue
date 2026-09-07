@@ -23,7 +23,7 @@ const menuList: MenuType[] = [
   {
     title: "个人中心",
     name: "userCenter",
-    icon: IconUser,
+    icon: "iconfont icon-gerenzhongxin",
     children: [
       { title: "用户信息", name: "userInfo" },
     ]
@@ -31,7 +31,7 @@ const menuList: MenuType[] = [
   {
     title: "用户管理",
     name: "userManage",
-    icon: IconUser,
+    icon: "iconfont icon-yonghuguanli",
     children: [
       { title: "用户列表", name: "userList" },
     ]
@@ -39,7 +39,7 @@ const menuList: MenuType[] = [
   {
     title: "系统设置",
     name: "settingsManage",
-    icon: IconUser,
+    icon: "iconfont icon-xitongshezhi",
     children: [
       { title: "系统信息", name: "settings" },
     ]
@@ -61,6 +61,7 @@ function initRoutes() {
   const selectedKey = matched[matched.length - 1]?.name as string
   selectedKeys.value = [selectedKey]
 }
+
 initRoutes()
 
 </script>

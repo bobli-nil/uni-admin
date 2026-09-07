@@ -4,6 +4,7 @@ import FScreen from '@/components/common/f-screen.vue'
 import FMenu from "@/components/admin/f-menu.vue";
 import FBreadcrumb from "@/components/admin/f-breadcrumb.vue";
 import FUserDropdown from "@/components/common/f-user-dropdown.vue";
+import FTabs from "@/components/admin/f_tabs.vue"
 import {collapsed} from "@/components/admin/f-menu.ts"
 import { useRouter } from "vue-router"
 
@@ -32,7 +33,7 @@ const goHome = () => {
           <f-user-dropdown />
         </div>
       </div>
-      <div class="f_tabs"></div>
+      <f-tabs />
       <div class="f_container">
         <router-view></router-view>
       </div>

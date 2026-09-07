@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {type Component, ref} from "vue";
+import {type Component, ref, watch} from "vue";
 import {IconHome, IconUser } from "@arco-design/web-vue/es/icon";
 import FComponent from "@/components/common/f-component.vue";
 import { collapsed } from "@/components/admin/f-menu.ts"
@@ -25,7 +25,7 @@ const menuList: MenuType[] = [
     name: "userCenter",
     icon: "iconfont icon-gerenzhongxin",
     children: [
-      { title: "用户信息", name: "userInfo" },
+      { title: "个人信息", name: "userInfo" },
     ]
   },
   {
@@ -52,6 +52,12 @@ function menuItemClick(key: string) {
   })
 }
 
+watch(() => route.name, () => {
+  initRoutes()
+}, {
+  immediate: true,
+})
+
 function initRoutes() {
   const matched = route.matched
   if (matched.length === 3) {
@@ -61,8 +67,6 @@ function initRoutes() {
   const selectedKey = matched[matched.length - 1]?.name as string
   selectedKeys.value = [selectedKey]
 }
-
-initRoutes()
 
 </script>
 

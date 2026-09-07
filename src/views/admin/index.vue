@@ -3,7 +3,15 @@ import FTheme from '@/components/common/f-theme.vue'
 import FScreen from '@/components/common/f-screen.vue'
 import FMenu from "@/components/admin/f-menu.vue";
 import FBreadcrumb from "@/components/admin/f-breadcrumb.vue";
+import FUserDropdown from "@/components/common/f-user-dropdown.vue";
 import {collapsed} from "@/components/admin/f-menu.ts"
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+
+const goHome = () => {
+  router.push("/admin")
+}
 </script>
 
 <template>
@@ -16,10 +24,12 @@ import {collapsed} from "@/components/admin/f-menu.ts"
       <div class="f_head">
         <f-breadcrumb />
         <div class="f_actions">
-          <icon-home />
+          <span title="去首页" @click="goHome">
+            <icon-home />
+          </span>
           <f-theme />
           <f-screen />
-          <div class="f_user_info_action"></div>
+          <f-user-dropdown />
         </div>
       </div>
       <div class="f_tabs"></div>
@@ -69,6 +79,15 @@ import {collapsed} from "@/components/admin/f-menu.ts"
       height: 60px;
       padding: 0 20px;
       border-bottom: @f_border;
+      .f_actions {
+        display: flex;
+        align-items: center;
+        /deep/svg {
+          margin-right: 10px;
+          font-size: 18px;
+          cursor: pointer;
+        }
+      }
     }
 
     .f_tabs {

@@ -4,8 +4,12 @@ loadTheme()
 </script>
 
 <template>
-  <icon-sun-fill v-if="theme === 'dark'" @click="setTheme('light')" />
-  <icon-moon-fill v-if="theme === 'light'" @click="setTheme('dark')" />
+  <span v-if="theme === 'dark'" title="白天模式">
+    <icon-sun-fill @click="setTheme('light')" />
+  </span>
+  <span v-if="theme === 'light'" title="黑夜模式">
+    <icon-moon-fill @click="setTheme('dark')" />
+  </span>
 </template>
 
 <style scoped></style>

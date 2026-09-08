@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {type Component, ref, watch} from "vue";
 import {IconHome, IconUser } from "@arco-design/web-vue/es/icon";
-import FComponent from "@/components/common/f-component.vue";
 import { collapsed } from "@/components/admin/f-menu.ts"
 import { useRouter, useRoute } from "vue-router";
+import FMenuItem from '@/components/admin/f-menu-item.vue'
 
 const router = useRouter();
 const route = useRoute();
@@ -16,6 +16,7 @@ interface MenuType {
   name: string
   icon?: string | Component
   children?: MenuType[]
+  role?: number
 }
 
 const menuList: MenuType[] = [
@@ -32,6 +33,7 @@ const menuList: MenuType[] = [
     title: "用户管理",
     name: "userManage",
     icon: "iconfont icon-yonghuguanli",
+    role: 1,
     children: [
       { title: "用户列表", name: "userList" },
     ]
@@ -40,6 +42,7 @@ const menuList: MenuType[] = [
     title: "系统设置",
     name: "settingsManage",
     icon: "iconfont icon-xitongshezhi",
+    role: 1,
     children: [
       { title: "系统信息", name: "settings" },
     ]
@@ -79,26 +82,7 @@ function initRoutes() {
       v-model:selected-keys="selectedKeys"
       @menuItemClick="menuItemClick"
     >
-      <template v-for="menu in menuList">
-        <a-menu-item v-if="!menu.children" :key="menu.name">
-          <template #icon>
-            <f-component :is="menu.icon" />
-          </template>
-          {{menu.title}}
-        </a-menu-item>
-        <a-sub-menu v-else :key="menu.name + '-sub-menu'">
-          <template #icon>
-            <f-component :is="menu.icon" />
-          </template>
-          <template #title>{{menu.title}}</template>
-          <a-menu-item v-for="sub in menu.children" :key="sub.name">
-            <template #icon>
-              <f-component :is="sub.icon" />
-            </template>
-            {{sub.title}}
-          </a-menu-item>
-        </a-sub-menu>
-      </template>
+      <f-menu-item :list="menuList"></f-menu-item>
     </a-menu>
   </div>
 </template>

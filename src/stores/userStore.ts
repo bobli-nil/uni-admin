@@ -15,7 +15,6 @@ export interface userInfoType {
 
 interface userStore {
   userInfo: Ref<userInfoType | null>
-  token: Ref<string | null>
   login: (data: userLoginRequest) => Promise<void>
   getUserInfo: () => Promise<void | userInfoType>
 }
@@ -23,7 +22,6 @@ interface userStore {
 export const useUserStore = defineStore('user', (): userStore => {
   const router = useRouter()
   const userInfo = ref<userInfoType | null>(null)
-  const token = ref<string | null>(null)
 
   // 登录
   const login = async (data: userLoginRequest) => {
@@ -32,8 +30,7 @@ export const useUserStore = defineStore('user', (): userStore => {
       Message.error(res.msg)
       return
     }
-    token.value = res.data
-    window.localStorage.setItem('token', token.value)
+    window.localStorage.setItem('token', res.data)
     Message.success('登录成功')
     router.push({name: 'home'})
   }
@@ -47,13 +44,11 @@ export const useUserStore = defineStore('user', (): userStore => {
     }
     const { id, email, username, nickname, avatar, role } = res.data
     userInfo.value = { id, email, username, nickname, avatar, role }
-    window.localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
     return userInfo.value
   }
 
   return {
     userInfo,
-    token,
     login,
     getUserInfo,
   }

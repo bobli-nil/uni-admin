@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
+import { useUserStore } from '@/stores/userStore'
+
 const router = useRouter()
+const userStore = useUserStore()
 
 type DropdownValue = string | number | Record<string, any> | undefined
 const handleSelect = (key: DropdownValue) => {
@@ -28,7 +31,7 @@ const options: OptionType[] = [
   <a-dropdown @select="handleSelect" trigger="hover">
     <div class="user-info">
       <icon-user class="icon-user" />
-      <span>张三</span>
+      <span>{{userStore?.userInfo?.nickname}}</span>
       <icon-down class="icon-down" />
     </div>
     <template #content>

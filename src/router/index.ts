@@ -88,20 +88,7 @@ const router = createRouter({
 })
 
 export const getToken = (): string | null => {
-  const userStore = useUserStore()
-  return localStorage.getItem('token') || userStore.token
-}
-
-export const getUserInfo = (): userInfoType | null => {
-  const userStore = useUserStore()
-  const str = localStorage.getItem('userInfo') as string
-  let info: userInfoType | null = null
-  try {
-    info = JSON.parse(str)
-  } catch(e) {
-    console.log(e)
-  }
-  return info || userStore.userInfo
+  return localStorage.getItem('token')
 }
 
 router.beforeEach(async (to, from, next) => {
@@ -111,10 +98,9 @@ router.beforeEach(async (to, from, next) => {
   if (!getToken() && to.path !== '/login') {
     next('/login')
   }
-  if (getToken() && !getUserInfo()) {
+  if (getToken() && !userStore.userInfo) {
     // 获取用户信息
     const userInfo = await userStore.getUserInfo()
-    console.log('路由钩子里的userInfo', userInfo)
     if (userInfo) {
       next()
     } else {

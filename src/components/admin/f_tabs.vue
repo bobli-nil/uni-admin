@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch} from "vue"
+import {onMounted, ref, watch} from "vue"
 import {useRoute, useRouter} from "vue-router"
 import {Swiper, SwiperSlide} from "swiper/vue"
 
@@ -15,20 +15,6 @@ interface TabType {
 
 const tabs = ref<TabType[]>([
   { name: "home", title: "首页" },
-  { name: "userInfo", title: "个人信息" },
-  { name: "userList", title: "用户列表" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
-  { name: "settings", title: "系统信息" },
 ])
 
 // 点击
@@ -74,7 +60,7 @@ const loadTabs = () => {
   }
 }
 
-// loadTabs()
+loadTabs()
 
 watch(() => route.name, () => {
   const index = tabs.value.findIndex(ele => ele.name === route.name)
@@ -89,12 +75,46 @@ watch(() => route.name, () => {
   immediate: true,
 })
 
+const slidesCount = ref(100)
+
+onMounted(() => {
+  const swiperDom = document.querySelector(".f-tabs-swiper") as HTMLDivElement
+  const swiperWidth = swiperDom.clientWidth
+  const wrapperDom = document.querySelector(".f-tabs-swiper .swiper-wrapper") as HTMLDivElement
+  const wrapperScrollWith = wrapperDom.scrollWidth
+  if (swiperWidth > wrapperScrollWith) {
+    return
+  }
+
+  let allWidth = 0
+  let index = 0
+  const slidesList = document.querySelectorAll(".f-tabs-swiper .swiper-slide") as NodeListOf<HTMLElement>
+  for (const slidesListElement of slidesList) {
+    allWidth += (slidesListElement.clientWidth)
+    if (allWidth >= swiperWidth) {
+      break
+    }
+    // slidesCount的实际值应该小于超出的元素总数，所以放到后面++
+    index++
+  }
+  slidesCount.value = index
+
+  // 将高亮tab滚动到视口里
+  const activeSlide = document.querySelector(".f-tabs-swiper .swiper-slide.active") as HTMLDivElement
+  if (activeSlide.offsetLeft > swiperWidth) {
+    const left = swiperWidth - activeSlide.offsetLeft
+    window.setTimeout(() => {
+      wrapperDom.style.transform = `translateX(${left}px)`
+    })
+  }
+})
+
 </script>
 
 <template>
   <div class="f-tabs">
-    <swiper :slides-per-view="1">
-      <swiper-slide v-for="item in tabs" :key="item.name">
+    <swiper class="f-tabs-swiper" :slides-per-view="slidesCount">
+      <swiper-slide v-for="item in tabs" :key="item.name" :class="{active: item.name === route.name}">
         <div
             class="item"
             :class="{active: item.name === route.name}"

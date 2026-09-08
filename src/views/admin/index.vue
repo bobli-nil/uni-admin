@@ -35,8 +35,12 @@ const goHome = () => {
         </div>
       </div>
       <f-tabs />
-      <div class="f_container">
-        <router-view></router-view>
+      <div class="f_container scroll-bar">
+        <router-view v-slot="{Component}" class="f-base-view">
+          <transition name="fade" mode="out-in">
+            <component :is="Component"></component>
+          </transition>
+        </router-view>
       </div>
     </div>
   </div>
@@ -95,10 +99,35 @@ const goHome = () => {
 
     .f_container {
       height: calc(100vh - 90px);
+      padding: 20px;
       overflow-y: auto;
       overflow-x: hidden;
       background-color: @color-fill-1;
+      .f-base-view {
+        background-color: var(--color-bg-1);
+        height: 1000px;
+      }
     }
   }
 }
+
+.fade-enter-active {
+  transform: translateX(-25px);
+  opacity: 0;
+}
+.fade-enter-to {
+  transform: translateX(0);
+  opacity: 1;
+}
+.fade-leave-active {
+}
+.fade-leave-to {
+  transform: translateX(25px);
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.2s ease-out;
+}
+
 </style>

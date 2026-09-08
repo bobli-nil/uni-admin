@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {reactive, ref} from "vue";
-import {userLoginApi, type userLoginRequest} from "@/api/user-api.ts";
-import {Message} from '@arco-design/web-vue'
+import {type userLoginRequest} from "@/api/user-api";
+import {useUserStore} from "@/stores/userStore"
 
+const userStore = useUserStore()
 const formRef = ref()
 
 const model = reactive<userLoginRequest>({
@@ -15,12 +16,7 @@ const login = async () => {
   if (val) {
     return
   }
-  const res = await userLoginApi(model)
-  console.log("res", res)
-  if (res.code) {
-    Message.error(res.msg)
-    return
-  }
+  await userStore.login(model)
 }
 
 </script>

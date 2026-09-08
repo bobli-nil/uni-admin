@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from '@arco-design/web-vue'
+import {useUserStore} from '@/stores/userStore'
 
 export interface baseResponse<T> {
   code: number
@@ -8,12 +9,14 @@ export interface baseResponse<T> {
 }
 
 export const useAxios = axios.create({
-  timeout: 10 * 1000,
+  // timeout: 10 * 1000,
   baseURL: '',
 })
 
 useAxios.interceptors.request.use((config) => {
-  config.headers.set('token', 'xxx')
+  const userStore = useUserStore()
+  const token = localStorage.getItem('token') || userStore.token
+  config.headers.set('token', token)
   return config
 })
 

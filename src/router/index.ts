@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore, type userInfoType } from '@/stores/userStore'
 import NProgress from 'nprogress'
 
 const router = createRouter({
@@ -86,8 +87,40 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
+export const getToken = (): string | null => {
+  const userStore = useUserStore()
+  return localStorage.getItem('token') || userStore.token
+}
+
+export const getUserInfo = (): userInfoType | null => {
+  const userStore = useUserStore()
+  const str = localStorage.getItem('userInfo') as string
+  let info: userInfoType | null = null
+  try {
+    info = JSON.parse(str)
+  } catch(e) {
+    console.log(e)
+  }
+  return info || userStore.userInfo
+}
+
+router.beforeEach(async (to, from, next) => {
   NProgress.start()
+  const userStore = useUserStore()
+  // 未登录
+  if (!getToken() && to.path !== '/login') {
+    next('/login')
+  }
+  if (getToken() && !getUserInfo()) {
+    // 获取用户信息
+    const userInfo = await userStore.getUserInfo()
+    console.log('路由钩子里的userInfo', userInfo)
+    if (userInfo) {
+      next()
+    } else {
+      next('/login')
+    }
+  }
   next()
 })
 

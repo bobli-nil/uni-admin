@@ -34,7 +34,9 @@ export default defineConfig((config) => {
       },
     },
     server: {
-      proxy: {}
+      proxy: {
+        '/api': env.VITE_SERVER_URL,
+      }
     }
   }
 })

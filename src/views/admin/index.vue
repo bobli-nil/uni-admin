@@ -5,6 +5,7 @@ import FMenu from "@/components/admin/f-menu.vue";
 import FBreadcrumb from "@/components/admin/f-breadcrumb.vue";
 import FUserDropdown from "@/components/common/f-user-dropdown.vue";
 import FTabs from "@/components/admin/f_tabs.vue"
+import FLogo from "@/components/common/f-logo.vue"
 import {collapsed} from "@/components/admin/f-menu.ts"
 import { useRouter } from "vue-router"
 
@@ -18,7 +19,7 @@ const goHome = () => {
 <template>
   <div class="f_admin">
     <div class="f_aside" :class="{collapsed}">
-      <div class="f_logo"></div>
+      <f-logo></f-logo>
       <f-menu />
     </div>
     <div class="f_main">
@@ -62,10 +63,6 @@ const goHome = () => {
         width: calc(100% - 48px);
         transition: width 0.1s;
       }
-    }
-
-    .f_logo {
-      height: 90px;
     }
   }
 

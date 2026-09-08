@@ -6,8 +6,6 @@ import {Swiper, SwiperSlide} from "swiper/vue"
 const route = useRoute()
 const router = useRouter()
 
-console.log("route.name", route.name)
-
 interface TabType {
   name: string
   title: string

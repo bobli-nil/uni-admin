@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
 import { useUserStore } from '@/stores/userStore'
+import {ref, computed} from "vue";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -18,12 +19,22 @@ interface OptionType {
   title: string
 }
 
-const options: OptionType[] = [
-  {title: "个人信息", name: "userInfo"},
-  {title: "用户列表", name: "userList"},
-  {title: "系统信息", name: "settings"},
-  {title: "注销退出", name: "logout"},
-]
+const options = computed<OptionType[]>(() => {
+  const baseOptions: OptionType[] = [
+    {title: "个人信息", name: "userInfo"},
+    {title: "注销退出", name: "logout"},
+  ]
+  if (userStore.isAdmin) {
+    return [
+      {title: "个人信息", name: "userInfo"},
+      {title: "用户列表", name: "userList"},
+      {title: "系统信息", name: "settings"},
+      {title: "注销退出", name: "logout"},
+    ]
+  }
+
+  return baseOptions
+})
 
 </script>
 

@@ -1,4 +1,4 @@
-import {ref, type Ref} from 'vue'
+import {ref, type Ref, computed, type ComputedRef} from 'vue'
 import { defineStore } from 'pinia'
 import {userLoginApi, userInfoApi, type userLoginRequest} from '@/api/user-api'
 import {Message} from "@arco-design/web-vue"
@@ -17,11 +17,15 @@ interface userStore {
   userInfo: Ref<userInfoType | null>
   login: (data: userLoginRequest) => Promise<void>
   getUserInfo: () => Promise<void | userInfoType>
+  isLogin: ComputedRef<boolean>
+  isAdmin: ComputedRef<boolean>
 }
 
 export const useUserStore = defineStore('user', (): userStore => {
   const router = useRouter()
   const userInfo = ref<userInfoType | null>(null)
+  const isLogin = computed(() => !!userInfo.value)
+  const isAdmin = computed(() => userInfo.value?.role === 1)
 
   // 登录
   const login = async (data: userLoginRequest) => {
@@ -49,6 +53,8 @@ export const useUserStore = defineStore('user', (): userStore => {
 
   return {
     userInfo,
+    isLogin,
+    isAdmin,
     login,
     getUserInfo,
   }

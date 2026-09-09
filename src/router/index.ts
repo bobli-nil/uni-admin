@@ -8,18 +8,36 @@ const router = createRouter({
         {
             name: 'web',
             path: '/',
+            meta: {
+                title: '首页',
+                role: [1,2,3]
+            },
             component: () => import("@/views/web/index.vue")
         },
         {
             name: 'login',
             path: '/login',
+            meta: {
+                title: '首页',
+                role: [1,2,3]
+            },
             component: () => import('@/views/login/index.vue'),
+        },
+        {
+            name: 'noPermission',
+            path: '/noPermission',
+            meta: {
+                title: '没有权限',
+                role: [1,2,3]
+            },
+            component: () => import('@/views/admin/no-permission/index.vue'),
         },
         {
             name: 'admin',
             path: '/admin',
             meta: {
                 title: '首页',
+                role: [1,2,3]
             },
             component: () => import('@/views/admin/index.vue'),
             children: [
@@ -53,6 +71,7 @@ const router = createRouter({
                     path: 'user_manage',
                     meta: {
                         title: '用户管理',
+                        role: [1]
                     },
                     children: [
                         {
@@ -70,6 +89,7 @@ const router = createRouter({
                     path: 'settings_manage',
                     meta: {
                         title: '系统设置',
+                        role: [1]
                     },
                     children: [
                         {
@@ -94,20 +114,33 @@ export const getToken = (): string | null => {
 router.beforeEach(async (to, from, next) => {
     NProgress.start()
     const userStore = useUserStore()
+    let userInfo = userStore.userInfo
     // 未登录
-    if (!getToken() && to.path !== '/login') {
-        next('/login')
-    }
-    if (getToken() && !userStore.userInfo) {
-        // 获取用户信息
-        const userInfo = await userStore.getUserInfo()
-        if (userInfo) {
+    if (!getToken()) {
+        if (to.path === '/login') {
             next()
         } else {
+            const redirect = encodeURIComponent(to.fullPath)
+            next({
+                path: '/login',
+                query: { redirect }
+            })
+        }
+    }
+    if (getToken() && !userInfo) {
+        // 获取用户信息
+        userInfo = await userStore.getUserInfo()
+        if (!userInfo) {
             next('/login')
         }
     }
-    next()
+
+    console.log('x',to.path, to.meta.role, userInfo!.role)
+    if (to.meta?.role?.includes(userInfo!.role)) {
+        next()
+    } else {
+        next('/noPermission')
+    }
 })
 
 router.afterEach((to, from, next) => {

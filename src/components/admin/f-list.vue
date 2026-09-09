@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import type {baseResponse, listResponse, paramsType} from "@/api";
 import {reactive, ref} from "vue";
-import {Message, type TableColumnData} from "@arco-design/web-vue";
+import {Message, type TableColumnData, type TableRowSelection} from "@arco-design/web-vue";
 import {dateTemFormat, type dateTemType } from "@/utils/date.ts";
 
 export interface columnType extends TableColumnData {
     dateFormat?: dateTemType
 }
 
+export interface actionGroupType {
+    label: string
+    value?: number
+    callback: (keys: number[] | string[]) => void
+}
+
 interface Props {
     url: (params?: paramsType) => Promise<baseResponse<listResponse<any>>>
     columns: columnType[]
+    rowKey?: string
     noAdd?: boolean
     noUpdate?: boolean
     noDelete?: boolean
@@ -19,29 +26,38 @@ interface Props {
     updateLabel?: string
     removeLabel?: string
     noActionGroup?: boolean
+    noCheck?: boolean
+    noBatchDelete?: boolean
+    actionGroup?: actionGroupType[]
 }
 
 const props = defineProps<Props>()
-const loading = ref<boolean>(false);
-
 const {
+    rowKey = 'id',
     searchPlaceholder = '搜索',
     addLabel = '创建',
     updateLabel = '编辑',
-    removeLabel = '删除'
+    removeLabel = '删除',
+    actionGroup = []
 } = props
 
+const emits = defineEmits<{
+    (e: 'add'): void
+    (e: 'delete', keyList: number[] | string[]): void
+    (e: 'update', data: any): void
+}>()
+
+const loading = ref<boolean>(false);
 const data = reactive<listResponse<any>>({
     count: 0,
     list: []
 })
 
-const params = reactive<paramsType>({})
-
-const search = (keyword: string) => {
+const search = () => {
     getList()
 }
 
+const params = reactive<paramsType>({})
 const getList = async () => {
     loading.value = true
     const res = await props.url(params)
@@ -54,7 +70,6 @@ const getList = async () => {
     data.count = res.data.count || 0
     console.log('data', data)
 }
-
 getList()
 
 const refresh = () => {
@@ -62,24 +77,61 @@ const refresh = () => {
     Message.success('刷新成功')
 }
 
-const emits = defineEmits<{
-    (e: 'add'): void
-    (e: 'delete', keyList: number[] | string[]): void
-    (e: 'update', data: any): void
-}>()
-
 const add = () => {
     emits('add')
 }
-
-const remove = (record: any) => {
-    emits('delete', [record.id])
+const remove = (keys: number[] | string[]): void => {
+    emits('delete', keys)
+}
+const removeOne = (record: any) => {
+    const list = [record[rowKey]]
+    remove(list)
 }
 const update = (record: any) => {
     emits('update', record)
 }
-const pageChange = (page: number) => {
+const pageChange = () => {
     getList()
+}
+
+const selectedKeys = ref([])
+const rowSelection = reactive<TableRowSelection>({
+    type: 'checkbox',
+    showCheckedAll: true,
+    onlyCurrent: false
+})
+
+const actionValue = ref()
+const actionGroupOptions = ref<actionGroupType[]>([])
+const initActionGroupOptions = () => {
+    let index = 0
+    if (!props.noBatchDelete) {
+        actionGroupOptions.value.push({
+            label: '批量删除',
+            value: ++index,
+            callback: (keys) => {
+                remove(keys)
+            }
+        })
+    }
+    actionGroup.forEach(item => {
+        actionGroupOptions.value.push({
+            label: item.label,
+            value: ++index,
+            callback: item.callback,
+        })
+    })
+}
+initActionGroupOptions()
+
+// 点击执行
+const actionGroupAction = () => {
+    if (selectedKeys.value.length === 0) {
+        Message.warning("请选择操作数据")
+        return
+    }
+    const option = actionGroupOptions.value.find(item => item.value === actionValue.value)
+    option?.callback(selectedKeys.value)
 }
 
 </script>
@@ -93,7 +145,19 @@ const pageChange = (page: number) => {
                 </div>
             </slot>
             <div class="action-group" v-if="!noActionGroup">
-                <a-select placeholder="操作"></a-select>
+                <a-select
+                    v-model="actionValue"
+                    allow-clear
+                    placeholder="操作"
+                    :options="actionGroupOptions"
+                    style="width: 200px;"
+                ></a-select>
+                <a-button
+                    v-if="actionValue"
+                    type="primary"
+                    status="danger"
+                    @click="actionGroupAction"
+                >执行</a-button>
             </div>
             <div class="action-search">
                 <a-input-search v-model="params.keyword" :placeholder="searchPlaceholder" @search="search"></a-input-search>
@@ -108,7 +172,13 @@ const pageChange = (page: number) => {
         <div class="f-list-body">
             <a-spin :loading="loading" tip="加载中">
                 <div class="f-list-table">
-                    <a-table :data="data.list" :pagination="false">
+                    <a-table
+                        v-model:selected-keys="selectedKeys"
+                        :row-selection="noCheck ? undefined : rowSelection"
+                        :data="data.list"
+                        :row-key="rowKey"
+                        :pagination="false"
+                    >
                         <template #columns>
                             <template v-for="col in props.columns">
                                 <a-table-column v-if="col.dataIndex" v-bind="{...col, title: col.title as string}"></a-table-column>
@@ -117,7 +187,7 @@ const pageChange = (page: number) => {
                                         <div v-if="col.slotName === 'action'" class="col-actions">
                                             <slot v-bind="data" name="action-left"></slot>
                                             <a-button v-if="!noUpdate" type="primary" @click="update(data.record)">{{ updateLabel }}</a-button>
-                                            <a-popconfirm v-if="!noDelete" content="确认删除该记录？" @ok="remove(data.record)">
+                                            <a-popconfirm v-if="!noDelete" content="确认删除该记录？" @ok="removeOne(data.record)">
                                                 <a-button type="primary" status="danger">{{ removeLabel }}</a-button>
                                             </a-popconfirm>
                                             <slot v-bind="data" name="action-right"></slot>
@@ -157,6 +227,14 @@ const pageChange = (page: number) => {
 
         .action-create, .action-group, .action-search, .action-search-slot {
             margin-right: 10px;
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            button {
+                margin-left: 10px;
+            }
         }
 
         .action-flush {

@@ -19,6 +19,16 @@ const remove = (keys: number[] | string[]): void => {
 const update = (record: any) => {
     console.log('update', record)
 }
+
+const actionGroup = [
+    {
+        label: '批量升级',
+        callback: (keys: number[] | string[]) => {
+            console.log('批量升级', keys)
+        }
+    }
+]
+
 </script>
 
 <template>
@@ -26,6 +36,9 @@ const update = (record: any) => {
         <f-list
             :url="userListApi"
             :columns="columns"
+            :actionGroup="actionGroup"
+            no-batch-delete
+            @delete="remove"
         >
             <template #avatar="data">{{data.avatar}}</template>
             <template #action-left>

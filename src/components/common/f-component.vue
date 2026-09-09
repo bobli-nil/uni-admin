@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import type {Component} from "vue";
+import type { Component } from 'vue'
 
 interface Props {
-  is?: Component | string
+    is?: Component | string
 }
 const props = defineProps<Props>()
 </script>
 
 <template>
-  <component v-if="typeof props.is === 'object'" :is="props.is" />
-  <i v-else :class="props.is"></i>
+    <component v-if="typeof props.is === 'object'" :is="props.is" />
+    <i v-else :class="props.is"></i>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

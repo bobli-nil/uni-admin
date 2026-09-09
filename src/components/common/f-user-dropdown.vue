@@ -1,69 +1,70 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router"
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
-import {ref, computed} from "vue";
+import { ref, computed } from 'vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 
 type DropdownValue = string | number | Record<string, any> | undefined
 const handleSelect = (key: DropdownValue) => {
-  if (key === "logout") {
-    return
-  }
-  router.push({name: key as string})
+    if (key === 'logout') {
+        return
+    }
+    router.push({ name: key as string })
 }
 
 interface OptionType {
-  name: string
-  title: string
+    name: string
+    title: string
 }
 
 const options = computed<OptionType[]>(() => {
-  const baseOptions: OptionType[] = [
-    {title: "个人信息", name: "userInfo"},
-    {title: "注销退出", name: "logout"},
-  ]
-  if (userStore.isAdmin) {
-    return [
-      {title: "个人信息", name: "userInfo"},
-      {title: "用户列表", name: "userList"},
-      {title: "系统信息", name: "settings"},
-      {title: "注销退出", name: "logout"},
+    const baseOptions: OptionType[] = [
+        { title: '个人信息', name: 'userInfo' },
+        { title: '注销退出', name: 'logout' },
     ]
-  }
+    if (userStore.isAdmin) {
+        return [
+            { title: '个人信息', name: 'userInfo' },
+            { title: '用户列表', name: 'userList' },
+            { title: '系统信息', name: 'settings' },
+            { title: '注销退出', name: 'logout' },
+        ]
+    }
 
-  return baseOptions
+    return baseOptions
 })
-
 </script>
 
 <template>
-  <a-dropdown @select="handleSelect" trigger="hover">
-    <div class="user-info">
-      <icon-user class="icon-user" />
-      <span>{{userStore?.userInfo?.nickname}}</span>
-      <icon-down class="icon-down" />
-    </div>
-    <template #content>
-      <a-doption v-for="option in options" :key="option.name" :value="option.name">{{option.title}}</a-doption>
-    </template>
-  </a-dropdown>
+    <a-dropdown @select="handleSelect" trigger="hover">
+        <div class="user-info">
+            <icon-user class="icon-user" />
+            <span>{{ userStore?.userInfo?.nickname }}</span>
+            <icon-down class="icon-down" />
+        </div>
+        <template #content>
+            <a-doption v-for="option in options" :key="option.name" :value="option.name">{{
+                option.title
+            }}</a-doption>
+        </template>
+    </a-dropdown>
 </template>
 
 <style scoped>
 .user-info {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  .icon-user {
-    margin-left: 10px;
-    margin-right: 2px !important;
-    font-size: 18px !important;
-  }
-  .icon-down {
-    margin-left: 5px;
-    font-size: 12px !important;
-  }
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    .icon-user {
+        margin-left: 10px;
+        margin-right: 2px !important;
+        font-size: 18px !important;
+    }
+    .icon-down {
+        margin-left: 5px;
+        font-size: 12px !important;
+    }
 }
 </style>

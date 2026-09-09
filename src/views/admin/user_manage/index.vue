@@ -1,11 +1,7 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>user manage</div>
+    <div>user manage</div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

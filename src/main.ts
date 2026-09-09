@@ -11,6 +11,9 @@ import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import 'nprogress/nprogress.css'
 import '@/assets/public.less'
 import '@/assets/iconfont.css'
+import { apiMock } from '@/mock/index.ts'
+
+apiMock()
 
 const app = createApp(App)
 

@@ -15,7 +15,7 @@ export const useAxios = axios.create({
 
 useAxios.interceptors.request.use((config) => {
     const userStore = useUserStore()
-    const token = localStorage.getItem('token') || userStore.token
+    const token = localStorage.getItem('token')
     config.headers.set('token', token)
     return config
 })

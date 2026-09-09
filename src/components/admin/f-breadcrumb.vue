@@ -6,9 +6,9 @@ const route = useRoute()
 <template>
     <a-breadcrumb>
         <template v-for="item in route.matched" :key="item.path">
-            <a-breadcrumb-item v-if="item.name !== 'home'">{{
-                item.meta?.title
-            }}</a-breadcrumb-item>
+            <a-breadcrumb-item v-if="item.name !== 'home'">
+                {{ item.meta?.title }}
+            </a-breadcrumb-item>
         </template>
     </a-breadcrumb>
 </template>

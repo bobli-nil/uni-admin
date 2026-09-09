@@ -9,6 +9,7 @@ const userStore = useUserStore()
 type DropdownValue = string | number | Record<string, any> | undefined
 const handleSelect = (key: DropdownValue) => {
     if (key === 'logout') {
+        userStore.logout()
         return
     }
     router.push({ name: key as string })
@@ -45,9 +46,9 @@ const options = computed<OptionType[]>(() => {
             <icon-down class="icon-down" />
         </div>
         <template #content>
-            <a-doption v-for="option in options" :key="option.name" :value="option.name">{{
-                option.title
-            }}</a-doption>
+            <a-doption v-for="option in options" :key="option.name" :value="option.name">
+                {{ option.title }}
+            </a-doption>
         </template>
     </a-dropdown>
 </template>

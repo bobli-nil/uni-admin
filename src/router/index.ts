@@ -8,7 +8,7 @@ const router = createRouter({
         {
             name: 'web',
             path: '/',
-            redirect: '/admin',
+            component: () => import("@/views/web/index.vue")
         },
         {
             name: 'login',

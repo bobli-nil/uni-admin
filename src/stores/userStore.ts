@@ -1,6 +1,6 @@
 import { ref, type Ref, computed, type ComputedRef } from 'vue'
 import { defineStore } from 'pinia'
-import { userLoginApi, userInfoApi, type userLoginRequest } from '@/api/user-api'
+import { userLoginApi, userInfoApi, logoutApi, type userLoginRequest } from '@/api/user-api'
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
 
@@ -15,10 +15,11 @@ export interface userInfoType {
 
 interface userStore {
     userInfo: Ref<userInfoType | null>
-    login: (data: userLoginRequest) => Promise<void>
-    getUserInfo: () => Promise<void | userInfoType>
     isLogin: ComputedRef<boolean>
     isAdmin: ComputedRef<boolean>
+    login: (data: userLoginRequest) => Promise<void>
+    getUserInfo: () => Promise<void | userInfoType>
+    logout: () => Promise<void>
 }
 
 export const useUserStore = defineStore('user', (): userStore => {
@@ -36,7 +37,7 @@ export const useUserStore = defineStore('user', (): userStore => {
         }
         window.localStorage.setItem('token', res.data)
         Message.success('登录成功')
-        router.push({ name: 'home' })
+        router.push({ name: 'web' })
     }
 
     // 获取用户信息
@@ -51,11 +52,21 @@ export const useUserStore = defineStore('user', (): userStore => {
         return userInfo.value
     }
 
+    // 退出登录
+    const logout = async () => {
+        await logoutApi()
+        userInfo.value = null
+        window.localStorage.removeItem('token')
+        Message.success("退出登录成功")
+        router.push({ name: 'login' })
+    }
+
     return {
         userInfo,
         isLogin,
         isAdmin,
         login,
         getUserInfo,
+        logout
     }
 })

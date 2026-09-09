@@ -22,3 +22,11 @@ export const userInfoApi = (): Promise<baseResponse<userInfoType>> => {
         method: 'get',
     })
 }
+
+// 退出登录
+export const logoutApi = (): Promise<baseResponse<Record<string, never>>> => {
+    return useAxios({
+        url: '/api/user/logout',
+        method: 'delete',
+    })
+}

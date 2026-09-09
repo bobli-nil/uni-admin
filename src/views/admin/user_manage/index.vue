@@ -12,11 +12,21 @@ const columns: columnType[] = [
     { title: '时间', slotName: 'createdAt', dateFormat: 'current' },
     { title: '操作', slotName: 'action' },
 ]
+
+const remove = (keys: number[] | string[]): void => {
+    console.log('delete', keys)
+}
+const update = (record: any) => {
+    console.log('update', record)
+}
 </script>
 
 <template>
     <div>
-        <f-list :url="userListApi" :columns="columns">
+        <f-list
+            :url="userListApi"
+            :columns="columns"
+        >
             <template #avatar="data">{{data.avatar}}</template>
             <template #action-left>
                 <a-button>预览</a-button>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type {baseResponse, listResponse, paramsType} from "@/api";
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import {Message, type TableColumnData} from "@arco-design/web-vue";
-import type {TableDataWithRaw} from "@arco-design/web-vue/es/table/interface";
 import {dateTemFormat, type dateTemType } from "@/utils/date.ts";
 
 export interface columnType extends TableColumnData {
@@ -12,9 +11,25 @@ export interface columnType extends TableColumnData {
 interface Props {
     url: (params?: paramsType) => Promise<baseResponse<listResponse<any>>>
     columns: columnType[]
+    noAdd?: boolean
+    noUpdate?: boolean
+    noDelete?: boolean
+    searchPlaceholder?: string
+    addLabel?: string
+    updateLabel?: string
+    removeLabel?: string
+    noActionGroup?: boolean
 }
 
 const props = defineProps<Props>()
+const loading = ref<boolean>(false);
+
+const {
+    searchPlaceholder = '搜索',
+    addLabel = '创建',
+    updateLabel = '编辑',
+    removeLabel = '删除'
+} = props
 
 const data = reactive<listResponse<any>>({
     count: 0,
@@ -23,8 +38,14 @@ const data = reactive<listResponse<any>>({
 
 const params = reactive<paramsType>({})
 
+const search = (keyword: string) => {
+    getList()
+}
+
 const getList = async () => {
+    loading.value = true
     const res = await props.url(params)
+    loading.value = false
     if (res.code) {
         Message.error(res.msg || '操作错误')
         return
@@ -36,11 +57,29 @@ const getList = async () => {
 
 getList()
 
-const remove = (data: TableDataWithRaw) => {
-    console.log('remove', data)
+const refresh = () => {
+    getList()
+    Message.success('刷新成功')
 }
-const update = (data: TableDataWithRaw) => {
-    console.log('update', data)
+
+const emits = defineEmits<{
+    (e: 'add'): void
+    (e: 'delete', keyList: number[] | string[]): void
+    (e: 'update', data: any): void
+}>()
+
+const add = () => {
+    emits('add')
+}
+
+const remove = (record: any) => {
+    emits('delete', [record.id])
+}
+const update = (record: any) => {
+    emits('update', record)
+}
+const pageChange = (page: number) => {
+    getList()
 }
 
 </script>
@@ -48,24 +87,28 @@ const update = (data: TableDataWithRaw) => {
 <template>
     <div class="f-list-com">
         <div class="f-list-head">
-            <div class="action-create">
-                <a-button type="primary">创建</a-button>
-            </div>
-            <div class="action-group">
+            <slot name="action-add">
+                <div class="action-create">
+                    <a-button type="primary" v-if="!noAdd" @click="add">{{ addLabel }}</a-button>
+                </div>
+            </slot>
+            <div class="action-group" v-if="!noActionGroup">
                 <a-select placeholder="操作"></a-select>
             </div>
             <div class="action-search">
-                <a-input placeholder="搜索"></a-input>
+                <a-input-search v-model="params.keyword" :placeholder="searchPlaceholder" @search="search"></a-input-search>
             </div>
-            <div class="action-search-slot"></div>
-            <div class="action-flush">
+            <div class="action-search-slot">
+                <slot name="search-other"></slot>
+            </div>
+            <div class="action-flush" @click="refresh">
                 <icon-refresh></icon-refresh>
             </div>
         </div>
         <div class="f-list-body">
-            <a-spin>
+            <a-spin :loading="loading" tip="加载中">
                 <div class="f-list-table">
-                    <a-table :data="data.list">
+                    <a-table :data="data.list" :pagination="false">
                         <template #columns>
                             <template v-for="col in props.columns">
                                 <a-table-column v-if="col.dataIndex" v-bind="{...col, title: col.title as string}"></a-table-column>
@@ -73,9 +116,9 @@ const update = (data: TableDataWithRaw) => {
                                     <template #cell="data">
                                         <div v-if="col.slotName === 'action'" class="col-actions">
                                             <slot v-bind="data" name="action-left"></slot>
-                                            <a-button type="primary" @click="update(data)">编辑</a-button>
-                                            <a-popconfirm content="确认删除该记录？" @ok="remove(data)">
-                                                <a-button type="primary" status="danger">删除</a-button>
+                                            <a-button v-if="!noUpdate" type="primary" @click="update(data.record)">{{ updateLabel }}</a-button>
+                                            <a-popconfirm v-if="!noDelete" content="确认删除该记录？" @ok="remove(data.record)">
+                                                <a-button type="primary" status="danger">{{ removeLabel }}</a-button>
                                             </a-popconfirm>
                                             <slot v-bind="data" name="action-right"></slot>
                                         </div>
@@ -90,7 +133,13 @@ const update = (data: TableDataWithRaw) => {
                     </a-table>
                 </div>
                 <div class="f-list-page">
-                    <a-pagination :total="100"></a-pagination>
+                    <a-pagination
+                        v-model:current="params.page"
+                        show-total
+                        :total="data.count"
+                        :page-size="params.limit"
+                        @change="pageChange"
+                    ></a-pagination>
                 </div>
             </a-spin>
         </div>

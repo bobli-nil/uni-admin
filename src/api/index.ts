@@ -8,6 +8,18 @@ export interface baseResponse<T> {
     msg: string
 }
 
+export interface listResponse<T> {
+    list: T[]
+    count: number
+}
+
+export interface paramsType {
+    keyword?: string
+    page?: number
+    limit?: number
+    sort?: string
+}
+
 export const useAxios = axios.create({
     // timeout: 10 * 1000,
     baseURL: '',

@@ -108,7 +108,7 @@ const goHome = () => {
 
             .f-base-view {
                 background-color: var(--color-bg-1);
-                height: 1000px;
+                min-height: calc(100vh - 130px);
             }
         }
     }

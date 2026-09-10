@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import FList, {type filterGroupType} from '@/components/admin/f-list.vue'
+import FModalForm from '@/components/admin/f-modal-form.vue'
 import { userListApi } from '@/api/user-api.ts'
 import {type columnType} from "@/components/admin/f-list.vue";
+import {type formListType} from '@/components/admin/f-modal-form.vue'
 
 const columns: columnType[] = [
     { title: 'ID', dataIndex: 'id' },
@@ -19,6 +21,9 @@ const remove = (keys: number[] | string[]): void => {
 }
 const update = (record: any) => {
     console.log('update', record)
+}
+const add = () => {
+    visible.value = true
 }
 
 const fListRef = ref()
@@ -40,9 +45,6 @@ const filters: filterGroupType[] = [
             { label: '用户', value: 2 },
         ],
         column: 'role',
-        // callback: (value: number | string) => {
-        //     console.log('父', value)
-        // }
     },
     {
         label: 'ip过滤',
@@ -61,10 +63,63 @@ const filters: filterGroupType[] = [
     }
 ]
 
+const visible = ref(false)
+const formList: formListType[] = [
+    {
+        label: '昵称',
+        field: 'nickname',
+        type: 'input',
+        rules: [{ required: true }],
+        validateTrigger: 'blur',
+    },
+    {
+        label: '角色',
+        field: 'role',
+        type: 'select',
+        multiple: true,
+        rules: [{ required: true }],
+        validateTrigger: 'blur',
+        source: [
+            { label: '管理员', value: 1 },
+            { label: '用户', value: 2 },
+        ]
+    },
+    {
+        label: '角色',
+        field: 'role1',
+        type: 'switch',
+        source: [
+            { label: '管理员', value: 1 },
+            { label: '用户', value: 2 },
+        ]
+    },
+    {
+        label: '角色3',
+        field: 'role2',
+    },
+]
+const ok = (form: Record<string, any>) => {
+    console.log('ok', form)
+}
+
 </script>
 
 <template>
     <div>
+        <f-modal-form
+            v-model:visible="visible"
+            title="创建用户"
+            :form-list="formList"
+            @ok="ok"
+        >
+            <template #role2="{form}">
+                <a-select
+                    v-model="form['role2']"
+                    placeholder="角色3"
+                    :options="[{ label: '管理员', value: 1 }, { label: '用户', value: 2 }]"
+                ></a-select>
+            </template>
+        </f-modal-form>
         <f-list
             ref="fListRef"
             :url="userListApi"
@@ -73,6 +128,7 @@ const filters: filterGroupType[] = [
             :filter-group="filters"
             no-batch-delete
             @delete="remove"
+            @add="add"
         >
             <template #avatar="data">{{data.avatar}}</template>
             <template #action-left>

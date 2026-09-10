@@ -26,7 +26,7 @@ export interface optionsType {
     value: number | string
 }
 
-export type optionsFunc = (params: paramsType) => Promise<baseResponse<optionsType[]>>
+export type optionsFunc = (params?: paramsType) => Promise<baseResponse<optionsType[]>>
 
 export const useAxios = axios.create({
     // timeout: 10 * 1000,

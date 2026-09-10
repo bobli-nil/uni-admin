@@ -3,6 +3,7 @@ import type {baseResponse, listResponse, paramsType} from "@/api";
 import {reactive, ref} from "vue";
 import {Message, type TableColumnData, type TableRowSelection} from "@arco-design/web-vue";
 import {dateTemFormat, type dateTemType } from "@/utils/date.ts";
+import { type optionsType, type optionsFunc } from '@/api/index.ts'
 
 export interface columnType extends TableColumnData {
     dateFormat?: dateTemType
@@ -12,6 +13,16 @@ export interface actionGroupType {
     label: string
     value?: number
     callback: (keys: number[] | string[]) => void
+}
+
+export interface filterGroupType {
+    label: string
+    source: optionsType[] | optionsFunc
+    options?: optionsType[]
+    column: string
+    params?: paramsType
+    callback?: (value: number | string) => void
+    width?: number
 }
 
 interface Props {
@@ -29,6 +40,7 @@ interface Props {
     noCheck?: boolean
     noBatchDelete?: boolean
     actionGroup?: actionGroupType[]
+    filterGroup?: filterGroupType[]
 }
 
 const props = defineProps<Props>()
@@ -58,8 +70,11 @@ const search = () => {
 }
 
 const params = reactive<paramsType>({})
-const getList = async () => {
+const getList = async (newParams?: Record<string, any>) => {
     loading.value = true
+    if (newParams) {
+        Object.assign(params, newParams)
+    }
     const res = await props.url(params)
     loading.value = false
     if (res.code) {
@@ -134,6 +149,34 @@ const actionGroupAction = () => {
     option?.callback(selectedKeys.value)
 }
 
+// 过滤组
+const filterGroupList = ref<filterGroupType[]>([])
+const initFilterGroupList = async () => {
+    filterGroupList.value = []
+    for (const f of props.filterGroup || []) {
+        if (typeof f.source === 'function') {
+            const res = await f.source(f.params as paramsType)
+            if (res.code) {
+                Message.error(res.msg)
+                continue
+            }
+            f.options = res.data
+        } else {
+            f.options = f.source
+        }
+        if (!f.callback) {
+            f.callback = (value: number | string) => {
+                console.log('子', value)
+                getList({
+                    [f.column]: value
+                })
+            }
+        }
+        filterGroupList.value.push(f)
+    }
+}
+initFilterGroupList()
+
 </script>
 
 <template>
@@ -161,6 +204,17 @@ const actionGroupAction = () => {
             </div>
             <div class="action-search">
                 <a-input-search v-model="params.keyword" :placeholder="searchPlaceholder" @search="search"></a-input-search>
+            </div>
+            <div class="action-filter">
+                <a-select
+                    :style="{ width: item.width ? item.width + 'px' : '200px' }"
+                    allow-clear
+                    v-for="item in filterGroupList"
+                    :key="item.column"
+                    :options="item.options"
+                    :placeholder="item.label"
+                    @change="item.callback as any"
+                ></a-select>
             </div>
             <div class="action-search-slot">
                 <slot name="search-other"></slot>
@@ -225,7 +279,7 @@ const actionGroupAction = () => {
         padding: 20px 20px 10px 20px;
         border-bottom: @f_border;
 
-        .action-create, .action-group, .action-search, .action-search-slot {
+        .action-create, .action-group, .action-search, .action-filter .action-search-slot {
             margin-right: 10px;
         }
 
@@ -234,6 +288,15 @@ const actionGroupAction = () => {
             align-items: center;
             button {
                 margin-left: 10px;
+            }
+        }
+
+        .action-filter {
+            /deep/.arco-select {
+                margin-left: 10px;
+                &:first-child {
+                    margin-left: 0;
+                }
             }
         }
 

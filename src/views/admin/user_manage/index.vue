@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FList from '@/components/admin/f-list.vue'
+import FList, {type filterGroupType} from '@/components/admin/f-list.vue'
 import { userListApi } from '@/api/user-api.ts'
 import {type columnType} from "@/components/admin/f-list.vue";
 
@@ -29,6 +29,31 @@ const actionGroup = [
     }
 ]
 
+const filters: filterGroupType[] = [
+    {
+        label: '角色过滤',
+        source: [
+            { label: '管理员', value: 1 },
+            { label: '用户', value: 2 },
+        ],
+        column: 'role',
+        // callback: (value: number | string) => {
+        //     console.log('父', value)
+        // }
+    },
+    {
+        label: 'ip过滤',
+        source: [
+            { label: '内网', value: 1 },
+            { label: '外网', value: 2 },
+        ],
+        column: 'ip',
+        // callback: (value: number | string) => {
+        //     console.log('父', value)
+        // }
+    }
+]
+
 </script>
 
 <template>
@@ -37,6 +62,7 @@ const actionGroup = [
             :url="userListApi"
             :columns="columns"
             :actionGroup="actionGroup"
+            :filter-group="filters"
             no-batch-delete
             @delete="remove"
         >

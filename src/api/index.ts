@@ -18,7 +18,15 @@ export interface paramsType {
     page?: number
     limit?: number
     sort?: string
+    [key: string]: any
 }
+
+export interface optionsType {
+    label: string
+    value: number | string
+}
+
+export type optionsFunc = (params: paramsType) => Promise<baseResponse<optionsType[]>>
 
 export const useAxios = axios.create({
     // timeout: 10 * 1000,

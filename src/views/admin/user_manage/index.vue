@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import FList, {type filterGroupType} from '@/components/admin/f-list.vue'
 import { userListApi } from '@/api/user-api.ts'
 import {type columnType} from "@/components/admin/f-list.vue";
@@ -19,6 +20,8 @@ const remove = (keys: number[] | string[]): void => {
 const update = (record: any) => {
     console.log('update', record)
 }
+
+const fListRef = ref()
 
 const actionGroup = [
     {
@@ -48,9 +51,13 @@ const filters: filterGroupType[] = [
             { label: '外网', value: 2 },
         ],
         column: 'ip',
-        // callback: (value: number | string) => {
-        //     console.log('父', value)
-        // }
+        callback: async (value: number | string) => {
+            console.log('父', value)
+            await fListRef.value?.getList({
+                ip: value
+            })
+            console.log('延迟的data', fListRef.value?.data)
+        }
     }
 ]
 
@@ -59,6 +66,7 @@ const filters: filterGroupType[] = [
 <template>
     <div>
         <f-list
+            ref="fListRef"
             :url="userListApi"
             :columns="columns"
             :actionGroup="actionGroup"

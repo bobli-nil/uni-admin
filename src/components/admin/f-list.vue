@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type {baseResponse, listResponse, paramsType} from "@/api";
 import {reactive, ref} from "vue";
-import {Message, type TableColumnData, type TableRowSelection} from "@arco-design/web-vue";
+import {Message, type TableColumnData, type TableData, type TableRowSelection} from "@arco-design/web-vue";
 import {dateTemFormat, type dateTemType } from "@/utils/date.ts";
 import { type optionsType, type optionsFunc } from '@/api/index.ts'
 
@@ -57,6 +57,7 @@ const emits = defineEmits<{
     (e: 'add'): void
     (e: 'delete', keyList: number[] | string[]): void
     (e: 'update', data: any): void
+    (e: 'row-click', record: any): void
 }>()
 
 const loading = ref<boolean>(false);
@@ -177,6 +178,15 @@ const initFilterGroupList = async () => {
 }
 initFilterGroupList()
 
+const rowClick = (record: TableData) => {
+    emits('row-click', record)
+}
+
+defineExpose({
+    getList,
+    data
+})
+
 </script>
 
 <template>
@@ -216,9 +226,6 @@ initFilterGroupList()
                     @change="item.callback as any"
                 ></a-select>
             </div>
-            <div class="action-search-slot">
-                <slot name="search-other"></slot>
-            </div>
             <div class="action-flush" @click="refresh">
                 <icon-refresh></icon-refresh>
             </div>
@@ -232,6 +239,7 @@ initFilterGroupList()
                         :data="data.list"
                         :row-key="rowKey"
                         :pagination="false"
+                        @row-click="rowClick"
                     >
                         <template #columns>
                             <template v-for="col in props.columns">

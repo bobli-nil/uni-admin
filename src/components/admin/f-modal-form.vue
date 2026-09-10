@@ -60,6 +60,14 @@ const initUsedFormList = async () => {
 }
 initUsedFormList()
 
+const setForm = (obj: Record<string, any>) => {
+    form.value = obj
+}
+
+defineExpose({
+    setForm
+})
+
 </script>
 
 <template>

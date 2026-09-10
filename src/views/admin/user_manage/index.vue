@@ -21,6 +21,9 @@ const remove = (keys: number[] | string[]): void => {
 }
 const update = (record: any) => {
     console.log('update', record)
+    modalRef.value.setForm(record)
+    visible.value = true
+
 }
 const add = () => {
     visible.value = true
@@ -76,7 +79,6 @@ const formList: formListType[] = [
         label: '角色',
         field: 'role',
         type: 'select',
-        multiple: true,
         rules: [{ required: true }],
         validateTrigger: 'blur',
         source: [
@@ -84,23 +86,12 @@ const formList: formListType[] = [
             { label: '用户', value: 2 },
         ]
     },
-    {
-        label: '角色',
-        field: 'role1',
-        type: 'switch',
-        source: [
-            { label: '管理员', value: 1 },
-            { label: '用户', value: 2 },
-        ]
-    },
-    {
-        label: '角色3',
-        field: 'role2',
-    },
 ]
 const ok = (form: Record<string, any>) => {
     console.log('ok', form)
 }
+
+const modalRef = ref()
 
 </script>
 
@@ -108,6 +99,7 @@ const ok = (form: Record<string, any>) => {
     <div>
         <f-modal-form
             v-model:visible="visible"
+            ref="modalRef"
             title="创建用户"
             :form-list="formList"
             @ok="ok"
@@ -129,6 +121,7 @@ const ok = (form: Record<string, any>) => {
             no-batch-delete
             @delete="remove"
             @add="add"
+            @update="update"
         >
             <template #avatar="data">{{data.avatar}}</template>
             <template #action-left>

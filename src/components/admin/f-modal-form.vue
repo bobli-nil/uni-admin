@@ -7,7 +7,7 @@ import {Message} from "@arco-design/web-vue";
 export interface formListType {
     label: string
     field: string
-    type?: 'input' | 'textarea' | 'select' | 'switch' | 'radio'
+    type?: 'input' | 'textarea' | 'select' | 'switch' | 'radio' | 'password'
     validateTrigger?: 'focus' | 'input' | 'blur' | 'change' | ('focus' | 'input' | 'blur' | 'change')[]
     rules?: FieldRule<any> | FieldRule<any>[]
     source?: optionsType[] | optionsFunc
@@ -65,7 +65,8 @@ const setForm = (obj: Record<string, any>) => {
 }
 
 defineExpose({
-    setForm
+    setForm,
+    formRef
 })
 
 </script>
@@ -85,8 +86,8 @@ defineExpose({
                 :rules="item.rules"
                 :validate-trigger="item.validateTrigger"
             >
-                <template v-if="item.type === 'input'">
-                    <a-input v-model="form[item.field]" :placeholder="item.label"></a-input>
+                <template v-if="item.type === 'input' || item.type === 'password'">
+                    <a-input v-model="form[item.field]" :type="item.type === 'input' ? 'text' : 'password'" :placeholder="item.label"></a-input>
                 </template>
                 <template v-else-if="item.type === 'select'">
                     <a-select :multiple="item.multiple" v-model="form[item.field]" allow-clear :placeholder="item.label" :options="item.options"></a-select>

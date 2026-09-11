@@ -27,9 +27,9 @@ const update = (record: any) => {
 }
 const add = () => {
     visible.value = true
+    modalRef.value.setForm({})
+    modalRef.value.formRef.clearValidate()
 }
-
-const fListRef = ref()
 
 const actionGroup = [
     {
@@ -49,28 +49,13 @@ const filters: filterGroupType[] = [
         ],
         column: 'role',
     },
-    {
-        label: 'ip过滤',
-        source: [
-            { label: '内网', value: 1 },
-            { label: '外网', value: 2 },
-        ],
-        column: 'ip',
-        callback: async (value: number | string) => {
-            console.log('父', value)
-            await fListRef.value?.getList({
-                ip: value
-            })
-            console.log('延迟的data', fListRef.value?.data)
-        }
-    }
 ]
 
 const visible = ref(false)
 const formList: formListType[] = [
     {
-        label: '昵称',
-        field: 'nickname',
+        label: '用户名',
+        field: 'username',
         type: 'input',
         rules: [{ required: true }],
         validateTrigger: 'blur',

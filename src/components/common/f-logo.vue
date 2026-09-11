@@ -15,7 +15,7 @@ import { collapsed } from '@/components/admin/f-menu'
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90px;
+    height: 60px;
     border-bottom: 1px solid var(--color-neutral-2);
     &.collapsed {
         .txt {

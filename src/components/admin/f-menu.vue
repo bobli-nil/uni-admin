@@ -86,7 +86,7 @@ function initRoutes() {
 
 <style lang="less">
 .f-menu {
-    height: calc(100vh - 90px);
+    height: calc(100vh - 60px);
     overflow-y: auto;
     overflow-x: hidden;
     .arco-menu {

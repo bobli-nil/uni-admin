@@ -104,6 +104,15 @@ const router = createRouter({
                 },
             ],
         },
+        {
+            name: 'notfound',
+            path: '/:pathMatch(.*)*',
+            meta: {
+                title: '404',
+                role: [1, 2, 3],
+            },
+            component: () => import('@/views/web/404.vue'),
+        }
     ],
 })
 

@@ -2,7 +2,9 @@
 import FCard from '@/components/common/f-card.vue'
 import FWelcome from '@/components/admin/f-welcome.vue'
 import FQuickEntrance from "@/components/admin/f-quick-entrance.vue";
+import FVersion from "@/components/common/f-version.vue";
 import {IconUser} from "@arco-design/web-vue/es/icon";
+import UserLoginEcharts from "@/components/echarts/user-login-echarts.vue";
 
 const entranceList = [
     { label: '个人信息', icon: IconUser, name: 'userInfo' },
@@ -17,10 +19,12 @@ const entranceList = [
         <div class="bottom">
             <div class="left">
                 <f-quick-entrance :list="entranceList"></f-quick-entrance>
-                <f-card title="数据统计" class="statistics"></f-card>
+                <f-card title="数据统计" class="statistics">
+                    <user-login-echarts></user-login-echarts>
+                </f-card>
             </div>
             <div class="right">
-                <f-card title="更新日志" class="version"></f-card>
+                <f-version></f-version>
             </div>
         </div>
     </div>

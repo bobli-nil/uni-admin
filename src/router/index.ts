@@ -12,7 +12,14 @@ const router = createRouter({
                 title: '首页',
                 role: [1,2,3]
             },
-            component: () => import("@/views/web/index.vue")
+            component: () => import("@/views/web/index.vue"),
+            children: [
+                {
+                    name: 'web-home',
+                    path: '',
+                    component: () => import('@/views/web/web-home.vue')
+                }
+            ]
         },
         {
             name: 'login',

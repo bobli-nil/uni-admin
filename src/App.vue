@@ -1,5 +1,7 @@
 <script setup lang="ts">
-console.log(import.meta.env)
+import {loadTheme} from "@/components/common/f-theme.ts";
+
+loadTheme();
 </script>
 
 <template>

@@ -65,7 +65,7 @@ const login = async () => {
         width: 400px;
         height: 100vh;
         padding: 0 30px;
-        background: rgba(white, 0.7);
+        background: var(--login-bg);
         position: absolute;
         right: 0;
         .title {

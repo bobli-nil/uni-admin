@@ -9,6 +9,8 @@ import FLogo from '@/components/common/f-logo.vue'
 import { collapsed } from '@/components/admin/f-menu.ts'
 import { useRouter } from 'vue-router'
 
+import FNav from "@/components/web/f-nav.vue";
+
 const router = useRouter()
 
 const goHome = () => {

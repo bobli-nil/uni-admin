@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type Component, ref, watch } from 'vue'
-import {IconHome, IconSettings, IconUser} from '@arco-design/web-vue/es/icon'
+import { IconHome, IconSettings, IconUser } from '@arco-design/web-vue/es/icon'
 import { collapsed } from '@/components/admin/f-menu.ts'
 import { useRouter, useRoute } from 'vue-router'
 import FMenuItem from '@/components/admin/f-menu-item.vue'
@@ -55,14 +55,14 @@ const menuList: MenuType[] = [
                         title: '邮箱设置',
                         name: 'siteManageEmail',
                         icon: IconSettings,
-                    }
-                ]
+                    },
+                ],
             },
             {
                 title: '日志列表',
                 name: 'logList',
                 icon: IconSettings,
-            }
+            },
         ],
     },
 ]
@@ -77,9 +77,9 @@ const initRoutes = () => {
     console.log('init routes')
     const matched = route.matched
     if (matched.length >= 3) {
-        for (let i = 1; i < matched.length-1; i++) {
-            const targetSubmenuKey = (matched[i]?.name as string)
-            const obj = openKeys.value.find(item => item === targetSubmenuKey)
+        for (let i = 1; i < matched.length - 1; i++) {
+            const targetSubmenuKey = matched[i]?.name as string
+            const obj = openKeys.value.find((item) => item === targetSubmenuKey)
             if (!obj) {
                 openKeys.value.push(targetSubmenuKey)
             }
@@ -98,7 +98,6 @@ watch(
         immediate: true,
     },
 )
-
 </script>
 
 <template>

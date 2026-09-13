@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import type {baseResponse, listResponse, paramsType} from "@/api";
-import {reactive, ref} from "vue";
-import {Message, type TableColumnData, type TableData, type TableRowSelection} from "@arco-design/web-vue";
-import {dateTemFormat, type dateTemType } from "@/utils/date.ts";
+import type { baseResponse, listResponse, paramsType } from '@/api'
+import { reactive, ref } from 'vue'
+import {
+    Message,
+    type TableColumnData,
+    type TableData,
+    type TableRowSelection,
+} from '@arco-design/web-vue'
+import { dateTemFormat, type dateTemType } from '@/utils/date.ts'
 import { type optionsType, type optionsFunc } from '@/api/index.ts'
 
 export interface columnType extends TableColumnData {
@@ -50,7 +55,7 @@ const {
     addLabel = '创建',
     updateLabel = '编辑',
     removeLabel = '删除',
-    actionGroup = []
+    actionGroup = [],
 } = props
 
 const emits = defineEmits<{
@@ -60,10 +65,10 @@ const emits = defineEmits<{
     (e: 'row-click', record: any): void
 }>()
 
-const loading = ref<boolean>(false);
+const loading = ref<boolean>(false)
 const data = reactive<listResponse<any>>({
     count: 0,
-    list: []
+    list: [],
 })
 
 const search = () => {
@@ -114,7 +119,7 @@ const selectedKeys = ref([])
 const rowSelection = reactive<TableRowSelection>({
     type: 'checkbox',
     showCheckedAll: true,
-    onlyCurrent: false
+    onlyCurrent: false,
 })
 
 const actionValue = ref()
@@ -127,10 +132,10 @@ const initActionGroupOptions = () => {
             value: ++index,
             callback: (keys) => {
                 remove(keys)
-            }
+            },
         })
     }
-    actionGroup.forEach(item => {
+    actionGroup.forEach((item) => {
         actionGroupOptions.value.push({
             label: item.label,
             value: ++index,
@@ -143,10 +148,10 @@ initActionGroupOptions()
 // 点击执行
 const actionGroupAction = () => {
     if (selectedKeys.value.length === 0) {
-        Message.warning("请选择操作数据")
+        Message.warning('请选择操作数据')
         return
     }
-    const option = actionGroupOptions.value.find(item => item.value === actionValue.value)
+    const option = actionGroupOptions.value.find((item) => item.value === actionValue.value)
     option?.callback(selectedKeys.value)
 }
 
@@ -169,7 +174,7 @@ const initFilterGroupList = async () => {
             f.callback = (value: number | string) => {
                 console.log('子', value)
                 getList({
-                    [f.column]: value
+                    [f.column]: value,
                 })
             }
         }
@@ -184,9 +189,8 @@ const rowClick = (record: TableData) => {
 
 defineExpose({
     getList,
-    data
+    data,
 })
-
 </script>
 
 <template>
@@ -203,17 +207,22 @@ defineExpose({
                     allow-clear
                     placeholder="操作"
                     :options="actionGroupOptions"
-                    style="width: 200px;"
+                    style="width: 200px"
                 ></a-select>
                 <a-button
                     v-if="actionValue"
                     type="primary"
                     status="danger"
                     @click="actionGroupAction"
-                >执行</a-button>
+                    >执行</a-button
+                >
             </div>
             <div class="action-search">
-                <a-input-search v-model="params.keyword" :placeholder="searchPlaceholder" @search="search"></a-input-search>
+                <a-input-search
+                    v-model="params.keyword"
+                    :placeholder="searchPlaceholder"
+                    @search="search"
+                ></a-input-search>
             </div>
             <div class="action-filter">
                 <a-select
@@ -243,19 +252,38 @@ defineExpose({
                     >
                         <template #columns>
                             <template v-for="col in props.columns">
-                                <a-table-column v-if="col.dataIndex" v-bind="{...col, title: col.title as string}"></a-table-column>
-                                <a-table-column v-else-if="col.slotName" :title="col.title as string">
+                                <a-table-column
+                                    v-if="col.dataIndex"
+                                    v-bind="{ ...col, title: col.title as string }"
+                                ></a-table-column>
+                                <a-table-column
+                                    v-else-if="col.slotName"
+                                    :title="col.title as string"
+                                >
                                     <template #cell="data">
                                         <div v-if="col.slotName === 'action'" class="col-actions">
                                             <slot v-bind="data" name="action-left"></slot>
-                                            <a-button v-if="!noUpdate" type="primary" @click="update(data.record)">{{ updateLabel }}</a-button>
-                                            <a-popconfirm v-if="!noDelete" content="确认删除该记录？" @ok="removeOne(data.record)">
-                                                <a-button type="primary" status="danger">{{ removeLabel }}</a-button>
+                                            <a-button
+                                                v-if="!noUpdate"
+                                                type="primary"
+                                                @click="update(data.record)"
+                                                >{{ updateLabel }}</a-button
+                                            >
+                                            <a-popconfirm
+                                                v-if="!noDelete"
+                                                content="确认删除该记录？"
+                                                @ok="removeOne(data.record)"
+                                            >
+                                                <a-button type="primary" status="danger">{{
+                                                    removeLabel
+                                                }}</a-button>
                                             </a-popconfirm>
                                             <slot v-bind="data" name="action-right"></slot>
                                         </div>
                                         <div v-if="col.slotName === 'createdAt'">
-                                            {{ dateTemFormat(data.record.createdAt, col.dateFormat) }}
+                                            {{
+                                                dateTemFormat(data.record.createdAt, col.dateFormat)
+                                            }}
                                         </div>
                                         <slot v-else :name="col.slotName" v-bind="data"></slot>
                                     </template>
@@ -287,7 +315,10 @@ defineExpose({
         padding: 20px 20px 10px 20px;
         border-bottom: @f_border;
 
-        .action-create, .action-group, .action-search, .action-filter .action-search-slot {
+        .action-create,
+        .action-group,
+        .action-search,
+        .action-filter .action-search-slot {
             margin-right: 10px;
         }
 

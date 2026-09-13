@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {computed} from 'vue'
-import {useUserStore} from "@/stores/userStore.ts";
+import { computed } from 'vue'
+import { useUserStore } from '@/stores/userStore.ts'
 const userStore = useUserStore()
 
 const welcomeTitle = computed(() => {
@@ -27,21 +27,24 @@ const welcomeTitle = computed(() => {
 
 <template>
     <div class="f-welcome">
-        <div class="title">{{welcomeTitle}}，{{userStore?.userInfo?.nickname}}，请开始一天的工作吧</div>
-        <div class="weather">
-            上海 · 上海市 今日 阴，25℃，天气温和，适合户外运动
+        <div class="title">
+            {{ welcomeTitle }}，{{ userStore?.userInfo?.nickname }}，请开始一天的工作吧
         </div>
+        <div class="weather">上海 · 上海市 今日 阴，25℃，天气温和，适合户外运动</div>
         <div class="statistics">
-            <a-statistic animation title="在线流量" :value="1234" show-group-separator></a-statistic>
+            <a-statistic
+                animation
+                title="在线流量"
+                :value="1234"
+                show-group-separator
+            ></a-statistic>
             <a-statistic animation title="消息总数" :value="134" show-group-separator></a-statistic>
             <a-statistic animation title="用户总数" :value="34" show-group-separator></a-statistic>
             <a-statistic animation title="文章总数" :value="72" show-group-separator></a-statistic>
             <a-statistic animation title="今日登录" :value="20" show-group-separator></a-statistic>
             <a-statistic animation title="今日注册" :value="9" show-group-separator></a-statistic>
         </div>
-        <div class="extra">
-            欢迎使用UniAdmin后台系统，可查看 <a href="">系统帮助</a>
-        </div>
+        <div class="extra">欢迎使用UniAdmin后台系统，可查看 <a href="">系统帮助</a></div>
     </div>
 </template>
 

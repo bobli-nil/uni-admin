@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 import FCard from '@/components/common/f-card.vue'
-import type {Component} from "vue";
-import FComponent from "@/components/common/f-component.vue";
+import type { Component } from 'vue'
+import FComponent from '@/components/common/f-component.vue'
 export interface entranceItem {
     label: string
     icon: string | Component
@@ -16,9 +16,8 @@ defineProps<Props>()
 const router = useRouter()
 
 const jump = (name: string) => {
-    router.push({name})
+    router.push({ name })
 }
-
 </script>
 
 <template>
@@ -28,7 +27,7 @@ const jump = (name: string) => {
                 <div class="icon">
                     <f-component :is="item.icon" />
                 </div>
-                <div class="label">{{item.label}}</div>
+                <div class="label">{{ item.label }}</div>
             </div>
         </div>
     </f-card>

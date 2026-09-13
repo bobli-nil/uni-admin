@@ -63,7 +63,7 @@ export const useUserStore = defineStore('user', (): userStore => {
         await logoutApi()
         userInfo.value = null
         window.localStorage.removeItem('token')
-        Message.success("退出登录成功")
+        Message.success('退出登录成功')
         router.push({ name: 'login' })
     }
 
@@ -73,6 +73,6 @@ export const useUserStore = defineStore('user', (): userStore => {
         isAdmin,
         login,
         getUserInfo,
-        logout
+        logout,
     }
 })

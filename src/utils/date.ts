@@ -31,7 +31,7 @@ export const dateCurrentFormat = (date: string) => {
     return dayjs().to(dayjs(date))
 }
 
-export const dateTemFormat = (date: string, name: dateTemType)=>  {
+export const dateTemFormat = (date: string, name: dateTemType) => {
     if (name === 'date') {
         return dateFormat(date)
     }

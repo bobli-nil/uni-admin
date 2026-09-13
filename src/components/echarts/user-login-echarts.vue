@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, watch, ref } from 'vue'
 import * as echarts from 'echarts'
-import {theme} from "@/components/common/f-theme.ts";
-import { type EChartsType } from "echarts"
+import { theme } from '@/components/common/f-theme.ts'
+import { type EChartsType } from 'echarts'
 
 type EchartsOptions = echarts.EChartsOption
 
@@ -10,9 +10,12 @@ let options: EchartsOptions
 
 let myChart = ref<EChartsType | null>(null)
 
-watch(() => theme.value, () => {
-    setOptions()
-})
+watch(
+    () => theme.value,
+    () => {
+        setOptions()
+    },
+)
 
 const setOptions = () => {
     const textColor = getComputedStyle(document.body).getPropertyValue('--color-text-1')
@@ -30,23 +33,23 @@ const setOptions = () => {
             left: 0,
             top: 0,
             textStyle: {
-                color: textColor
-            }
+                color: textColor,
+            },
         },
         tooltip: {
             trigger: 'axis',
             axisPointer: {
                 type: 'cross',
                 label: {
-                    backgroundColor: '#6a7985'
-                }
-            }
+                    backgroundColor: '#6a7985',
+                },
+            },
         },
         legend: {
             show: true,
             data: ['注册', '登录'],
             textStyle: {
-                color: textColor
+                color: textColor,
             },
             top: 0,
             right: 20,
@@ -55,18 +58,18 @@ const setOptions = () => {
             {
                 type: 'category',
                 boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            }
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            },
         ],
         yAxis: [
             {
                 type: 'value',
                 splitLine: {
                     lineStyle: {
-                        color: lineColor
-                    }
-                }
-            }
+                        color: lineColor,
+                    },
+                },
+            },
         ],
         grid: {
             left: '3%',
@@ -80,10 +83,10 @@ const setOptions = () => {
                 stack: 'Total',
                 areaStyle: {},
                 emphasis: {
-                    focus: 'series'
+                    focus: 'series',
                 },
                 smooth: true,
-                data: [120, 132, 101, 134, 90, 230, 210]
+                data: [120, 132, 101, 134, 90, 230, 210],
             },
             {
                 name: '登录',
@@ -91,13 +94,13 @@ const setOptions = () => {
                 stack: 'Total',
                 areaStyle: {},
                 emphasis: {
-                    focus: 'series'
+                    focus: 'series',
                 },
                 smooth: true,
-                data: [220, 182, 191, 234, 290, 330, 310]
+                data: [220, 182, 191, 234, 290, 330, 310],
             },
-        ]
-    };
+        ],
+    }
 
     myChart.value?.setOption(options)
 }
@@ -108,7 +111,6 @@ onMounted(() => {
 
     setOptions()
 })
-
 </script>
 
 <template>

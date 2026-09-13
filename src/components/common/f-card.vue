@@ -7,7 +7,7 @@ defineProps<Props>()
 
 <template>
     <div class="f-card">
-        <div class="title">{{title}}</div>
+        <div class="title">{{ title }}</div>
         <div class="body">
             <slot></slot>
         </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 import img404 from '@/assets/img/404.png'
 
 const router = useRouter()
@@ -10,7 +10,7 @@ const back = () => {
 
 <template>
     <div class="not-found">
-        <img :src="img404" width="400" alt="">
+        <img :src="img404" width="400" alt="" />
         <div>
             <a-button type="primary" @click="back">回到首页</a-button>
         </div>

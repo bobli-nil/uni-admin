@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FCard from '@/components/common/f-card.vue'
-import {dateCurrentFormat} from "@/utils/date.ts";
+import { dateCurrentFormat } from '@/utils/date.ts'
 
 interface versionType {
     title: string
@@ -15,9 +15,9 @@ const list: versionType[] = [
         items: [
             '权限设置，可以根据不同的角色进行不同的配置，同时增加了新的特色',
             '主题定制',
-            '用户管理'
-        ]
-    }
+            '用户管理',
+        ],
+    },
 ]
 </script>
 
@@ -25,12 +25,12 @@ const list: versionType[] = [
     <f-card title="更新日志" class="f-version">
         <div class="item" v-for="(item, index) in list">
             <div class="version-head">
-                <span class="index">{{index + 1}}.</span>
-                <span class="label">{{item.title}}</span>
-                <span class="date">{{dateCurrentFormat(item.date)}}</span>
+                <span class="index">{{ index + 1 }}.</span>
+                <span class="label">{{ item.title }}</span>
+                <span class="date">{{ dateCurrentFormat(item.date) }}</span>
             </div>
             <ul class="version-content" v-if="item.items?.length">
-                <li v-for="li in item.items">{{li}}</li>
+                <li v-for="li in item.items">{{ li }}</li>
             </ul>
         </div>
     </f-card>

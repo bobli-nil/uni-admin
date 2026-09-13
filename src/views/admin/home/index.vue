@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import FCard from '@/components/common/f-card.vue'
 import FWelcome from '@/components/admin/f-welcome.vue'
-import FQuickEntrance from "@/components/admin/f-quick-entrance.vue";
-import FVersion from "@/components/common/f-version.vue";
-import {IconUser} from "@arco-design/web-vue/es/icon";
-import UserLoginEcharts from "@/components/echarts/user-login-echarts.vue";
+import FQuickEntrance from '@/components/admin/f-quick-entrance.vue'
+import FVersion from '@/components/common/f-version.vue'
+import { IconUser } from '@arco-design/web-vue/es/icon'
+import UserLoginEcharts from '@/components/echarts/user-login-echarts.vue'
 
 const entranceList = [
     { label: '个人信息', icon: IconUser, name: 'userInfo' },
-    { label: '个人信息', icon: IconUser, name: 'userInfo' }
+    { label: '个人信息', icon: IconUser, name: 'userInfo' },
 ]
-
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import FList, {type filterGroupType} from '@/components/admin/f-list.vue'
+import FList, { type filterGroupType } from '@/components/admin/f-list.vue'
 import FModalForm from '@/components/admin/f-modal-form.vue'
 import { userListApi } from '@/api/user-api.ts'
-import {type columnType} from "@/components/admin/f-list.vue";
-import {type formListType} from '@/components/admin/f-modal-form.vue'
+import { type columnType } from '@/components/admin/f-list.vue'
+import { type formListType } from '@/components/admin/f-modal-form.vue'
 
 const columns: columnType[] = [
     { title: 'ID', dataIndex: 'id' },
@@ -23,7 +23,6 @@ const update = (record: any) => {
     console.log('update', record)
     modalRef.value.setForm(record)
     visible.value = true
-
 }
 const add = () => {
     visible.value = true
@@ -36,8 +35,8 @@ const actionGroup = [
         label: '批量升级',
         callback: (keys: number[] | string[]) => {
             console.log('批量升级', keys)
-        }
-    }
+        },
+    },
 ]
 
 const filters: filterGroupType[] = [
@@ -69,7 +68,7 @@ const formList: formListType[] = [
         source: [
             { label: '管理员', value: 1 },
             { label: '用户', value: 2 },
-        ]
+        ],
     },
 ]
 const ok = (form: Record<string, any>) => {
@@ -77,7 +76,6 @@ const ok = (form: Record<string, any>) => {
 }
 
 const modalRef = ref()
-
 </script>
 
 <template>
@@ -89,11 +87,14 @@ const modalRef = ref()
             :form-list="formList"
             @ok="ok"
         >
-            <template #role2="{form}">
+            <template #role2="{ form }">
                 <a-select
                     v-model="form['role2']"
                     placeholder="角色3"
-                    :options="[{ label: '管理员', value: 1 }, { label: '用户', value: 2 }]"
+                    :options="[
+                        { label: '管理员', value: 1 },
+                        { label: '用户', value: 2 },
+                    ]"
                 ></a-select>
             </template>
         </f-modal-form>
@@ -108,7 +109,7 @@ const modalRef = ref()
             @add="add"
             @update="update"
         >
-            <template #avatar="data">{{data.avatar}}</template>
+            <template #avatar="data">{{ data.avatar }}</template>
             <template #action-left>
                 <a-button>预览</a-button>
             </template>
@@ -116,5 +117,4 @@ const modalRef = ref()
     </div>
 </template>
 
-<style scoped lang="less">
-</style>
+<style scoped lang="less"></style>

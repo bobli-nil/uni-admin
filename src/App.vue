@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {loadTheme} from "@/components/common/f-theme.ts";
+import { loadTheme } from '@/components/common/f-theme.ts'
 
-loadTheme();
+loadTheme()
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {ref} from 'vue'
-import FTheme from "@/components/common/f-theme.vue";
-import FUserDropdown from "@/components/common/f-user-dropdown.vue";
+import { ref } from 'vue'
+import FTheme from '@/components/common/f-theme.vue'
+import FUserDropdown from '@/components/common/f-user-dropdown.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 
 const userStore = useUserStore()
@@ -18,7 +18,7 @@ const isShow = ref(false)
 if (!noScroll) {
     window.onscroll = () => {
         const top = document.documentElement.scrollTop
-        isShow.value = top > scrollTop;
+        isShow.value = top > scrollTop
     }
 }
 </script>

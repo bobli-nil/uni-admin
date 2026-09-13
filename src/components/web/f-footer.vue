@@ -5,7 +5,7 @@ import beian from '@/assets/img/beian.png'
 <template>
     <div class="f-footer">
         <div class="bei-an">
-            <img :src="beian" alt="">
+            <img :src="beian" alt="" />
             <a href="https://beian.miit.gov.cn">备案号：苏ICP备2025163885号-1</a>
         </div>
     </div>

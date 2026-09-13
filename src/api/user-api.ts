@@ -1,4 +1,4 @@
-import {useAxios, type baseResponse, type paramsType, type listResponse} from './index.ts'
+import { useAxios, type baseResponse, type paramsType, type listResponse } from './index.ts'
 import { type userInfoType } from '@/stores/userStore'
 
 export interface userLoginRequest {
@@ -46,10 +46,12 @@ interface userListType {
 }
 
 // 用户列表
-export const userListApi = (params?: paramsType): Promise<baseResponse<listResponse<userListType>>> => {
+export const userListApi = (
+    params?: paramsType,
+): Promise<baseResponse<listResponse<userListType>>> => {
     return useAxios({
         url: '/api/user',
         method: 'get',
-        params
+        params,
     })
 }

@@ -1,13 +1,7 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    <div>
-        日志列表
-    </div>
+    <div>日志列表</div>
 </template>
 
-<style scoped lang="less">
-
-</style>
+<style scoped lang="less"></style>

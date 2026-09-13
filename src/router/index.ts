@@ -10,23 +10,23 @@ const router = createRouter({
             path: '/',
             meta: {
                 title: '首页',
-                role: [1,2,3]
+                role: [1, 2, 3],
             },
-            component: () => import("@/views/web/index.vue"),
+            component: () => import('@/views/web/index.vue'),
             children: [
                 {
                     name: 'web-home',
                     path: '',
-                    component: () => import('@/views/web/web-home.vue')
-                }
-            ]
+                    component: () => import('@/views/web/web-home.vue'),
+                },
+            ],
         },
         {
             name: 'login',
             path: '/login',
             meta: {
                 title: '首页',
-                role: [1,2,3]
+                role: [1, 2, 3],
             },
             component: () => import('@/views/login/index.vue'),
         },
@@ -35,7 +35,7 @@ const router = createRouter({
             path: '/noPermission',
             meta: {
                 title: '没有权限',
-                role: [1,2,3]
+                role: [1, 2, 3],
             },
             component: () => import('@/views/admin/no-permission/index.vue'),
         },
@@ -44,7 +44,7 @@ const router = createRouter({
             path: '/admin',
             meta: {
                 title: '首页',
-                role: [1,2,3]
+                role: [1, 2, 3],
             },
             component: () => import('@/views/admin/index.vue'),
             children: [
@@ -78,7 +78,7 @@ const router = createRouter({
                     path: 'user_manage',
                     meta: {
                         title: '用户管理',
-                        role: [1]
+                        role: [1],
                     },
                     children: [
                         {
@@ -96,33 +96,35 @@ const router = createRouter({
                     path: 'settings',
                     meta: {
                         title: '系统管理',
-                        role: [1]
+                        role: [1],
                     },
                     children: [
                         {
                             name: 'siteManage',
                             path: 'site',
                             meta: {
-                                title: '站点配置'
+                                title: '站点配置',
                             },
                             children: [
                                 {
                                     name: 'siteManageSite',
                                     path: 'site',
                                     meta: {
-                                        title: '网站设置'
+                                        title: '网站设置',
                                     },
-                                    component: () => import('@/views/admin/settings_manage/site-manage/site.vue'),
+                                    component: () =>
+                                        import('@/views/admin/settings_manage/site-manage/site.vue'),
                                 },
                                 {
                                     name: 'siteManageEmail',
                                     path: 'email',
                                     meta: {
-                                        title: '网站设置'
+                                        title: '网站设置',
                                     },
-                                    component: () => import('@/views/admin/settings_manage/site-manage/email.vue'),
-                                }
-                            ]
+                                    component: () =>
+                                        import('@/views/admin/settings_manage/site-manage/email.vue'),
+                                },
+                            ],
                         },
                         {
                             name: 'logList',
@@ -144,7 +146,7 @@ const router = createRouter({
                 role: [1, 2, 3],
             },
             component: () => import('@/views/web/404.vue'),
-        }
+        },
     ],
 })
 
@@ -164,7 +166,7 @@ router.beforeEach(async (to, from, next) => {
             const redirect = encodeURIComponent(to.fullPath)
             next({
                 path: '/login',
-                query: { redirect }
+                query: { redirect },
             })
         }
     }
@@ -176,7 +178,7 @@ router.beforeEach(async (to, from, next) => {
         }
     }
 
-    console.log('x',to.path, to.meta.role, userInfo!.role)
+    console.log('x', to.path, to.meta.role, userInfo!.role)
     if (to.meta?.role?.includes(userInfo!.role)) {
         next()
     } else {

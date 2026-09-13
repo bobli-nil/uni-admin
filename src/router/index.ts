@@ -93,17 +93,42 @@ const router = createRouter({
                 },
                 {
                     name: 'settingsManage',
-                    path: 'settings_manage',
+                    path: 'settings',
                     meta: {
-                        title: '系统设置',
+                        title: '系统管理',
                         role: [1]
                     },
                     children: [
                         {
-                            name: 'settings',
-                            path: 'settings',
+                            name: 'siteManage',
+                            path: 'site',
                             meta: {
-                                title: '系统信息',
+                                title: '站点配置'
+                            },
+                            children: [
+                                {
+                                    name: 'siteManageSite',
+                                    path: 'site',
+                                    meta: {
+                                        title: '网站设置'
+                                    },
+                                    component: () => import('@/views/admin/settings_manage/site-manage/site.vue'),
+                                },
+                                {
+                                    name: 'siteManageEmail',
+                                    path: 'email',
+                                    meta: {
+                                        title: '网站设置'
+                                    },
+                                    component: () => import('@/views/admin/settings_manage/site-manage/email.vue'),
+                                }
+                            ]
+                        },
+                        {
+                            name: 'logList',
+                            path: 'logs',
+                            meta: {
+                                title: '日志列表',
                             },
                             component: () => import('@/views/admin/settings_manage/index.vue'),
                         },

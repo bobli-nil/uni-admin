@@ -173,7 +173,9 @@ router.beforeEach(async (to, from, next) => {
     if (getToken() && !userInfo) {
         // 获取用户信息
         userInfo = await userStore.getUserInfo()
+        console.log('userInfo', userInfo)
         if (!userInfo) {
+            window.localStorage.removeItem('token')
             next('/login')
         }
     }

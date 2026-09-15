@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FTitle from '@/components/common/f-title.vue'
+import FImageUpload from '@/components/common/f-image-upload.vue'
 import { reactive } from 'vue'
 
 const form = reactive({
@@ -47,6 +48,10 @@ const form = reactive({
         commentLine: 3,
     },
 })
+
+const updateHandler = () => {
+    console.log('form', form)
+}
 </script>
 
 <template>
@@ -72,6 +77,10 @@ const form = reactive({
                                 :label-col-props="{ span: 5 }"
                                 :wrapper-col-props="{ span: 18 }"
                             >
+                                <f-image-upload
+                                    v-model="form.siteInfo.logo"
+                                    placeholder="logo地址"
+                                ></f-image-upload>
                             </a-form-item>
                             <a-form-item
                                 label="备案号"
@@ -97,17 +106,148 @@ const form = reactive({
                     </div>
                     <div class="form project-form">
                         <f-title>项目设置</f-title>
+                        <div class="body">
+                            <a-form-item
+                                label="网站title"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <a-input
+                                    v-model="form.project.title"
+                                    placeholder="网站标题"
+                                ></a-input>
+                            </a-form-item>
+                            <a-form-item
+                                label="网站icon"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <f-image-upload
+                                    v-model="form.project.icon"
+                                    placeholder="网站icon"
+                                ></f-image-upload>
+                            </a-form-item>
+                            <a-form-item
+                                label="前端地址"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <a-input
+                                    v-model="form.project.webPath"
+                                    placeholder="前端地址"
+                                ></a-input>
+                            </a-form-item>
+                        </div>
                     </div>
                     <div class="form seo-form">
                         <f-title>SEO设置</f-title>
+                        <div class="body">
+                            <a-form-item
+                                label="keywords"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <a-input
+                                    v-model="form.seo.keywords"
+                                    placeholder="keywords"
+                                ></a-input>
+                            </a-form-item>
+                            <a-form-item
+                                label="description"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <a-textarea
+                                    v-model="form.seo.description"
+                                    placeholder="description"
+                                    :auto-size="{ minRows: 2, maxRows: 3 }"
+                                ></a-textarea>
+                            </a-form-item>
+                        </div>
                     </div>
                 </a-col>
                 <a-col :span="8">
                     <div class="form about-form">
                         <f-title>关于我们</f-title>
+                        <div class="body">
+                            <a-form-item
+                                label="QQ二维码"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <f-image-upload
+                                    v-model="form.about.qq"
+                                    placeholder="QQ二维码"
+                                ></f-image-upload>
+                            </a-form-item>
+                            <a-form-item
+                                label="微信二维码"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <f-image-upload
+                                    v-model="form.about.wechat"
+                                    placeholder="微信二维码"
+                                ></f-image-upload>
+                            </a-form-item>
+                            <a-form-item
+                                label="bilibili"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <a-input
+                                    v-model="form.about.bilibili"
+                                    placeholder="bilibili"
+                                ></a-input>
+                            </a-form-item>
+                            <a-form-item
+                                label="gitee"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <a-input v-model="form.about.gitee" placeholder="gitee"></a-input>
+                            </a-form-item>
+                            <a-form-item
+                                label="github"
+                                :label-col-props="{ span: 5 }"
+                                :wrapper-col-props="{ span: 18 }"
+                            >
+                                <a-input v-model="form.about.gitee" placeholder="github"></a-input>
+                            </a-form-item>
+                        </div>
                     </div>
                     <div class="form login-form">
                         <f-title>登录设置</f-title>
+                        <div class="body">
+                            <a-form-item
+                                label="启用QQ登录"
+                                :label-col-props="{ span: 6 }"
+                                :wrapper-col-props="{ span: 17 }"
+                            >
+                                <a-switch v-model="form.login.qqLogin"></a-switch>
+                            </a-form-item>
+                            <a-form-item
+                                label="用户名密码登录"
+                                :label-col-props="{ span: 6 }"
+                                :wrapper-col-props="{ span: 17 }"
+                            >
+                                <a-switch v-model="form.login.usernamePwdLogin"></a-switch>
+                            </a-form-item>
+                            <a-form-item
+                                label="启用邮箱注册"
+                                :label-col-props="{ span: 6 }"
+                                :wrapper-col-props="{ span: 17 }"
+                            >
+                                <a-switch v-model="form.login.emailPwdLogin"></a-switch>
+                            </a-form-item>
+                            <a-form-item
+                                label="启用图片验证码"
+                                :label-col-props="{ span: 6 }"
+                                :wrapper-col-props="{ span: 17 }"
+                            >
+                                <a-switch v-model="form.login.captcha"></a-switch>
+                            </a-form-item>
+                        </div>
                     </div>
                 </a-col>
                 <a-col :span="8">
@@ -116,10 +256,31 @@ const form = reactive({
                     </div>
                     <div class="form article-form">
                         <f-title>文章设置</f-title>
+                        <div class="body">
+                            <a-form-item
+                                label="文章免审核"
+                                :label-col-props="{ span: 6 }"
+                                :wrapper-col-props="{ span: 17 }"
+                            >
+                                <a-switch v-model="form.article.noExamine"></a-switch>
+                            </a-form-item>
+                            <a-form-item
+                                label="评论层数"
+                                :label-col-props="{ span: 6 }"
+                                :wrapper-col-props="{ span: 17 }"
+                            >
+                                <a-input-number
+                                    v-model="form.article.commentLine"
+                                    placeholder="评论层数"
+                                ></a-input-number>
+                            </a-form-item>
+                        </div>
                     </div>
                 </a-col>
             </a-row>
         </a-form>
+
+        <a-button type="primary" @click="updateHandler">更新配置</a-button>
     </div>
 </template>
 

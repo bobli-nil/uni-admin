@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import FTitle from '@/components/common/f-title.vue'
 import FImageUpload from '@/components/common/f-image-upload.vue'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import FIndexRight from '@/components/admin/site/f-index-right.vue'
 
 const form = reactive({
     qiNiu: {
@@ -41,7 +42,14 @@ const form = reactive({
         captcha: false,
     },
     indexRight: {
-        list: [],
+        list: [
+            { title: '标签云', enable: true },
+            { title: '作者推荐', enable: false },
+            { title: '关于我们', enable: true },
+            { title: '独家推广', enable: true },
+            { title: '意见反馈', enable: true },
+            { title: '文章推荐', enable: true },
+        ],
     },
     article: {
         noExamine: true,
@@ -253,6 +261,7 @@ const updateHandler = () => {
                 <a-col :span="8">
                     <div class="form index-right-form">
                         <f-title>首页右侧组件展示</f-title>
+                        <f-index-right class="body" v-model="form.indexRight.list"></f-index-right>
                     </div>
                     <div class="form article-form">
                         <f-title>文章设置</f-title>

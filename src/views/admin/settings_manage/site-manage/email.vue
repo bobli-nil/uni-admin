@@ -1,7 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import FSite from '@/components/admin/site/f-site.vue'
+</script>
 
 <template>
-    <div>邮箱设置</div>
+    <div class="email-view">
+        <f-site name="email" v-slot="{ data }">
+            {{ data }}
+        </f-site>
+    </div>
 </template>
 
 <style scoped lang="less"></style>

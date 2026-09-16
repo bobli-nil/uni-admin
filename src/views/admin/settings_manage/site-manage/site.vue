@@ -3,7 +3,7 @@ import FTitle from '@/components/common/f-title.vue'
 import FImageUpload from '@/components/common/f-image-upload.vue'
 import { reactive } from 'vue'
 import FIndexRight from '@/components/admin/site/f-index-right.vue'
-import { siteInfoApi, siteUpdateInfoApi, type SiteResponse } from '@/api/site-api.ts'
+import { siteApi, siteUpdateApi, type SiteResponse } from '@/api/site-api.ts'
 import { Message } from '@arco-design/web-vue'
 
 const form = reactive<SiteResponse>({
@@ -60,7 +60,7 @@ const form = reactive<SiteResponse>({
 })
 
 const initForm = async () => {
-    const res = await siteInfoApi()
+    const res = await siteApi('site')
     if (res.code) {
         Message.error(res.msg)
         return
@@ -71,7 +71,7 @@ initForm()
 
 const updateHandler = async () => {
     console.log('form', form)
-    const res = await siteUpdateInfoApi(form)
+    const res = await siteUpdateApi('site', form)
     if (res.code) {
         Message.error(res.msg)
         return

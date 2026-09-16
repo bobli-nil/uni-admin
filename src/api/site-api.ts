@@ -46,20 +46,37 @@ export interface SiteResponse {
     }
 }
 
-// 获取站点信息
-export const siteInfoApi = (): Promise<baseResponse<SiteResponse>> => {
+export interface EmailResponse {}
+
+export interface QQResponse {}
+
+export interface QiNiuResponse {}
+
+export interface AiResponse {}
+
+export interface SiteBaseResponse {
+    site: SiteResponse
+    email: EmailResponse
+    qq: QQResponse
+    qiNiu: QiNiuResponse
+    ai: AiResponse
+}
+
+export const siteApi = <T extends keyof SiteBaseResponse>(
+    name: T,
+): Promise<baseResponse<SiteBaseResponse[T]>> => {
     return useAxios({
-        url: '/api/site/site',
+        url: `/api/site/${name}`,
         method: 'get',
     })
 }
 
-// 更新站点信息
-export const siteUpdateInfoApi = (
-    data: SiteResponse,
-): Promise<baseResponse<Record<string, unknown>>> => {
+export const siteUpdateApi = <T extends keyof SiteBaseResponse>(
+    siteName: T,
+    data: SiteBaseResponse[T],
+): Promise<baseResponse<string>> => {
     return useAxios({
-        url: '/api/site/site',
+        url: `/api/site/${siteName}`,
         method: 'put',
         data,
     })

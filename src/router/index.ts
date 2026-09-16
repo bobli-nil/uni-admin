@@ -119,10 +119,19 @@ const router = createRouter({
                                     name: 'siteManageEmail',
                                     path: 'email',
                                     meta: {
-                                        title: '网站设置',
+                                        title: '邮箱设置',
                                     },
                                     component: () =>
                                         import('@/views/admin/settings_manage/site-manage/email.vue'),
+                                },
+                                {
+                                    name: 'siteManageQQ',
+                                    path: 'qq',
+                                    meta: {
+                                        title: 'qq设置',
+                                    },
+                                    component: () =>
+                                        import('@/views/admin/settings_manage/site-manage/qq.vue'),
                                 },
                             ],
                         },

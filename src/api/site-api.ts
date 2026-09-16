@@ -56,7 +56,11 @@ export interface EmailResponse {
     tls: boolean
 }
 
-export interface QQResponse {}
+export interface QQResponse {
+    appID: string
+    appKey: string
+    redirect: string
+}
 
 export interface QiNiuResponse {}
 

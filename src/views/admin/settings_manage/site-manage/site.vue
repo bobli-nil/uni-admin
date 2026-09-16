@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import FTitle from '@/components/common/f-title.vue'
 import FImageUpload from '@/components/common/f-image-upload.vue'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import FIndexRight from '@/components/admin/site/f-index-right.vue'
+import { siteInfoApi, siteUpdateInfoApi, type SiteResponse } from '@/api/site-api.ts'
+import { Message } from '@arco-design/web-vue'
 
-const form = reactive({
+const form = reactive<SiteResponse>({
     qiNiu: {
         enable: false,
     },
@@ -57,8 +59,24 @@ const form = reactive({
     },
 })
 
-const updateHandler = () => {
+const initForm = async () => {
+    const res = await siteInfoApi()
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Object.assign(form, res.data)
+}
+initForm()
+
+const updateHandler = async () => {
     console.log('form', form)
+    const res = await siteUpdateInfoApi(form)
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Message.success('更新成功')
 }
 </script>
 

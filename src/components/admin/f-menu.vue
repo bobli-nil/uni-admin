@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { type Component, ref, watch } from 'vue'
-import { IconHome, IconSettings, IconUser, IconEmail, IconQq } from '@arco-design/web-vue/es/icon'
+import {
+    IconHome,
+    IconSettings,
+    IconUser,
+    IconEmail,
+    IconQq,
+    IconRobot,
+} from '@arco-design/web-vue/es/icon'
 import { collapsed } from '@/components/admin/f-menu.ts'
 import { useRouter, useRoute } from 'vue-router'
 import FMenuItem from '@/components/admin/f-menu-item.vue'
@@ -60,6 +67,11 @@ const menuList: MenuType[] = [
                         title: 'QQ设置',
                         name: 'siteManageQQ',
                         icon: IconQq,
+                    },
+                    {
+                        title: 'AI设置',
+                        name: 'siteManageAI',
+                        icon: IconRobot,
                     },
                 ],
             },

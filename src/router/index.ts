@@ -133,6 +133,15 @@ const router = createRouter({
                                     component: () =>
                                         import('@/views/admin/settings_manage/site-manage/qq.vue'),
                                 },
+                                {
+                                    name: 'siteManageAI',
+                                    path: 'ai',
+                                    meta: {
+                                        title: 'AI设置',
+                                    },
+                                    component: () =>
+                                        import('@/views/admin/settings_manage/site-manage/ai.vue'),
+                                },
                             ],
                         },
                         {

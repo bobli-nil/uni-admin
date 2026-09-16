@@ -20,7 +20,11 @@ import type { QQResponse } from '@/api/site-api.ts'
                                 <a-input v-model="data.appID" placeholder="appID"></a-input>
                             </a-form-item>
                             <a-form-item label="appKey">
-                                <a-input v-model="data.appKey" placeholder="appKey"></a-input>
+                                <a-input
+                                    type="password"
+                                    v-model="data.appKey"
+                                    placeholder="appKey"
+                                ></a-input>
                             </a-form-item>
                             <a-form-item label="回调地址">
                                 <a-input v-model="data.redirect" placeholder="回调地址"></a-input>

@@ -64,7 +64,13 @@ export interface QQResponse {
 
 export interface QiNiuResponse {}
 
-export interface AiResponse {}
+export interface AiResponse {
+    enable: boolean
+    secretKey: string
+    nickname: string
+    avatar: string
+    abstract: string
+}
 
 export interface SiteBaseResponse {
     site: SiteResponse

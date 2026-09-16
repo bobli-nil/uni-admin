@@ -46,7 +46,15 @@ export interface SiteResponse {
     }
 }
 
-export interface EmailResponse {}
+export interface EmailResponse {
+    domain: string
+    port: 587
+    sendEmail: string
+    authCode: string
+    sendNickname: string
+    ssl: boolean
+    tls: boolean
+}
 
 export interface QQResponse {}
 

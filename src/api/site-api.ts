@@ -62,7 +62,17 @@ export interface QQResponse {
     redirect: string
 }
 
-export interface QiNiuResponse {}
+export interface QiNiuResponse {
+    enable: boolean
+    accessKey: string
+    secretKey: string
+    bucket: string
+    uri: string
+    region: string
+    prefix: string
+    size: number // MB
+    expiry: number // 秒
+}
 
 export interface AiResponse {
     enable: boolean

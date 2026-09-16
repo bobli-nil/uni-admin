@@ -142,6 +142,15 @@ const router = createRouter({
                                     component: () =>
                                         import('@/views/admin/settings_manage/site-manage/ai.vue'),
                                 },
+                                {
+                                    name: 'siteManageQiNiu',
+                                    path: 'qiniu',
+                                    meta: {
+                                        title: '七牛云设置',
+                                    },
+                                    component: () =>
+                                        import('@/views/admin/settings_manage/site-manage/qiniu.vue'),
+                                },
                             ],
                         },
                         {

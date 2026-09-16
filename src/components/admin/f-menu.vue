@@ -7,6 +7,7 @@ import {
     IconEmail,
     IconQq,
     IconRobot,
+    IconCloud,
 } from '@arco-design/web-vue/es/icon'
 import { collapsed } from '@/components/admin/f-menu.ts'
 import { useRouter, useRoute } from 'vue-router'
@@ -72,6 +73,11 @@ const menuList: MenuType[] = [
                         title: 'AI设置',
                         name: 'siteManageAI',
                         icon: IconRobot,
+                    },
+                    {
+                        title: '七牛云设置',
+                        name: 'siteManageQiNiu',
+                        icon: IconCloud,
                     },
                 ],
             },

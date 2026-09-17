@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import FList, { type columnType } from '@/components/admin/f-list.vue'
-import FImageUpload from '@/components/common/f-image-upload.vue'
 import { Message } from '@arco-design/web-vue'
-import { articleListApi, type ArticleListItem } from '@/api/article-api.ts'
-import FLabel from '@/components/common/f-label.vue'
+import {
+    articleDetailApi,
+    type ArticleDetailType,
+    articleExamineApi,
+    type ArticleExamineRequest,
+    articleListApi,
+    type ArticleListItem,
+} from '@/api/article-api.ts'
+import FUser from '@/components/common/f-user.vue'
 import { ArticleStatusOptions } from '@/options/options.ts'
 
 const columns: columnType[] = [
@@ -24,20 +30,117 @@ const columns: columnType[] = [
     { title: '操作', slotName: 'action' },
 ]
 const fListRef = ref()
+const visible = ref(false)
 
 const deleteArticle = async (keys: (string | number)[]) => {
     console.log('delete keys', keys)
     fListRef.value?.getList()
 }
+
+const data = reactive<ArticleDetailType>({
+    id: 0,
+    createdAt: '',
+    updatedAt: '',
+    title: '',
+    abstract: '',
+    content: '',
+    categoryId: 0,
+    tagList: [],
+    cover: '',
+    userId: 0,
+    lookCount: 0,
+    diggCount: 0,
+    commentCount: 0,
+    collectCount: 0,
+    openComment: false,
+    status: 1,
+    username: '',
+    nickname: '',
+    avatar: '',
+    categoryTitle: '',
+    isCollect: false,
+    isDigg: false,
+})
+
+const update = async (record: ArticleDetailType) => {
+    if (record.id !== data.id) {
+        const res = await articleDetailApi(record.id)
+        if (res.code) {
+            Message.error(res.msg)
+            return
+        }
+        Object.assign(data, res.data)
+    }
+    visible.value = true
+}
+
+const examine = reactive<ArticleExamineRequest>({
+    articleID: 0,
+    status: 3,
+    msg: '',
+})
+
+const handler = async () => {
+    if (examine.status !== 2) {
+        return
+    }
+    examine.articleID = data.id
+    const res = await articleExamineApi(examine)
+    if (res.code) {
+        Message.error(res.msg)
+        return false
+    }
+    Message.success(res.msg || '成功')
+    fListRef.value?.getList()
+    return true
+}
 </script>
 
 <template>
     <div class="article-list">
+        <a-modal
+            v-model:visible="visible"
+            title="文章审核"
+            modal-class="article-examine-modal"
+            :on-before-ok="handler"
+        >
+            <a-form :model="data">
+                <a-form-item label="文章标题">{{ data.title }}</a-form-item>
+                <a-form-item label="文章简介">{{ data.abstract }}</a-form-item>
+                <a-form-item label="发布用户">
+                    <f-user :avatar="data.avatar" :nickname="data.nickname"></f-user>
+                </a-form-item>
+                <a-form-item label="文章分类">{{ data.categoryTitle }}</a-form-item>
+                <a-form-item label="文章标签">
+                    <a-tag v-for="tag in data.tagList" color="blue" style="margin-right: 8px">
+                        {{ tag }}
+                    </a-tag>
+                </a-form-item>
+                <a-form-item label="文章正文">
+                    {{ data.content }}
+                </a-form-item>
+                <a-form-item v-if="data.status === 2" label="审核意见">
+                    <a-radio-group v-model="examine.status">
+                        <a-radio :value="3">通过</a-radio>
+                        <a-radio :value="4">不通过</a-radio>
+                    </a-radio-group>
+                </a-form-item>
+                <a-form-item v-if="examine.status === 4" label="拒绝原因">
+                    <a-textarea
+                        v-model="examine.msg"
+                        :auto-size="{ minRows: 2, maxRows: 4 }"
+                        placeholder="拒绝原因"
+                    ></a-textarea>
+                </a-form-item>
+            </a-form>
+        </a-modal>
         <f-list
             ref="fListRef"
             :url="articleListApi as any"
             :columns="columns"
             :default-params="{ type: 3, status: 3 }"
+            no-add
+            @update="update"
             @delete="deleteArticle"
         >
             <template #cover="{ record }: { record: ArticleListItem }">
@@ -45,8 +148,7 @@ const deleteArticle = async (keys: (string | number)[]) => {
                 <span v-else>-</span>
             </template>
             <template #user="{ record }: { record: ArticleListItem }">
-                <a-avatar :image-url="record.userAvatar" width="30"></a-avatar>
-                <span style="margin-left: 8px">{{ record.userNickname }}</span>
+                <f-user :avatar="record.userAvatar" :nickname="record.userNickname"></f-user>
             </template>
             <template #category="{ record }: { record: ArticleListItem }">
                 {{ record.categoryTitle || '-' }}

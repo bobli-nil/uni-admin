@@ -83,3 +83,14 @@ export interface ArticleExamineRequest {
 export const articleExamineApi = (data: ArticleExamineRequest): Promise<baseResponse<string>> => {
     return useAxios.post('/api/article/examine', data)
 }
+
+// 置顶入参类型
+interface UserArticleTopRequest {
+    articleID: number
+    type: number
+}
+
+// 置顶接口
+export const userArticleTopApi = (data: UserArticleTopRequest): Promise<baseResponse<string>> => {
+    return useAxios.post('/api/user/article/top', data)
+}

@@ -9,6 +9,7 @@ import {
     type ArticleExamineRequest,
     articleListApi,
     type ArticleListItem,
+    userArticleTopApi,
 } from '@/api/article-api.ts'
 import FUser from '@/components/common/f-user.vue'
 import { ArticleStatusOptions } from '@/options/options.ts'
@@ -25,6 +26,7 @@ const columns: columnType[] = [
     { title: '收藏', dataIndex: 'collectCount' },
     { title: '状态', dataIndex: 'status', type: 'options', options: ArticleStatusOptions },
     { title: '分类', slotName: 'category' },
+    { title: '文章置顶', slotName: 'adminTop' },
     { title: '发布时间', dataIndex: 'createdAt', type: 'date', dateFormat: 'current' },
     { title: '更新时间', dataIndex: 'updatedAt', type: 'date', dateFormat: 'current' },
     { title: '操作', slotName: 'action' },
@@ -94,6 +96,22 @@ const handler = async () => {
     fListRef.value?.getList()
     return true
 }
+
+// 管理员置顶
+const adminArticleTop = async (data: ArticleListItem) => {
+    console.log(data.id, data.adminTop)
+    if (data.status !== 3) {
+        Message.warning('只能置顶已经发布的文章')
+        data.adminTop = !data.adminTop
+        return
+    }
+    const res = await userArticleTopApi({ articleID: data.id, type: 2 })
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Message.success(res.msg)
+}
 </script>
 
 <template>
@@ -155,6 +173,9 @@ const handler = async () => {
             </template>
             <template #openComment="{ record }: { record: ArticleListItem }">
                 {{ record.openComment ? '是' : '否' }}
+            </template>
+            <template #adminTop="{ record }: { record: ArticleListItem }">
+                <a-switch v-model="record.adminTop" @change="adminArticleTop(record)"></a-switch>
             </template>
         </f-list>
     </div>

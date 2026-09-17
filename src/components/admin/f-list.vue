@@ -9,9 +9,13 @@ import {
 } from '@arco-design/web-vue'
 import { dateTemFormat, type dateTemType } from '@/utils/date.ts'
 import { type optionsType, type optionsFunc } from '@/api/index.ts'
+import type { OptionColorType } from '@/options/options.ts'
+import FLabel from '@/components/common/f-label.vue'
 
 export interface columnType extends TableColumnData {
     dateFormat?: dateTemType
+    type?: 'date' | 'options' | 'switch'
+    options?: OptionColorType[]
 }
 
 export interface actionGroupType {
@@ -46,6 +50,7 @@ interface Props {
     noBatchDelete?: boolean
     actionGroup?: actionGroupType[]
     filterGroup?: filterGroupType[]
+    defaultParams?: Record<string, any>
 }
 
 const props = defineProps<Props>()
@@ -78,6 +83,9 @@ const search = () => {
 const params = reactive<paramsType>({})
 const getList = async (newParams?: Record<string, any>) => {
     loading.value = true
+    if (props.defaultParams) {
+        Object.assign(params, props.defaultParams)
+    }
     if (newParams) {
         Object.assign(params, newParams)
     }
@@ -253,7 +261,45 @@ defineExpose({
                         <template #columns>
                             <template v-for="col in props.columns">
                                 <a-table-column
-                                    v-if="col.dataIndex"
+                                    v-if="col.type === 'date'"
+                                    v-bind="{ ...col, title: col.title as string }"
+                                >
+                                    <template #cell="data">
+                                        {{
+                                            dateTemFormat(
+                                                data.record[col.dataIndex as string],
+                                                col.dateFormat,
+                                            )
+                                        }}
+                                    </template>
+                                </a-table-column>
+
+                                <a-table-column
+                                    v-else-if="col.type === 'options'"
+                                    v-bind="{ ...col, title: col.title as string }"
+                                >
+                                    <template #cell="data">
+                                        <f-label
+                                            :options="col.options || []"
+                                            :value="data.record[col.dataIndex as string]"
+                                        ></f-label>
+                                    </template>
+                                </a-table-column>
+
+                                <a-table-column
+                                    v-else-if="col.type === 'switch'"
+                                    v-bind="{ ...col, title: col.title as string }"
+                                >
+                                    <template #cell="data">
+                                        <a-switch
+                                            disabled
+                                            :model-value="data.record[col.dataIndex as string]"
+                                        ></a-switch>
+                                    </template>
+                                </a-table-column>
+
+                                <a-table-column
+                                    v-else-if="col.dataIndex"
                                     v-bind="{ ...col, title: col.title as string }"
                                 ></a-table-column>
                                 <a-table-column

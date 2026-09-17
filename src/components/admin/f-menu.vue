@@ -9,6 +9,7 @@ import {
     IconRobot,
     IconCloud,
     IconImage,
+    IconFile,
 } from '@arco-design/web-vue/es/icon'
 import { collapsed } from '@/components/admin/f-menu.ts'
 import { useRouter, useRoute } from 'vue-router'
@@ -43,6 +44,13 @@ const menuList: MenuType[] = [
         icon: 'iconfont icon-yonghuguanli',
         role: 1,
         children: [{ title: '用户列表', name: 'userList' }],
+    },
+    {
+        title: '文章管理',
+        name: 'articleManage',
+        icon: IconFile,
+        role: 1,
+        children: [{ title: '文章列表', name: 'articleList' }],
     },
     {
         title: '系统管理',

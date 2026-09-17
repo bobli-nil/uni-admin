@@ -8,6 +8,7 @@ import {
     IconQq,
     IconRobot,
     IconCloud,
+    IconImage,
 } from '@arco-design/web-vue/es/icon'
 import { collapsed } from '@/components/admin/f-menu.ts'
 import { useRouter, useRoute } from 'vue-router'
@@ -80,6 +81,11 @@ const menuList: MenuType[] = [
                         icon: IconCloud,
                     },
                 ],
+            },
+            {
+                title: 'Banner列表',
+                name: 'bannerList',
+                icon: IconImage,
             },
             {
                 title: '日志列表',

@@ -267,16 +267,17 @@ defineExpose({
                                                 v-if="!noUpdate"
                                                 type="primary"
                                                 @click="update(data.record)"
-                                                >{{ updateLabel }}</a-button
                                             >
+                                                {{ updateLabel }}
+                                            </a-button>
                                             <a-popconfirm
                                                 v-if="!noDelete"
                                                 content="确认删除该记录？"
                                                 @ok="removeOne(data.record)"
                                             >
-                                                <a-button type="primary" status="danger">{{
-                                                    removeLabel
-                                                }}</a-button>
+                                                <a-button type="primary" status="danger">
+                                                    {{ removeLabel }}
+                                                </a-button>
                                             </a-popconfirm>
                                             <slot v-bind="data" name="action-right"></slot>
                                         </div>

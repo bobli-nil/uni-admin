@@ -154,6 +154,15 @@ const router = createRouter({
                             ],
                         },
                         {
+                            name: 'bannerList',
+                            path: 'banners',
+                            meta: {
+                                title: 'Banner列表',
+                            },
+                            component: () =>
+                                import('@/views/admin/settings_manage/banner-list.vue'),
+                        },
+                        {
                             name: 'logList',
                             path: 'logs',
                             meta: {

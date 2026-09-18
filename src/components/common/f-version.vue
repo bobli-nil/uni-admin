@@ -11,11 +11,12 @@ interface versionType {
 const list: versionType[] = [
     {
         title: '第一次上线',
-        date: '2020-01-01',
+        date: '2026-10-01',
         items: [
             '权限设置，可以根据不同的角色进行不同的配置，同时增加了新的特色',
-            '主题定制',
+            '主题切换',
             '用户管理',
+            'AI集成',
         ],
     },
 ]

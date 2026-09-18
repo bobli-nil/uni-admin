@@ -3,15 +3,26 @@ import { useRouter } from 'vue-router'
 import FCard from '@/components/common/f-card.vue'
 import type { Component } from 'vue'
 import FComponent from '@/components/common/f-component.vue'
+import {
+    IconFile,
+    IconImage,
+    IconRobot,
+    IconSettings,
+    IconUser,
+} from '@arco-design/web-vue/es/icon'
 export interface entranceItem {
     label: string
     icon: string | Component
     name: string
 }
-interface Props {
-    list: entranceItem[]
-}
-defineProps<Props>()
+
+const entranceList: entranceItem[] = [
+    { label: '用户列表', icon: IconUser, name: 'userList' },
+    { label: '文章列表', icon: IconFile, name: 'articleList' },
+    { label: '网站设置', icon: IconSettings, name: 'siteManageSite' },
+    { label: 'AI设置', icon: IconRobot, name: 'siteManageAI' },
+    { label: 'Banner设置', icon: IconImage, name: 'bannerList' },
+]
 
 const router = useRouter()
 
@@ -23,7 +34,7 @@ const jump = (name: string) => {
 <template>
     <f-card title="快捷入口">
         <div class="body">
-            <div class="item" v-for="item in list" @click="jump(item.name)">
+            <div class="item" v-for="item in entranceList" @click="jump(item.name)">
                 <div class="icon">
                     <f-component :is="item.icon" />
                 </div>
@@ -35,13 +46,14 @@ const jump = (name: string) => {
 
 <style scoped lang="less">
 .body {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 20px;
 }
 .item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 40px;
     cursor: pointer;
     &:last-child {
         margin-right: 0;

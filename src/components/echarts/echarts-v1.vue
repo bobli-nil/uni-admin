@@ -81,7 +81,6 @@ const setOption = () => {
 
 onMounted(() => {
     let chartDom = document.querySelector(`.${props.class}`)
-    console.log('chartDom', chartDom)
     if (!chartDom) {
         return
     }

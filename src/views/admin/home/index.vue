@@ -6,12 +6,6 @@ import FTitle from '@/components/common/f-title.vue'
 import FHomeChartsV1 from '@/components/admin/f-home-charts-v1.vue'
 import EchartsV2 from '@/components/echarts/echarts-v2.vue'
 import EchartsV3 from '@/components/echarts/echarts-v3.vue'
-import { IconUser } from '@arco-design/web-vue/es/icon'
-
-const entranceList = [
-    { label: '个人信息', icon: IconUser, name: 'userInfo' },
-    { label: '个人信息', icon: IconUser, name: 'userInfo' },
-]
 </script>
 
 <template>
@@ -44,7 +38,7 @@ const entranceList = [
             </div>
         </div>
         <div class="right">
-            <f-quick-entrance :list="entranceList"></f-quick-entrance>
+            <f-quick-entrance></f-quick-entrance>
             <f-version></f-version>
         </div>
     </div>
@@ -70,7 +64,7 @@ const entranceList = [
             grid-template-columns: repeat(3, 1fr);
         }
         .charts-2 {
-            grid-template-columns: 7fr 3fr;
+            grid-template-columns: 6.75fr 3.25fr;
         }
     }
     .right {

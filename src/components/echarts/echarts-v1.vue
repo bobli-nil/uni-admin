@@ -31,7 +31,12 @@ watch(
 
 const setOption = () => {
     const lineColor = getComputedStyle(document.body).getPropertyValue('--color-neutral-2')
+    let themeColor = ['#1c5ae0', '#15c5be']
+    if (theme.value === 'dark') {
+        themeColor = ['#1c5ae0', '#15c5be']
+    }
     option.value = {
+        color: themeColor,
         xAxis: {
             type: 'category',
             data: props.dateList,

@@ -28,3 +28,13 @@ export const dataGrowthApi = (type: 1 | 2 | 3): Promise<baseResponse<DataGrowthT
 export const dataArticleGrowthApi = (): Promise<baseResponse<DataGrowthType>> => {
     return useAxios.get('/api/data/article')
 }
+
+export interface DataComputerType {
+    cpuPercent: number
+    memPercent: number
+    diskPercent: number
+}
+
+export const dataComputerApi = (): Promise<baseResponse<DataComputerType>> => {
+    return useAxios('/api/data/computer')
+}

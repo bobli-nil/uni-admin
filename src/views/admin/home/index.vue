@@ -5,6 +5,7 @@ import FVersion from '@/components/common/f-version.vue'
 import FTitle from '@/components/common/f-title.vue'
 import FHomeChartsV1 from '@/components/admin/f-home-charts-v1.vue'
 import EchartsV2 from '@/components/echarts/echarts-v2.vue'
+import EchartsV3 from '@/components/echarts/echarts-v3.vue'
 import { IconUser } from '@arco-design/web-vue/es/icon'
 
 const entranceList = [
@@ -38,6 +39,7 @@ const entranceList = [
                 </div>
                 <div class="item">
                     <f-title :type="2">系统资源</f-title>
+                    <echarts-v3></echarts-v3>
                 </div>
             </div>
         </div>

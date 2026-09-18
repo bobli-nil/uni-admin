@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, watch, ref, reactive } from 'vue'
+import { onMounted, watch, ref, reactive, nextTick } from 'vue'
 import * as echarts from 'echarts'
 import { theme } from '@/components/common/f-theme.ts'
 import { type EChartsType } from 'echarts'
-import { dataArticleGrowthApi, type DataGrowthType } from '@/api/data-api.ts'
+import { dataComputerApi, type DataComputerType } from '@/api/data-api.ts'
 import { Message } from '@arco-design/web-vue'
 
 type EchartsOptions = echarts.EChartsOption
@@ -12,32 +12,27 @@ let options: EchartsOptions
 
 let myChart = ref<EChartsType | null>(null)
 
-const data = reactive<DataGrowthType>({
-    growthRate: 0,
-    growthNum: 0,
-    countList: [],
-    dateList: [],
+const data = reactive<DataComputerType>({
+    cpuPercent: 0,
+    memPercent: 0,
+    diskPercent: 0,
 })
 
 const getData = async () => {
-    const res = await dataArticleGrowthApi()
+    const res = await dataComputerApi()
     if (res.code) {
         Message.error(res.msg)
         return
     }
     Object.assign(data, res.data)
+
+    await nextTick()
+    setOptions()
 }
 getData()
 
 watch(
     () => theme.value,
-    () => {
-        setOptions()
-    },
-)
-
-watch(
-    () => data.growthNum,
     () => {
         setOptions()
     },
@@ -57,27 +52,35 @@ const setOptions = () => {
         tooltip: {
             trigger: 'axis',
             axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985',
-                },
+                type: 'shadow',
+            },
+            formatter: (params: any) => {
+                const data = params[0]
+                return `
+                    <div>
+                        ${data.name}: ${data.seriesName} ${(data.data as number).toFixed(1)}%
+                    </div>
+                `
             },
         },
-        xAxis: [
-            {
-                type: 'category',
-                boundaryGap: false,
-                data: data.dateList,
+        xAxis: {
+            type: 'value',
+            min: 0,
+            max: 100,
+            axisLabel: {
+                formatter: '{value}%',
             },
-        ],
+        },
+
         yAxis: [
             {
-                type: 'value',
+                type: 'category',
                 splitLine: {
                     lineStyle: {
                         color: lineColor,
                     },
                 },
+                data: ['CPU', '内存', '磁盘'],
             },
         ],
         grid: {
@@ -87,14 +90,15 @@ const setOptions = () => {
         },
         series: [
             {
-                name: '文章数据',
-                type: 'line',
-                areaStyle: {},
-                emphasis: {
-                    focus: 'series',
+                name: '使用率',
+                type: 'bar',
+                data: [data.cpuPercent, data.memPercent, data.diskPercent],
+                label: {
+                    show: true,
+                    formatter: (params: any) => {
+                        return (params.data as number).toFixed(1) + '%'
+                    },
                 },
-                smooth: true,
-                data: data.countList,
             },
         ],
     }
@@ -103,7 +107,7 @@ const setOptions = () => {
 }
 
 onMounted(() => {
-    const dom = document.getElementById('dom') as HTMLElement
+    const dom = document.getElementById('resource') as HTMLElement
     myChart.value = echarts.init(dom)
 
     setOptions()
@@ -111,11 +115,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="dom"></div>
+    <div id="resource"></div>
 </template>
 
 <style scoped>
-#dom {
+#resource {
     height: 300px;
 }
 </style>

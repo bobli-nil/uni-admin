@@ -3,6 +3,7 @@ import FCard from '@/components/common/f-card.vue'
 import FWelcome from '@/components/admin/f-welcome.vue'
 import FQuickEntrance from '@/components/admin/f-quick-entrance.vue'
 import FVersion from '@/components/common/f-version.vue'
+import FTitle from '@/components/common/f-title.vue'
 import { IconUser } from '@arco-design/web-vue/es/icon'
 import UserLoginEcharts from '@/components/echarts/user-login-echarts.vue'
 
@@ -14,33 +15,62 @@ const entranceList = [
 
 <template>
     <div class="home-view">
-        <f-welcome></f-welcome>
-        <div class="bottom">
-            <div class="left">
-                <f-quick-entrance :list="entranceList"></f-quick-entrance>
-                <f-card title="数据统计" class="statistics">
-                    <user-login-echarts></user-login-echarts>
-                </f-card>
+        <div class="left">
+            <f-welcome></f-welcome>
+            <div class="charts charts-3">
+                <div class="item">
+                    <f-title :type="2">访问人数</f-title>
+                </div>
+                <div class="item">
+                    <f-title :type="2">发布文章</f-title>
+                </div>
+                <div class="item">
+                    <f-title :type="2">新增用户</f-title>
+                </div>
             </div>
-            <div class="right">
-                <f-version></f-version>
+            <div class="charts charts-2">
+                <div class="item">
+                    <f-title :type="2">发布文章</f-title>
+                </div>
+                <div class="item">
+                    <f-title :type="2">系统资源</f-title>
+                </div>
             </div>
+        </div>
+        <div class="right">
+            <f-quick-entrance :list="entranceList"></f-quick-entrance>
+            <f-version></f-version>
         </div>
     </div>
 </template>
 
 <style scoped lang="less">
 .home-view {
+    display: flex;
     background: inherit !important;
-    .bottom {
-        display: flex;
-        justify-content: space-between;
-        .left {
-            width: 70%;
+    .left {
+        width: 70%;
+        .charts {
+            display: grid;
+            margin-bottom: 20px;
+            column-gap: 20px;
+            .item {
+                background: var(--color-bg-1);
+                border-radius: 5px;
+                padding: 20px 10px;
+            }
         }
-        .right {
-            margin-left: 20px;
-            width: 30%;
+        .charts-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .charts-2 {
+            grid-template-columns: 7fr 3fr;
+        }
+    }
+    .right {
+        margin-left: 20px;
+        .f-quick-entrance {
+            margin-bottom: 20px;
         }
     }
 }

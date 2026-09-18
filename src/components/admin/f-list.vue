@@ -205,8 +205,8 @@ defineExpose({
     <div class="f-list-com">
         <div class="f-list-head">
             <slot name="action-add">
-                <div class="action-create">
-                    <a-button type="primary" v-if="!noAdd" @click="add">{{ addLabel }}</a-button>
+                <div v-if="!noAdd" class="action-create">
+                    <a-button type="primary" @click="add">{{ addLabel }}</a-button>
                 </div>
             </slot>
             <div class="action-group" v-if="!noActionGroup">
@@ -412,6 +412,9 @@ defineExpose({
         .col-actions {
             button {
                 margin-left: 10px;
+                &:first-child {
+                    margin-left: 0;
+                }
                 &:last-child {
                     margin-right: 0;
                 }

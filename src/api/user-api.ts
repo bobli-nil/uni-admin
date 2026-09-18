@@ -31,11 +31,13 @@ export const logoutApi = (): Promise<baseResponse<Record<string, never>>> => {
     })
 }
 
-interface userListType {
+// 用户列表类型
+export interface UserListItem {
     id: number
     nickname: string
     username: string
     avatar: string
+    abstract: string
     ip: string
     addr: string
     articleCount: number
@@ -45,13 +47,23 @@ interface userListType {
     role: number
 }
 
-// 用户列表
+// 用户列表接口
 export const userListApi = (
     params?: paramsType,
-): Promise<baseResponse<listResponse<userListType>>> => {
-    return useAxios({
-        url: '/api/user',
-        method: 'get',
-        params,
-    })
+): Promise<baseResponse<listResponse<UserListItem>>> => {
+    return useAxios.get('/api/user', { params })
+}
+
+export interface UserUpdateAdminRequest {
+    userId: number
+    username: string
+    nickname: string
+    avatar: string
+    abstract: string
+    role: number
+}
+
+// 管理员更新用户信息接口
+export const userUpdateAdminApi = (data: UserUpdateAdminRequest): Promise<baseResponse<string>> => {
+    return useAxios.put('/api/user/admin', data)
 }

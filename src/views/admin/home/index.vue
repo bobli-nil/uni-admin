@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import FCard from '@/components/common/f-card.vue'
 import FWelcome from '@/components/admin/f-welcome.vue'
 import FQuickEntrance from '@/components/admin/f-quick-entrance.vue'
 import FVersion from '@/components/common/f-version.vue'
 import FTitle from '@/components/common/f-title.vue'
+import FHomeChartsV1 from '@/components/admin/f-home-charts-v1.vue'
+import EchartsV2 from '@/components/echarts/echarts-v2.vue'
 import { IconUser } from '@arco-design/web-vue/es/icon'
-import UserLoginEcharts from '@/components/echarts/user-login-echarts.vue'
 
 const entranceList = [
     { label: '个人信息', icon: IconUser, name: 'userInfo' },
@@ -20,17 +20,21 @@ const entranceList = [
             <div class="charts charts-3">
                 <div class="item">
                     <f-title :type="2">访问人数</f-title>
+                    <f-home-charts-v1 :type="1"></f-home-charts-v1>
                 </div>
                 <div class="item">
                     <f-title :type="2">发布文章</f-title>
+                    <f-home-charts-v1 :type="2"></f-home-charts-v1>
                 </div>
                 <div class="item">
                     <f-title :type="2">新增用户</f-title>
+                    <f-home-charts-v1 :type="3"></f-home-charts-v1>
                 </div>
             </div>
             <div class="charts charts-2">
                 <div class="item">
                     <f-title :type="2">发布文章</f-title>
+                    <echarts-v2></echarts-v2>
                 </div>
                 <div class="item">
                     <f-title :type="2">系统资源</f-title>

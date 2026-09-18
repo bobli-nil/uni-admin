@@ -13,3 +13,18 @@ export interface DataSumType {
 export const dataSumApi = (): Promise<baseResponse<DataSumType>> => {
     return useAxios('/api/data/sum')
 }
+
+export interface DataGrowthType {
+    growthRate: number
+    growthNum: number
+    countList: number[]
+    dateList: string[]
+}
+
+export const dataGrowthApi = (type: 1 | 2 | 3): Promise<baseResponse<DataGrowthType>> => {
+    return useAxios.get('/api/data/growth', { params: { type } })
+}
+
+export const dataArticleGrowthApi = (): Promise<baseResponse<DataGrowthType>> => {
+    return useAxios.get('/api/data/article')
+}

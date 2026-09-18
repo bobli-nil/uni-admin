@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { reactive } from 'vue'
 import { computed } from 'vue'
 import { useUserStore } from '@/stores/userStore.ts'
+import { dataSumApi, type DataSumType } from '@/api/data-api.ts'
+import { Message } from '@arco-design/web-vue'
+
 const userStore = useUserStore()
 
 const welcomeTitle = computed(() => {
@@ -23,6 +27,26 @@ const welcomeTitle = computed(() => {
     }
     return '早安'
 })
+
+const data = reactive<DataSumType>({
+    flowCount: 0,
+    userCount: 0,
+    articleCount: 0,
+    chatCount: 0,
+    commentCount: 0,
+    newLoginCount: 0,
+    newSignCount: 0,
+})
+
+const getData = async () => {
+    const res = await dataSumApi()
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Object.assign(data, res.data)
+}
+getData()
 </script>
 
 <template>
@@ -35,14 +59,39 @@ const welcomeTitle = computed(() => {
             <a-statistic
                 animation
                 title="在线流量"
-                :value="1234"
+                :value="data.flowCount"
                 show-group-separator
             ></a-statistic>
-            <a-statistic animation title="消息总数" :value="134" show-group-separator></a-statistic>
-            <a-statistic animation title="用户总数" :value="34" show-group-separator></a-statistic>
-            <a-statistic animation title="文章总数" :value="72" show-group-separator></a-statistic>
-            <a-statistic animation title="今日登录" :value="20" show-group-separator></a-statistic>
-            <a-statistic animation title="今日注册" :value="9" show-group-separator></a-statistic>
+            <a-statistic
+                animation
+                title="消息总数"
+                :value="data.chatCount"
+                show-group-separator
+            ></a-statistic>
+            <a-statistic
+                animation
+                title="用户总数"
+                :value="data.userCount"
+                show-group-separator
+            ></a-statistic>
+            <a-statistic
+                animation
+                title="文章总数"
+                :value="data.articleCount"
+                show-group-separator
+            ></a-statistic>
+            <a-statistic
+                animation
+                title="今日登录"
+                :value="data.newLoginCount"
+                show-group-separator
+            ></a-statistic>
+            <a-statistic
+                animation
+                title="今日注册"
+                :value="data.newSignCount"
+                show-group-separator
+            ></a-statistic>
         </div>
         <div class="extra">欢迎使用UniAdmin后台系统，可查看 <a href="">系统帮助</a></div>
     </div>

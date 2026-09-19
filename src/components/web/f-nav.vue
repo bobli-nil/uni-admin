@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import FNavMsg from '@/components/web/f-nav-msg.vue'
+import FNavAvatar from '@/components/web/f-nav-avatar.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 
 const userStore = useUserStore()
@@ -33,7 +34,7 @@ if (!noScroll) {
                 <a-input-search placeholder="搜索你喜欢的文章"></a-input-search>
             </div>
             <div class="right">
-                <a-avatar :image-url="userStore?.userInfo?.avatar" width="30"></a-avatar>
+                <f-nav-avatar></f-nav-avatar>
                 <f-nav-msg></f-nav-msg>
                 <span class="history">历史</span>
                 <a-button type="primary">
@@ -83,8 +84,9 @@ if (!noScroll) {
         .right {
             display: flex;
             align-items: center;
+            justify-content: end;
             width: 30%;
-            .arco-avatar {
+            .f-nav-avatar {
                 margin-right: 20px;
             }
             .f-nav-msg-com {

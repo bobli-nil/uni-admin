@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import FTheme from '@/components/common/f-theme.vue'
-import FUserDropdown from '@/components/common/f-user-dropdown.vue'
+import FNavMsg from '@/components/web/f-nav-msg.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 
 const userStore = useUserStore()
@@ -26,13 +25,21 @@ if (!noScroll) {
 <template>
     <div class="f-nav" :class="{ isShow }">
         <div class="container">
-            <div class="left">
-                <router-link to="/">首页</router-link>
+            <div class="logo">
+                <div>BlogX</div>
+            </div>
+            <div class="center">
+                <icon-robot></icon-robot>
+                <a-input-search placeholder="搜索你喜欢的文章"></a-input-search>
             </div>
             <div class="right">
-                <router-link v-if="!userStore.userInfo" to="/login">登录</router-link>
-                <f-user-dropdown v-else></f-user-dropdown>
-                <f-theme class="theme"></f-theme>
+                <a-avatar :image-url="userStore?.userInfo?.avatar" width="30"></a-avatar>
+                <f-nav-msg></f-nav-msg>
+                <span class="history">历史</span>
+                <a-button type="primary">
+                    <icon-plus-circle></icon-plus-circle>
+                    发布
+                </a-button>
             </div>
         </div>
     </div>
@@ -55,23 +62,44 @@ if (!noScroll) {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        a {
-            color: var(--color-text-2);
-            font-size: 16px;
-            text-decoration: none;
-            &.router-link-exact-active {
-                color: @primary-6;
-            }
+        .logo {
+            width: 20%;
         }
-        .left {
-            width: 70%;
+        .center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            :deep(.arco-icon-robot) {
+                font-size: 22px;
+                cursor: pointer;
+            }
+            :deep(.arco-input-wrapper) {
+                width: 400px;
+                margin-left: 10px;
+                border-radius: 20px;
+            }
         }
         .right {
             display: flex;
             align-items: center;
-            .theme {
-                margin-left: 20px;
-                cursor: pointer;
+            width: 30%;
+            .arco-avatar {
+                margin-right: 20px;
+            }
+            .f-nav-msg-com {
+                margin-right: 20px;
+            }
+            .history {
+                margin-right: 20px;
+            }
+            :deep(.arco-btn) {
+                font-size: 12px;
+                border-radius: 100px;
+                .arco-icon {
+                    font-size: 16px;
+                    margin-right: 5px;
+                }
             }
         }
     }

@@ -4,6 +4,8 @@ import { type userInfoType } from '@/stores/userStore'
 export interface userLoginRequest {
     val: string
     password: string
+    captchaId: string
+    captchaCode: string
 }
 
 // 登录
@@ -66,4 +68,30 @@ export interface UserUpdateAdminRequest {
 // 管理员更新用户信息接口
 export const userUpdateAdminApi = (data: UserUpdateAdminRequest): Promise<baseResponse<string>> => {
     return useAxios.put('/api/user/admin', data)
+}
+
+export interface SendEmailRequest {
+    type: number
+    email: string
+    captchaId: string
+    captchaCode: string
+}
+
+export interface SendEmailResponse {
+    emailID: string
+}
+
+export const sendEmailApi = (data: SendEmailRequest): Promise<baseResponse<SendEmailResponse>> => {
+    return useAxios.post('/api/user/send_email', data)
+}
+
+export interface EmailRegisterRequest {
+    emailID: string
+    emailCode: string
+    pwd: string
+    rePwd: string
+}
+
+export const emailRegisterApi = (data: EmailRegisterRequest): Promise<baseResponse<string>> => {
+    return useAxios.post('/api/user/email', data)
 }

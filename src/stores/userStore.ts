@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { userLoginApi, userInfoApi, logoutApi, type userLoginRequest } from '@/api/user-api'
 import { Message } from '@arco-design/web-vue'
 import { useRouter, useRoute } from 'vue-router'
+import { siteApi, type SiteResponse } from '@/api/site-api.ts'
 
 export interface userInfoType {
     id: number
@@ -15,17 +16,20 @@ export interface userInfoType {
 
 interface userStore {
     userInfo: Ref<userInfoType | null>
+    siteInfo: Ref<SiteResponse | null>
     isLogin: ComputedRef<boolean>
     isAdmin: ComputedRef<boolean>
     login: (data: userLoginRequest) => Promise<void>
     getUserInfo: () => Promise<null | userInfoType>
     logout: () => Promise<void>
+    getSiteInfo: () => Promise<void>
 }
 
 export const useUserStore = defineStore('user', (): userStore => {
     const router = useRouter()
     const route = useRoute()
     const userInfo = ref<userInfoType | null>(null)
+    const siteInfo = ref<SiteResponse | null>(null)
     const isLogin = computed(() => !!userInfo.value)
     const isAdmin = computed(() => userInfo.value?.role === 1)
 
@@ -67,12 +71,24 @@ export const useUserStore = defineStore('user', (): userStore => {
         router.push({ name: 'login' })
     }
 
+    // 获取siteInfo
+    const getSiteInfo = async () => {
+        const res = await siteApi('site')
+        if (res.code) {
+            Message.error(res.msg)
+            return
+        }
+        siteInfo.value = res.data
+    }
+
     return {
         userInfo,
+        siteInfo,
         isLogin,
         isAdmin,
         login,
         getUserInfo,
         logout,
+        getSiteInfo,
     }
 })

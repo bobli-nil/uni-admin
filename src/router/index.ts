@@ -10,7 +10,7 @@ const router = createRouter({
             path: '/',
             meta: {
                 title: '首页',
-                role: [1, 2, 3],
+                role: [],
             },
             component: () => import('@/views/web/index.vue'),
             children: [
@@ -213,6 +213,11 @@ router.beforeEach(async (to, from, next) => {
     NProgress.start()
     const userStore = useUserStore()
     let userInfo = userStore.userInfo
+    console.log('to.meta', to.meta)
+    if (to.meta.role?.length === 0) {
+        next()
+    }
+
     // 未登录
     if (!getToken()) {
         if (to.path === '/login') {

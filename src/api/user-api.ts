@@ -98,3 +98,32 @@ export const emailRegisterApi = (
 ): Promise<baseResponse<{ token: string }>> => {
     return useAxios.post('/api/user/email', data)
 }
+
+export interface UserDetailType {
+    id: number
+    createdAt: string
+    username: string
+    nickname: string
+    avatar: string
+    abstract: string
+    registerSource: number
+    likeTags: string[]
+    codeAge: number
+    role: number
+    email: string
+    usePassword: boolean
+    userConf: {
+        userID: number
+        likeTags: string[]
+        updateUsernameDate: string
+        openCollect: boolean
+        openFollow: boolean
+        openFans: boolean
+        homeStyleID: number
+        lookCount: number
+    }
+}
+
+export const userDetailApi = (): Promise<baseResponse<UserDetailType>> => {
+    return useAxios.get('/api/user/detail')
+}

@@ -33,12 +33,6 @@ interface MenuType {
 const menuList: MenuType[] = [
     { title: '首页', name: 'home', icon: IconHome },
     {
-        title: '个人中心',
-        name: 'userCenter',
-        icon: 'iconfont icon-gerenzhongxin',
-        children: [{ title: '个人信息', name: 'userInfo' }],
-    },
-    {
         title: '用户管理',
         name: 'userManage',
         icon: 'iconfont icon-yonghuguanli',

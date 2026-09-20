@@ -46,12 +46,21 @@ const login = () => {
                     </div>
                     <div class="nickname">{{ userStore.userInfo?.nickName }}</div>
                     <div class="data">
-                        <a-statistic extra="粉丝" :value="99"></a-statistic>
-                        <a-statistic extra="关注" :value="99"></a-statistic>
-                        <a-statistic extra="文章" :value="99"></a-statistic>
+                        <a-statistic
+                            extra="粉丝"
+                            :value="userStore.userInfo.fansCount"
+                        ></a-statistic>
+                        <a-statistic
+                            extra="关注"
+                            :value="userStore.userInfo.followCount"
+                        ></a-statistic>
+                        <a-statistic
+                            extra="文章"
+                            :value="userStore.userInfo.articleCount"
+                        ></a-statistic>
                     </div>
                     <div class="menu">
-                        <div class="item" @click="goRouter('userCenter')">
+                        <div class="item" @click="goRouter('userCenterInfo')">
                             <icon-user /><span>个人中心</span>
                         </div>
                         <div class="item" @click="goRouter('articleManage')">

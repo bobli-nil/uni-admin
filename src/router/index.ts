@@ -9,16 +9,30 @@ const router = createRouter({
         {
             name: 'web',
             path: '/',
-            meta: {
-                title: '首页',
-                role: [],
-            },
+            meta: { title: '首页', role: [] },
             component: () => import('@/views/web/index.vue'),
             children: [
                 {
                     name: 'web-home',
                     path: '',
                     component: () => import('@/views/web/web-home.vue'),
+                },
+                {
+                    name: 'userCenter',
+                    path: 'center',
+                    component: () => import('@/views/web/user-center/index.vue'),
+                    children: [
+                        {
+                            name: 'userCenterInfo',
+                            path: 'info',
+                            component: () => import('@/views/web/user-center/info.vue'),
+                        },
+                        {
+                            name: 'userCenterAccount',
+                            path: 'account',
+                            component: () => import('@/views/web/user-center/account.vue'),
+                        },
+                    ],
                 },
             ],
         },
@@ -56,23 +70,6 @@ const router = createRouter({
                         title: '首页',
                     },
                     component: () => import('@/views/admin/home/index.vue'),
-                },
-                {
-                    name: 'userCenter',
-                    path: 'user_center',
-                    meta: {
-                        title: '个人中心',
-                    },
-                    children: [
-                        {
-                            name: 'userInfo',
-                            path: 'user_info',
-                            meta: {
-                                title: '个人信息',
-                            },
-                            component: () => import('@/views/admin/user_center/index.vue'),
-                        },
-                    ],
                 },
                 {
                     name: 'userManage',

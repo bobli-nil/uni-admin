@@ -16,3 +16,9 @@ export const RoleOptions = [
     { label: '用户', value: 2, color: 'green' },
     { label: '访客', value: 3, color: 'green' },
 ]
+
+export const registerResourceOptions = [
+    { label: '邮箱注册', value: 1, color: 'green' },
+    { label: 'QQ注册', value: 2, color: 'orange' },
+    { label: '控制台注册', value: 3, color: 'red' },
+]

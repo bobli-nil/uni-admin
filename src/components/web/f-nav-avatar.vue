@@ -9,8 +9,7 @@ const router = useRouter()
 
 const goRouter = (name: string) => {
     if (name === 'exit') {
-        localStorage.removeItem('token')
-        window.location.reload()
+        userStore.logout()
         return
     }
     router.push({ name })

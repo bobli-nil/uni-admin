@@ -68,7 +68,7 @@ export const useUserStore = defineStore('user', (): userStore => {
         userInfo.value = null
         window.localStorage.removeItem('token')
         Message.success('退出登录成功')
-        router.push({ name: 'login' })
+        router.push({ path: '/' })
     }
 
     // 获取siteInfo

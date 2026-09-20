@@ -127,3 +127,19 @@ export interface UserDetailType {
 export const userDetailApi = (): Promise<baseResponse<UserDetailType>> => {
     return useAxios.get('/api/user/detail')
 }
+
+export interface UserDetailUpdateRequest {
+    username?: string
+    nickname?: string
+    avatar?: string
+    abstract?: string
+    likeTags?: string[]
+    openCollect?: boolean
+    openFollow?: boolean
+    openFans?: boolean
+    homeStyleID?: number
+}
+
+export const userUpdateApi = (data: UserDetailUpdateRequest): Promise<baseResponse<string>> => {
+    return useAxios.put('/api/user', data)
+}

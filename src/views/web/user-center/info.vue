@@ -3,9 +3,28 @@ import { useUserCenterStore } from '@/stores/userCenterStore.ts'
 import { dateTimeFormat } from '@/utils/date.ts'
 import { registerResourceOptions } from '@/options/options.ts'
 import FLabel from '@/components/common/f-label.vue'
+import FEditInput from '@/components/common/input/f-edit-input.vue'
+import { Message } from '@arco-design/web-vue'
+import { type UserDetailUpdateRequest, userUpdateApi } from '@/api/user-api.ts'
 const userCenterStore = useUserCenterStore()
 
 userCenterStore.getUserDetail()
+
+const userUpdateColumn = async (
+    column: 'username' | 'nickname' | 'avatar' | 'abstract',
+    value: string,
+) => {
+    const data: UserDetailUpdateRequest = {}
+    data[column] = value
+
+    const res = await userUpdateApi(data)
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Message.success(res.msg)
+    userCenterStore.getUserDetail()
+}
 </script>
 
 <template>
@@ -34,13 +53,20 @@ userCenterStore.getUserDetail()
                         {{ userCenterStore.userDetail?.nickname }}
                     </a-form-item>
                     <a-form-item label="用户名">
-                        {{ userCenterStore.userDetail?.username }}
-                        <a href="javascript:void 0"> <icon-edit></icon-edit> 编辑 </a>
+                        <f-edit-input
+                            :value="userCenterStore.userDetail?.nickname || ''"
+                            placeholder="用户名"
+                            @ok="userUpdateColumn('nickname', $event)"
+                        ></f-edit-input>
                         <template #help> 登录的唯一标识，30天内可以修改一次 </template>
                     </a-form-item>
                     <a-form-item label="简介">
-                        <span>{{ userCenterStore.userDetail?.abstract }}</span>
-                        <a href="javascript:void 0"> <icon-edit></icon-edit> 编辑 </a>
+                        <f-edit-input
+                            :value="userCenterStore.userDetail?.abstract || ''"
+                            placeholder="简介"
+                            type="textarea"
+                            @ok="userUpdateColumn('abstract', $event)"
+                        ></f-edit-input>
                     </a-form-item>
                     <a-form-item label="注册时间">
                         {{ dateTimeFormat(userCenterStore.userDetail?.createdAt || '') }}
@@ -48,7 +74,7 @@ userCenterStore.getUserDetail()
                     <a-form-item label="注册来源">
                         <f-label
                             :options="registerResourceOptions"
-                            :value="userCenterStore.userDetail?.registerSource as number"
+                            :value="userCenterStore.userDetail?.registerSource || ''"
                         ></f-label>
                     </a-form-item>
                 </a-form>

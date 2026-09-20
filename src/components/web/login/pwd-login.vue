@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue'
 import { type userLoginRequest } from '@/api/user-api.ts'
 import { useUserStore } from '@/stores/userStore.ts'
 import { Form, FormItem, Input, Button } from '@arco-design/web-vue'
-import { base64Img } from './xxx.ts'
+import FCaptcha from '@/components/web/f-captcha.vue'
 
 const emits = defineEmits<{
     (e: 'ok'): void
@@ -20,11 +20,16 @@ const form = reactive<userLoginRequest>({
     captchaCode: '',
 })
 
+const captchaRef = ref()
+
 const pwdLogin = async () => {
     const val = await formRef.value.validate()
     if (val) return
-    await userStore.login(form)
-    await userStore.getUserInfo()
+    const res = await userStore.login(form)
+    if (res.code) {
+        captchaRef.value?.getData()
+        return
+    }
 
     emits('ok')
 }
@@ -50,7 +55,7 @@ const pwdLogin = async () => {
             :rules="[{ required: true, message: '请输入验证码' }]"
         >
             <Input v-model="form.captchaCode" placeholder="图形验证码"></Input>
-            <img :src="base64Img" alt="" />
+            <f-captcha ref="captchaRef" v-model="form.captchaId"></f-captcha>
         </FormItem>
         <FormItem>
             <Button type="primary" long @click="pwdLogin">登录</Button>

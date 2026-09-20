@@ -87,11 +87,13 @@ export const sendEmailApi = (data: SendEmailRequest): Promise<baseResponse<SendE
 
 export interface EmailRegisterRequest {
     emailID: string
-    emailCode: string
+    code: string
     pwd: string
     rePwd: string
 }
 
-export const emailRegisterApi = (data: EmailRegisterRequest): Promise<baseResponse<string>> => {
+export const emailRegisterApi = (
+    data: EmailRegisterRequest,
+): Promise<baseResponse<{ token: string }>> => {
     return useAxios.post('/api/user/email', data)
 }

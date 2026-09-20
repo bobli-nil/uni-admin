@@ -4,6 +4,7 @@ import { userLoginApi, userInfoApi, logoutApi, type userLoginRequest } from '@/a
 import { Message } from '@arco-design/web-vue'
 import { useRouter, useRoute } from 'vue-router'
 import { siteApi, type SiteResponse } from '@/api/site-api.ts'
+import type {baseResponse} from "@/api";
 
 export interface userInfoType {
     id: number
@@ -19,7 +20,7 @@ interface userStore {
     siteInfo: Ref<SiteResponse | null>
     isLogin: ComputedRef<boolean>
     isAdmin: ComputedRef<boolean>
-    login: (data: userLoginRequest) => Promise<void>
+    login: (data: userLoginRequest) => Promise<baseResponse<string>>
     getUserInfo: () => Promise<null | userInfoType>
     logout: () => Promise<void>
     getSiteInfo: () => Promise<void>
@@ -34,19 +35,24 @@ export const useUserStore = defineStore('user', (): userStore => {
     const isAdmin = computed(() => userInfo.value?.role === 1)
 
     // 登录
-    const login = async (data: userLoginRequest) => {
+    const login = async (data: userLoginRequest): Promise<baseResponse<string>> => {
         const res = await userLoginApi(data)
         if (res.code) {
             Message.error(res.msg)
-            return
+            return res
         }
         window.localStorage.setItem('token', res.data)
         Message.success('登录成功')
+
+        await getUserInfo()
+
         let target = '/'
         if (route.query.redirect) {
             target = decodeURIComponent(route.query.redirect as string)
         }
         router.push(target)
+
+        return res
     }
 
     // 获取用户信息

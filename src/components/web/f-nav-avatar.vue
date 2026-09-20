@@ -2,6 +2,7 @@
 import { useUserStore } from '@/stores/userStore.ts'
 import { useRouter } from 'vue-router'
 import { showLogin } from '@/components/web/f-login.ts'
+import defaultAvatar from '@/assets/img/default-avatar.png'
 
 const userStore = useUserStore()
 console.log('userInfo', userStore.userInfo)
@@ -31,11 +32,17 @@ const login = () => {
             trigger="hover"
             :unmount-on-close="false"
         >
-            <a-avatar :image-url="userStore?.userInfo!.avatar" :size="30"></a-avatar>
+            <a-avatar
+                :image-url="userStore?.userInfo!.avatar || defaultAvatar"
+                :size="30"
+            ></a-avatar>
             <template #content>
                 <div class="f-nav-avatar-com">
                     <div class="avatar">
-                        <a-avatar :image-url="userStore?.userInfo!.avatar" :size="60"></a-avatar>
+                        <a-avatar
+                            :image-url="userStore?.userInfo!.avatar || defaultAvatar"
+                            :size="60"
+                        ></a-avatar>
                     </div>
                     <div class="nickname">zhangsan</div>
                     <div class="data">

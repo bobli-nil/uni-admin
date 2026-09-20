@@ -26,6 +26,9 @@ const ok = () => {
 
 const registerOk = (token: string): void => {
     console.log('registerOk', token)
+    localStorage.setItem('token', token)
+    emits('update:visible', false)
+    userStore.getUserInfo()
 }
 
 const type = ref(1) // 1pwd 2邮箱
@@ -36,7 +39,6 @@ const type = ref(1) // 1pwd 2邮箱
         class="f-login-modal"
         :width="380"
         :visible="visible"
-        style="top: 20px"
         @cancel="cancel"
         @ok="ok"
         :footer="false"

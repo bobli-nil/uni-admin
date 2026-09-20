@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { base64Img } from '@/components/web/login/xxx.ts'
 import { Form, FormItem, Input, Button, Message } from '@arco-design/web-vue'
 import { sendEmailApi, type SendEmailRequest, type SendEmailResponse } from '@/api/user-api.ts'
 import { useUserStore } from '@/stores/userStore.ts'
+import FCaptcha from '@/components/web/f-captcha.vue'
 
 const userStore = useUserStore()
 
@@ -20,16 +20,19 @@ const form = reactive<SendEmailRequest>({
     captchaCode: '',
 })
 
+const captchaRef = ref()
+
 const handler = async () => {
-    const value = formRef.value.validate()
+    const value = await formRef.value.validate()
+    console.log('value', value)
     if (value) return
 
     const res = await sendEmailApi(form)
     if (res.code) {
         Message.error(res.msg)
+        captchaRef.value?.getData()
         return
     }
-    Message.success(res.msg)
     emits('ok', res.data)
 }
 </script>
@@ -51,7 +54,7 @@ const handler = async () => {
             :rules="[{ required: true, message: '请输入验证码' }]"
         >
             <Input v-model="form.captchaCode" placeholder="图形验证码"></Input>
-            <img :src="base64Img" alt="" />
+            <f-captcha ref="captchaRef" v-model="form.captchaId"></f-captcha>
         </FormItem>
         <FormItem>
             <Button type="primary" long @click="handler">验证邮箱</Button>

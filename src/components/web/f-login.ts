@@ -7,30 +7,32 @@ export const showLogin = () => {
 
     const visible = ref(true)
 
-    const destroy = () => {
-        render(null, container)
-        document.body.removeChild(container)
-    }
+    return new Promise((resolve, reject) => {
+        const destroy = () => {
+            render(null, container)
+            document.body.removeChild(container)
+            resolve(visible.value)
+        }
 
-    const Wrapper = defineComponent({
-        render: () =>
-            h(FLoginModal, {
-                visible: visible.value,
-                'onUpdate:visible': (val: boolean) => {
-                    visible.value = val
+        const Wrapper = defineComponent({
+            render: () =>
+                h(FLoginModal, {
+                    visible: visible.value,
+                    'onUpdate:visible': (val: boolean) => {
+                        visible.value = val
 
-                    if (!val) {
-                        setTimeout(destroy, 300)
-                    }
-                },
-            }),
+                        if (!val) {
+                            setTimeout(destroy, 300)
+                        }
+                    },
+                }),
+        })
+        render(h(Wrapper), container)
     })
 
-    render(h(Wrapper), container)
-
-    return {
-        close: () => {
-            visible.value = false
-        },
-    }
+    // return {
+    //     close: () => {
+    //         visible.value = false
+    //     },
+    // }
 }

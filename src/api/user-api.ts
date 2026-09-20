@@ -18,10 +18,11 @@ export const userLoginApi = (data: userLoginRequest): Promise<baseResponse<strin
 }
 
 // 获取用户信息
-export const userInfoApi = (): Promise<baseResponse<userInfoType>> => {
+export const userInfoApi = (params?: { id: number }): Promise<baseResponse<userInfoType>> => {
     return useAxios({
-        url: '/api/user/detail',
+        url: '/api/user/base',
         method: 'get',
+        params,
     })
 }
 

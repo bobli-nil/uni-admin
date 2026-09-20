@@ -4,8 +4,10 @@ import { Modal } from '@arco-design/web-vue'
 import PwdLogin from '@/components/web/login/pwd-login.vue'
 import EmailLogin from '@/components/web/login/email-login.vue'
 import { useUserStore } from '@/stores/userStore.ts'
+import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
+const router = useRouter()
 
 interface Props {
     visible: boolean

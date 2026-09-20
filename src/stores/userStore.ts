@@ -4,15 +4,19 @@ import { userLoginApi, userInfoApi, logoutApi, type userLoginRequest } from '@/a
 import { Message } from '@arco-design/web-vue'
 import { useRouter, useRoute } from 'vue-router'
 import { siteApi, type SiteResponse } from '@/api/site-api.ts'
-import type {baseResponse} from "@/api";
+import type { baseResponse } from '@/api'
 
 export interface userInfoType {
-    id: number
-    email: string
+    userID: number
     username: string
-    nickname: string
+    nickName: string
     avatar: string
     role: number
+    lookCount: number
+    articleCount: number
+    fansCount: number
+    followCount: number
+    place: string
 }
 
 interface userStore {
@@ -62,9 +66,32 @@ export const useUserStore = defineStore('user', (): userStore => {
             Message.error(res.msg)
             return null
         }
-        const { id, email, username, nickname, avatar, role } = res.data
-        const info = { id, email, username, nickname, avatar, role }
+        const {
+            userID,
+            username,
+            nickName,
+            avatar,
+            role,
+            lookCount,
+            articleCount,
+            fansCount,
+            followCount,
+            place,
+        } = res.data
+        const info = {
+            userID,
+            username,
+            nickName,
+            avatar,
+            role,
+            lookCount,
+            articleCount,
+            fansCount,
+            followCount,
+            place,
+        }
         userInfo.value = info
+        console.log('userInfo.value', userInfo.value)
         return info
     }
 

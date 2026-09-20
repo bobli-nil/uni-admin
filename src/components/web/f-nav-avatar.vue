@@ -44,7 +44,7 @@ const login = () => {
                             :size="60"
                         ></a-avatar>
                     </div>
-                    <div class="nickname">zhangsan</div>
+                    <div class="nickname">{{ userStore.userInfo?.nickName }}</div>
                     <div class="data">
                         <a-statistic extra="粉丝" :value="99"></a-statistic>
                         <a-statistic extra="关注" :value="99"></a-statistic>
@@ -60,10 +60,13 @@ const login = () => {
                         <div class="item" @click="goRouter('msgChat')">
                             <icon-message /><span>我的消息</span>
                         </div>
+                        <div v-if="userStore.isAdmin" class="item" @click="goRouter('admin')">
+                            <icon-send /><span>后台管理</span>
+                        </div>
                     </div>
                     <div class="exit">
                         <div class="item" @click="goRouter('exit')">
-                            <icon-to-right /><span>退出</span>
+                            <icon-poweroff /><span>退出</span>
                         </div>
                     </div>
                 </div>

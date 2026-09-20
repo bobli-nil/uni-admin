@@ -42,7 +42,7 @@ const options = computed<OptionType[]>(() => {
     <a-dropdown @select="handleSelect" trigger="hover">
         <div class="user-info">
             <icon-user class="icon-user" />
-            <span>{{ userStore?.userInfo?.nickname }}</span>
+            <span>{{ userStore?.userInfo?.nickName }}</span>
             <icon-down class="icon-down" />
         </div>
         <template #content>

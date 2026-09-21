@@ -164,3 +164,23 @@ export interface UserEmailUpdateRequest {
 export const userEmailUpdateApi = (data: UserEmailUpdateRequest): Promise<baseResponse<string>> => {
     return useAxios.put('/api/user/bind_email', data)
 }
+
+export interface LoginRecordType {
+    id: number
+    userID: string
+    ip: string
+    addr: string
+    ua: string
+    createdAt: string
+    updatedAt: string
+}
+
+export interface LoginRecordRequest extends paramsType {
+    type: 1 | 2
+}
+
+export const loginRecordApi = (
+    params: LoginRecordRequest,
+): Promise<baseResponse<listResponse<LoginRecordType>>> => {
+    return useAxios.get('/api/user/login_list', { params })
+}

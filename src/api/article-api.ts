@@ -94,3 +94,25 @@ interface UserArticleTopRequest {
 export const userArticleTopApi = (data: UserArticleTopRequest): Promise<baseResponse<string>> => {
     return useAxios.post('/api/user/article/top', data)
 }
+
+export interface ArticleHistoryType {
+    id: number
+    createAt: string
+    articleID: number
+    title: string
+    cover: string
+    nickname: string
+    avatar: string
+    userID: number
+}
+
+export interface ArticleHistoryListRequest extends paramsType {
+    type: 1 | 2
+}
+
+// 浏览历史
+export const articleHistoryApi = (
+    params: ArticleHistoryListRequest,
+): Promise<baseResponse<listResponse<ArticleHistoryType>>> => {
+    return useAxios.get('/api/article/history', { params })
+}

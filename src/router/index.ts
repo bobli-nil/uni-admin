@@ -47,6 +47,11 @@ const router = createRouter({
                             path: 'privacy',
                             component: () => import('@/views/web/user-center/privacy.vue'),
                         },
+                        {
+                            name: 'userCenterHistory',
+                            path: 'history',
+                            component: () => import('@/views/web/user-center/history.vue'),
+                        },
                     ],
                 },
             ],

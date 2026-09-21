@@ -15,6 +15,7 @@ userCenterStore.getUserDetail()
                 <router-link :to="{ name: 'userCenterInfo' }">个人资料</router-link>
                 <router-link :to="{ name: 'userCenterAccount' }">账号设置</router-link>
                 <router-link :to="{ name: 'userCenterPrivacy' }">隐私设置</router-link>
+                <router-link :to="{ name: 'userCenterHistory' }">浏览历史</router-link>
             </div>
             <div class="view">
                 <router-view></router-view>

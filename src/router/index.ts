@@ -20,6 +20,10 @@ const router = createRouter({
                 {
                     name: 'userCenter',
                     path: 'center',
+                    meta: {
+                        title: '个人中心',
+                        role: [1, 2],
+                    },
                     component: () => import('@/views/web/user-center/index.vue'),
                     children: [
                         {
@@ -225,7 +229,7 @@ router.beforeEach(async (to, from, next) => {
     console.log('路由拦截里的userInfo', userInfo)
     console.log('to.meta', to.meta)
     if (to.meta.role?.length === 0) {
-        if (getToken()) {
+        if (getToken() && !userInfo) {
             await userStore.getUserInfo()
         }
         next()

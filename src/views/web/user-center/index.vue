@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import FNav from '@/components/web/f-nav.vue'
 import FMain from '@/components/web/f-main.vue'
+import { useUserCenterStore } from '@/stores/userCenterStore.ts'
+
+const userCenterStore = useUserCenterStore()
+userCenterStore.getUserDetail()
 </script>
 
 <template>

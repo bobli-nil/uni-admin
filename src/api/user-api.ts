@@ -143,3 +143,15 @@ export interface UserDetailUpdateRequest {
 export const userUpdateApi = (data: UserDetailUpdateRequest): Promise<baseResponse<string>> => {
     return useAxios.put('/api/user', data)
 }
+
+export interface UserPwdUpdateRequest {
+    oldPassword: string
+    newPassword: string
+    reNewPassword: string
+}
+
+export const userPasswordUpdateApi = (
+    data: UserPwdUpdateRequest,
+): Promise<baseResponse<string>> => {
+    return useAxios.put('/api/user/update_password', data)
+}

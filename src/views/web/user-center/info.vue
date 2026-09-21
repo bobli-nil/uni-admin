@@ -10,8 +10,6 @@ import { Message } from '@arco-design/web-vue'
 import { type UserDetailUpdateRequest, userUpdateApi } from '@/api/user-api.ts'
 const userCenterStore = useUserCenterStore()
 
-userCenterStore.getUserDetail()
-
 const userUpdateColumn = async (
     column: 'username' | 'nickname' | 'avatar' | 'abstract' | 'likeTags',
     value: string | string[],

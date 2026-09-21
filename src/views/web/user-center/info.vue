@@ -4,6 +4,7 @@ import { dateTimeFormat } from '@/utils/date.ts'
 import { registerResourceOptions } from '@/options/options.ts'
 import FLabel from '@/components/common/f-label.vue'
 import FEditInput from '@/components/common/input/f-edit-input.vue'
+import FAvatarCutter from '@/components/web/f-avatar-cutter.vue'
 import { Message } from '@arco-design/web-vue'
 import { type UserDetailUpdateRequest, userUpdateApi } from '@/api/user-api.ts'
 const userCenterStore = useUserCenterStore()
@@ -25,13 +26,38 @@ const userUpdateColumn = async (
     Message.success(res.msg)
     userCenterStore.getUserDetail()
 }
+
+const isUpdateUsername = (updateTime?: string) => {
+    if (!updateTime) {
+        return true
+    }
+    const t1 = new Date(updateTime).getTime()
+    const t2 = new Date().getTime()
+    const subDay = (t2 - t1) / (24 * 60 * 60 * 1000)
+    console.log('subDay', subDay)
+    return subDay > 30
+}
 </script>
 
 <template>
     <div class="user-center-info-view">
         <div class="top">
             <div class="avatar">
-                <a-avatar :image-url="userCenterStore.userDetail?.avatar" :size="60"></a-avatar>
+                <a-avatar
+                    v-if="userCenterStore.userDetail?.registerSource === 2"
+                    :image-url="userCenterStore.userDetail?.avatar"
+                    :size="60"
+                ></a-avatar>
+
+                <f-avatar-cutter v-else @ok="userUpdateColumn('avatar', $event)">
+                    <div class="avatar-inner">
+                        <icon-camera class="camera"></icon-camera>
+                        <a-avatar
+                            :image-url="userCenterStore.userDetail?.avatar"
+                            :size="60"
+                        ></a-avatar>
+                    </div>
+                </f-avatar-cutter>
             </div>
             <div class="info">
                 <div class="title">{{ userCenterStore.userDetail?.nickname }}</div>
@@ -49,16 +75,27 @@ const userUpdateColumn = async (
                     :label-col-props="{ span: 2 }"
                     :wrapper-col-props="{ span: 22 }"
                 >
-                    <a-form-item label="用户昵称">
-                        {{ userCenterStore.userDetail?.nickname }}
-                    </a-form-item>
                     <a-form-item label="用户名">
                         <f-edit-input
+                            :value="userCenterStore.userDetail?.username || ''"
+                            :no-edit="
+                                userCenterStore.userDetail?.registerSource === 2 ||
+                                !isUpdateUsername(
+                                    userCenterStore.userDetail?.userConf.updateUsernameDate,
+                                )
+                            "
+                            placeholder="用户名"
+                            @ok="userUpdateColumn('username', $event)"
+                        ></f-edit-input>
+                        <template #help> 登录的唯一标识，30天内可以修改一次 </template>
+                    </a-form-item>
+                    <a-form-item label="昵称">
+                        <f-edit-input
                             :value="userCenterStore.userDetail?.nickname || ''"
+                            :no-edit="userCenterStore.userDetail?.registerSource === 2"
                             placeholder="用户名"
                             @ok="userUpdateColumn('nickname', $event)"
                         ></f-edit-input>
-                        <template #help> 登录的唯一标识，30天内可以修改一次 </template>
                     </a-form-item>
                     <a-form-item label="简介">
                         <f-edit-input
@@ -110,7 +147,26 @@ const userUpdateColumn = async (
         margin-bottom: 20px;
         padding: 20px;
         .avatar {
-            width: 80px;
+            margin-right: 20px;
+            .avatar-inner {
+                position: relative;
+                cursor: pointer;
+                .camera {
+                    display: none;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 20px;
+                    color: #fff;
+                    z-index: 2;
+                }
+                &:hover {
+                    .camera {
+                        display: block;
+                    }
+                }
+            }
         }
         .info {
             display: flex;

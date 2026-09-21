@@ -4,6 +4,7 @@ interface Props {
     value: string
     placeholder?: string
     type?: 'input' | 'textarea'
+    noEdit?: boolean
 }
 const props = defineProps<Props>()
 
@@ -64,7 +65,7 @@ const changeText = (value: string): void => {
                 @blur="inputBlur"
             ></a-textarea>
         </template>
-        <a href="javascript:void 0" @click="edit"> <icon-edit></icon-edit> 编辑 </a>
+        <a v-if="!noEdit" href="javascript:void 0" @click="edit"> <icon-edit></icon-edit> 编辑 </a>
     </div>
 </template>
 

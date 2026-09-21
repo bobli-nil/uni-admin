@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { useUserCenterStore } from '@/stores/userCenterStore.ts'
 import { showUpdatePwd } from '@/components/common/f-update-password.ts'
+import { showUpdateEmail } from '@/components/common/f-update-email.ts'
 
 const userCenterStore = useUserCenterStore()
 
 const changePwd = () => {
     showUpdatePwd()
+}
+
+const changeEmail = async () => {
+    await showUpdateEmail()
+    await userCenterStore.getUserDetail()
 }
 </script>
 
@@ -16,14 +22,16 @@ const changePwd = () => {
             <a-form :model="{}" :label-col-props="{ span: 2 }">
                 <a-form-item label="密码">
                     <span v-if="userCenterStore.userDetail?.usePassword">
-                        <span class="pwd">******</span>
+                        <span class="txt">******</span>
                         <a href="javascript:void 0" @click="changePwd">修改密码</a>
                     </span>
                     <span v-else>未启用</span>
                 </a-form-item>
                 <a-form-item label="邮箱">
-                    {{ userCenterStore.userDetail?.email }}
-                    <a href="javascript:void 0">
+                    <span class="txt" v-if="userCenterStore.userDetail?.email">
+                        {{ userCenterStore.userDetail?.email }}
+                    </span>
+                    <a href="javascript:void 0" @click="changeEmail">
                         {{ userCenterStore.userDetail?.email ? '修改邮箱' : '绑定邮箱' }}
                     </a>
                 </a-form-item>
@@ -50,7 +58,7 @@ const changePwd = () => {
         :deep(.arco-row) {
             margin-bottom: 10px;
         }
-        .pwd {
+        .txt {
             margin-left: 10px;
         }
         a {

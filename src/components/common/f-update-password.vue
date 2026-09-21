@@ -48,8 +48,13 @@ const rePwdValidate = (value: string | undefined, callback: (error?: string) => 
 </script>
 
 <template>
-    <Modal title="修改密码" width="400" :visible="visible" @cancel="cancel" :on-before-ok="ok">
-        <Form ref="formRef" :model="form">
+    <Modal title="修改密码" :width="400" :visible="visible" @cancel="cancel" :on-before-ok="ok">
+        <Form
+            ref="formRef"
+            :model="form"
+            :label-col-props="{ span: 6 }"
+            :wrapper-col-props="{ span: 18 }"
+        >
             <FormItem
                 label="原密码"
                 field="oldPassword"

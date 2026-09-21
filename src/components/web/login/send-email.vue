@@ -7,6 +7,11 @@ import FCaptcha from '@/components/web/f-captcha.vue'
 
 const userStore = useUserStore()
 
+interface Props {
+    type?: number
+}
+const props = defineProps<Props>()
+
 const emits = defineEmits<{
     (e: 'ok', value: SendEmailResponse): void
 }>()
@@ -27,6 +32,9 @@ const handler = async () => {
     console.log('value', value)
     if (value) return
 
+    if (props.type) {
+        form.type = props.type
+    }
     const res = await sendEmailApi(form)
     if (res.code) {
         Message.error(res.msg)

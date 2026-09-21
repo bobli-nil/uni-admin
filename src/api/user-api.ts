@@ -155,3 +155,12 @@ export const userPasswordUpdateApi = (
 ): Promise<baseResponse<string>> => {
     return useAxios.put('/api/user/update_password', data)
 }
+
+export interface UserEmailUpdateRequest {
+    emailID: string
+    code: string
+}
+
+export const userEmailUpdateApi = (data: UserEmailUpdateRequest): Promise<baseResponse<string>> => {
+    return useAxios.put('/api/user/bind_email', data)
+}

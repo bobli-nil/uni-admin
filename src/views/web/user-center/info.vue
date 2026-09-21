@@ -5,6 +5,7 @@ import { registerResourceOptions } from '@/options/options.ts'
 import FLabel from '@/components/common/f-label.vue'
 import FEditInput from '@/components/common/input/f-edit-input.vue'
 import FAvatarCutter from '@/components/web/f-avatar-cutter.vue'
+import FTagsInput from '@/components/common/input/f-tags-input.vue'
 import { Message } from '@arco-design/web-vue'
 import { type UserDetailUpdateRequest, userUpdateApi } from '@/api/user-api.ts'
 const userCenterStore = useUserCenterStore()
@@ -12,11 +13,15 @@ const userCenterStore = useUserCenterStore()
 userCenterStore.getUserDetail()
 
 const userUpdateColumn = async (
-    column: 'username' | 'nickname' | 'avatar' | 'abstract',
-    value: string,
+    column: 'username' | 'nickname' | 'avatar' | 'abstract' | 'likeTags',
+    value: string | string[],
 ) => {
     const data: UserDetailUpdateRequest = {}
-    data[column] = value
+    if (column === 'likeTags') {
+        data.likeTags = value as string[]
+    } else {
+        data[column] = value as string
+    }
 
     const res = await userUpdateApi(data)
     if (res.code) {
@@ -34,7 +39,6 @@ const isUpdateUsername = (updateTime?: string) => {
     const t1 = new Date(updateTime).getTime()
     const t2 = new Date().getTime()
     const subDay = (t2 - t1) / (24 * 60 * 60 * 1000)
-    console.log('subDay', subDay)
     return subDay > 30
 }
 </script>
@@ -126,10 +130,10 @@ const isUpdateUsername = (updateTime?: string) => {
                 </div>
             </div>
             <div class="body">
-                <a-tag>后端开发</a-tag>
-                <a-tag>前端开发</a-tag>
-                <a-tag>gorm</a-tag>
-                <a-tag>mysql</a-tag>
+                <f-tags-input
+                    :value="userCenterStore.userDetail?.userConf.likeTags || []"
+                    @ok="userUpdateColumn('likeTags', $event)"
+                ></f-tags-input>
             </div>
         </div>
     </div>

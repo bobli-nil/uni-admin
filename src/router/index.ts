@@ -38,6 +38,11 @@ const router = createRouter({
                             component: () =>
                                 import('@/views/web/user-center/user-center-login-record-view.vue'),
                         },
+                        {
+                            name: 'userCenterPrivacy',
+                            path: 'privacy',
+                            component: () => import('@/views/web/user-center/privacy.vue'),
+                        },
                     ],
                 },
             ],

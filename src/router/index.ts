@@ -54,6 +54,22 @@ const router = createRouter({
                         },
                     ],
                 },
+                {
+                    name: 'platform',
+                    path: 'platform',
+                    meta: {
+                        title: '平台管理',
+                        role: [1, 2],
+                    },
+                    component: () => import('@/views/web/platform/index.vue'),
+                    children: [
+                        {
+                            name: 'platformArticle',
+                            path: 'article',
+                            component: () => import('@/views/web/platform/platform-article.vue'),
+                        },
+                    ],
+                },
             ],
         },
         // {

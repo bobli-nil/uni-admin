@@ -63,7 +63,7 @@ const login = () => {
                         <div class="item" @click="goRouter('userCenterInfo')">
                             <icon-user /><span>个人中心</span>
                         </div>
-                        <div class="item" @click="goRouter('articleManage')">
+                        <div class="item" @click="goRouter('platformArticle')">
                             <icon-file /><span>文章管理</span>
                         </div>
                         <div class="item" @click="goRouter('msgChat')">

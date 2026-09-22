@@ -68,6 +68,12 @@ const router = createRouter({
                             path: 'article',
                             component: () => import('@/views/web/platform/platform-article.vue'),
                         },
+                        {
+                            name: 'platformArticleAdd',
+                            path: 'articleAdd',
+                            component: () =>
+                                import('@/views/web/platform/platform-article-add.vue'),
+                        },
                     ],
                 },
             ],

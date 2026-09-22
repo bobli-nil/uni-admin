@@ -1,4 +1,10 @@
-import { type baseResponse, type listResponse, type paramsType, useAxios } from '@/api/index'
+import {
+    type baseResponse,
+    type listResponse,
+    type optionsType,
+    type paramsType,
+    useAxios,
+} from '@/api/index'
 
 export interface ArticleListItem {
     id: number
@@ -120,4 +126,30 @@ export const articleHistoryApi = (
 // 足迹删除
 export const articleHistoryRemoveApi = (idList: number[]): Promise<baseResponse<string>> => {
     return useAxios.delete('/api/article/history', { data: { idList } })
+}
+
+export interface ArticleAddType {
+    title: string
+    abstract: string
+    content: string
+    status: 1 | 2
+    categoryID?: number
+    cover: string
+    tagList: string[]
+    openComment: boolean
+}
+
+// 文章发布
+export const articleAddApi = (data: ArticleAddType): Promise<baseResponse<string>> => {
+    return useAxios.post('/api/article', data)
+}
+
+// 获取文章分类
+export const articleCategoryOptionApi = (): Promise<baseResponse<optionsType[]>> => {
+    return useAxios.get('/api/article/category/options')
+}
+
+// 获取tag
+export const articleTagOptionApi = (): Promise<baseResponse<optionsType[]>> => {
+    return useAxios.get('/api/article/tag/options')
 }

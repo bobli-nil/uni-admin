@@ -9,3 +9,10 @@ export const imageUploadApi = (file: File): Promise<baseResponse<string>> => {
         },
     })
 }
+
+export const onUploadImg = async (files: File[], callback: (urls: string[]) => void) => {
+    const resList = await Promise.all(files.map((file) => imageUploadApi(file)))
+    const urlList = resList.map((res) => res.data)
+    console.log('urlList', urlList)
+    callback(urlList)
+}

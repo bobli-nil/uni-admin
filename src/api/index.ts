@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from '@arco-design/web-vue'
 import { useUserStore } from '@/stores/userStore'
+import { type Ref } from 'vue'
 
 export interface baseResponse<T> {
     code: number
@@ -27,6 +28,12 @@ export interface optionsType {
 }
 
 export type optionsFunc = (params?: paramsType) => Promise<baseResponse<optionsType[]>>
+
+export const getOptions = (data: Ref<optionsType[]>, func: optionsFunc, params?: paramsType) => {
+    func(params).then((res) => {
+        data.value = res.data
+    })
+}
 
 export const useAxios = axios.create({
     // timeout: 10 * 1000,

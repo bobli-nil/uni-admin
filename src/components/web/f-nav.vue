@@ -3,8 +3,10 @@ import { ref } from 'vue'
 import FNavMsg from '@/components/web/f-nav-msg.vue'
 import FNavAvatar from '@/components/web/f-nav-avatar.vue'
 import { useUserStore } from '@/stores/userStore.ts'
+import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
+const router = useRouter()
 
 interface Props {
     noScroll?: boolean
@@ -20,6 +22,10 @@ if (!noScroll) {
         const top = document.documentElement.scrollTop
         isShow.value = top > scrollTop
     }
+}
+
+const release = () => {
+    router.push({ name: 'platformArticleAdd' })
 }
 </script>
 
@@ -37,7 +43,7 @@ if (!noScroll) {
                 <f-nav-avatar></f-nav-avatar>
                 <f-nav-msg></f-nav-msg>
                 <span class="history">历史</span>
-                <a-button type="primary">
+                <a-button type="primary" @click="release">
                     <icon-plus-circle></icon-plus-circle>
                     发布
                 </a-button>

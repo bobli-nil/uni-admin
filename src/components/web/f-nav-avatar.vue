@@ -69,7 +69,7 @@ const login = () => {
                         <div class="item" @click="goRouter('msgChat')">
                             <icon-message /><span>我的消息</span>
                         </div>
-                        <div v-if="userStore.isAdmin" class="item" @click="goRouter('admin')">
+                        <div v-if="userStore.isAdmin" class="item" @click="goRouter('home')">
                             <icon-send /><span>后台管理</span>
                         </div>
                     </div>

@@ -83,7 +83,8 @@ const examine = reactive<ArticleExamineRequest>({
 })
 
 const handler = async () => {
-    if (examine.status !== 2) {
+    console.log('handler', examine)
+    if (data.status !== 2) {
         return
     }
     examine.articleID = data.id

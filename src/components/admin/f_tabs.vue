@@ -40,7 +40,7 @@ const removeAll = () => {
 
 // 将tabs保存在本地
 const saveTabs = () => {
-    console.log('saveTabs')
+    console.log('saveTabs', tabs.value)
     window.localStorage.setItem('tabs', JSON.stringify(tabs.value))
 }
 
@@ -59,7 +59,9 @@ loadTabs()
 watch(
     () => route.name,
     () => {
+        console.log('route.name', route.name)
         const index = tabs.value.findIndex((ele) => ele.name === route.name)
+        console.log('index', index)
         if (index === -1) {
             tabs.value.push({
                 name: route.name as string,

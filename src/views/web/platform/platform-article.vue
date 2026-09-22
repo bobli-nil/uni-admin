@@ -4,6 +4,7 @@ import FA from '@/components/common/f-a.vue'
 import { Message } from '@arco-design/web-vue'
 import type { listResponse } from '@/api'
 import { type ArticleListItem, type ArticleListRequest, articleListApi } from '@/api/article-api.ts'
+import { dateCurrentFormat } from '@/utils/date.ts'
 
 const data = reactive<listResponse<ArticleListItem>>({
     count: 0,
@@ -40,7 +41,9 @@ const checkStatus = (status: number) => {
         <div class="head">
             <div class="left">
                 <div class="title">我的文章</div>
-                <a-button type="primary">发布文章</a-button>
+                <router-link :to="{ name: 'platformArticleAdd' }">
+                    <a-button type="primary">发布文章</a-button>
+                </router-link>
             </div>
             <div class="right">
                 <a-input-search
@@ -79,7 +82,9 @@ const checkStatus = (status: number) => {
                             <div class="tags">
                                 <a-tag v-for="tag in item.tagList">{{ tag }}</a-tag>
                             </div>
-                            <div class="date">最后更新于6天前</div>
+                            <div class="date">
+                                最后更新于{{ dateCurrentFormat(item.updatedAt) }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,7 +151,7 @@ const checkStatus = (status: number) => {
             margin-top: 20px;
             .item {
                 display: flex;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
                 .cover {
                     img {
                         width: 160px;

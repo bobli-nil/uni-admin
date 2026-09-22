@@ -8,7 +8,7 @@ const props = defineProps<Props>()
 <template>
     <div class="f-card">
         <div class="head">{{ title }}</div>
-        <div class="body">
+        <div class="body scroll-bar">
             <slot></slot>
         </div>
     </div>
@@ -26,6 +26,9 @@ const props = defineProps<Props>()
     }
     .body {
         padding: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: calc(100vh - 180px);
     }
 }
 </style>

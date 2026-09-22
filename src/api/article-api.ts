@@ -116,3 +116,8 @@ export const articleHistoryApi = (
 ): Promise<baseResponse<listResponse<ArticleHistoryType>>> => {
     return useAxios.get('/api/article/history', { params })
 }
+
+// 足迹删除
+export const articleHistoryRemoveApi = (idList: number[]): Promise<baseResponse<string>> => {
+    return useAxios.delete('/api/article/history', { data: { idList } })
+}

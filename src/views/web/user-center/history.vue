@@ -6,6 +6,7 @@ import { reactive } from 'vue'
 import {
     articleHistoryApi,
     type ArticleHistoryListRequest,
+    articleHistoryRemoveApi,
     type ArticleHistoryType,
 } from '@/api/article-api.ts'
 import type { listResponse } from '@/api'
@@ -63,7 +64,15 @@ const getData = async () => {
 }
 getData()
 
-const removeHistory = async (article: ArticleHistoryType) => {}
+const removeHistory = async (article: ArticleHistoryType) => {
+    const res = await articleHistoryRemoveApi([article.articleID])
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Message.success(res.msg)
+    getData()
+}
 </script>
 
 <template>
@@ -107,7 +116,7 @@ const removeHistory = async (article: ArticleHistoryType) => {}
                 </a-timeline-item>
             </a-timeline>
 
-            <div class="page">
+            <div v-if="data.count > 0" class="page">
                 <a-pagination
                     show-total
                     show-page-size

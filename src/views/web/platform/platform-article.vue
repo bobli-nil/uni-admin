@@ -2,8 +2,14 @@
 import { reactive } from 'vue'
 import FA from '@/components/common/f-a.vue'
 import { Message } from '@arco-design/web-vue'
-import type { listResponse } from '@/api'
-import { type ArticleListItem, type ArticleListRequest, articleListApi } from '@/api/article-api.ts'
+import type { baseResponse, listResponse } from '@/api'
+import {
+    type ArticleListItem,
+    type ArticleListRequest,
+    articleListApi,
+    articleRemoveApi,
+    userArticleTopApi,
+} from '@/api/article-api.ts'
 import { dateCurrentFormat } from '@/utils/date.ts'
 import { useRouter } from 'vue-router'
 
@@ -40,12 +46,27 @@ const checkStatus = (status: number) => {
 
 const goArticle = (id: number) => {}
 
-const handleSelect = (id: number, val?: string | number | Record<string, any>) => {
+const handleSelect = async (id: number, val?: string | number | Record<string, any>) => {
     console.log(id, val)
-    if (val === 'delete') {
-    } else {
+    if (val === 'platformArticleEdit') {
         router.push({ name: val as string, params: { id } })
+        return
     }
+
+    let res: baseResponse<string> = { code: 0, data: '', msg: '' }
+    if (val === 'delete') {
+        res = await articleRemoveApi(id)
+    } else {
+        res = await userArticleTopApi({
+            type: 1,
+            articleID: id,
+        })
+    }
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Message.success(res.msg)
 }
 </script>
 
@@ -82,7 +103,11 @@ const handleSelect = (id: number, val?: string | number | Record<string, any>) =
                     </div>
                     <div class="info">
                         <div class="title">{{ item.title }}</div>
-                        <div class="abs">{{ item.abstract }}</div>
+                        <div class="abs">
+                            <a-typography-text :ellipsis="{ rows: 2, css: true }">
+                                {{ item.abstract }}
+                            </a-typography-text>
+                        </div>
                         <div class="data">
                             <div class="look">
                                 <icon-eye></icon-eye>
@@ -104,12 +129,24 @@ const handleSelect = (id: number, val?: string | number | Record<string, any>) =
                         <a-dropdown trigger="hover" @select="handleSelect(item.id, $event)">
                             <icon-more size="20"></icon-more>
                             <template #content>
+                                <a-doption v-if="item.status === 3 && !item.userTop" value="top">
+                                    置顶文章
+                                </a-doption>
+                                <a-doption
+                                    v-if="item.status === 3 && item.userTop"
+                                    value="cancelTop"
+                                >
+                                    取消置顶
+                                </a-doption>
                                 <a-doption value="platformArticleEdit">编辑文章</a-doption>
                                 <a-doption value="platformArticleDelete" style="color: red">
                                     删除文章
                                 </a-doption>
                             </template>
                         </a-dropdown>
+                    </div>
+                    <div v-if="item.userTop" class="user-top">
+                        <a-tag color="blue">置顶</a-tag>
                     </div>
                 </div>
 
@@ -180,7 +217,7 @@ const handleSelect = (id: number, val?: string | number | Record<string, any>) =
                 border-bottom: @f_border;
                 cursor: pointer;
                 &:hover {
-                    background: var(--color-fill-2);
+                    background: var(--color-fill-1);
                 }
                 .cover {
                     img {
@@ -199,7 +236,7 @@ const handleSelect = (id: number, val?: string | number | Record<string, any>) =
                         color: var(--color-text-1);
                     }
                     .abs {
-                        height: 2rem;
+                        padding-right: 20px;
                         margin: 5px 0;
                     }
                     .data {
@@ -230,6 +267,11 @@ const handleSelect = (id: number, val?: string | number | Record<string, any>) =
                     right: 10px;
                     top: 50%;
                     transform: translateY(-50%);
+                }
+                .user-top {
+                    position: absolute;
+                    right: 10px;
+                    top: 5px;
                 }
             }
 

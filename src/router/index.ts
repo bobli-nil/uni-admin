@@ -58,7 +58,7 @@ const router = createRouter({
                     name: 'platform',
                     path: 'platform',
                     meta: {
-                        title: '平台管理',
+                        title: '文章',
                         role: [1, 2],
                     },
                     component: () => import('@/views/web/platform/index.vue'),
@@ -76,7 +76,7 @@ const router = createRouter({
                         },
                         {
                             name: 'platformArticleEdit',
-                            path: 'articleEdit',
+                            path: 'articleEdit/:id',
                             component: () =>
                                 import('@/views/web/platform/platform-article-edit.vue'),
                         },

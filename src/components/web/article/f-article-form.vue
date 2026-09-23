@@ -4,6 +4,7 @@ import {
     articleAddApi,
     type ArticleAddType,
     articleCategoryOptionApi,
+    articleDetailApi,
     articleTagOptionApi,
 } from '@/api/article-api.ts'
 import { Message } from '@arco-design/web-vue'
@@ -15,26 +16,55 @@ import type { optionsType } from '@/api'
 import { getOptions } from '@/api'
 import { onUploadImg } from '@/api/image-api.ts'
 
+interface Props {
+    articleId?: number
+}
+
+const props = defineProps<Props>()
+
 const router = useRouter()
 
 const form = reactive<ArticleAddType>({
     title: '',
     abstract: '',
     content: '',
+    categoryID: 0,
     status: 1, // 1草稿 2发布到审核中
     cover: '',
     tagList: [],
     openComment: true,
 })
 
+const getData = async (articleId: number) => {
+    const res = await articleDetailApi(articleId)
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    form.title = res.data.title
+    form.content = res.data.content
+    form.abstract = res.data.abstract
+    form.categoryID = res.data.categoryId
+    form.cover = res.data.cover
+    form.tagList = res.data.tagList
+    form.openComment = res.data.openComment
+}
+
+if (props.articleId) {
+    getData(props.articleId)
+}
+
 const emits = defineEmits(['ok'])
 
 const formRef = ref()
 
-const create = async (status: 1 | 2) => {
+const confirm = async (status?: 1 | 2) => {
     const val = await formRef.value.validate()
     if (val) return
 
+    if (status) {
+        form.status = status
+    }
     emits('ok', form)
 }
 
@@ -47,6 +77,10 @@ const tagOptions = ref<optionsType[]>([])
 
 getOptions(categoryOptions, articleCategoryOptionApi)
 getOptions(tagOptions, articleTagOptionApi)
+
+const coverRemove = () => {
+    form.cover = ''
+}
 </script>
 
 <template>
@@ -93,7 +127,11 @@ getOptions(tagOptions, articleTagOptionApi)
                     :wrapper-col-props="{ span: 8 }"
                 >
                     <a-form-item label="请选择文章分类">
-                        <a-select placeholder="文章分类" :options="categoryOptions"></a-select>
+                        <a-select
+                            v-model="form.categoryID"
+                            placeholder="文章分类"
+                            :options="categoryOptions"
+                        ></a-select>
                     </a-form-item>
                     <a-form-item label="设置文章封面" content-class="article-cover-col">
                         <div class="up">
@@ -105,7 +143,11 @@ getOptions(tagOptions, articleTagOptionApi)
                             </f-cover-cutter>
                         </div>
                         <div v-if="form.cover" class="show">
-                            <a-image :src="form.cover" :height="80"></a-image>
+                            <a-image :src="form.cover" :height="80">
+                                <template #extra>
+                                    <icon-delete @click="coverRemove"></icon-delete>
+                                </template>
+                            </a-image>
                         </div>
                     </a-form-item>
                     <a-form-item label="文章标签">
@@ -126,8 +168,10 @@ getOptions(tagOptions, articleTagOptionApi)
         </a-collapse>
 
         <div class="actions">
-            <a-button type="primary" @click="create(2)">发布文章</a-button>
-            <a-button @click="create(1)">存为草稿</a-button>
+            <a-button type="primary" @click="confirm()">
+                {{ articleId ? '更新文章' : '发布文章' }}
+            </a-button>
+            <a-button @click="confirm(1)">存为草稿</a-button>
         </div>
     </a-form>
 </template>
@@ -176,6 +220,19 @@ getOptions(tagOptions, articleTagOptionApi)
             }
             .show {
                 margin-top: 10px;
+            }
+        }
+        .show {
+            :deep(.arco-image-footer) {
+                display: flex;
+                justify-content: center;
+                .arco-image-footer-extra {
+                    padding-left: 0;
+                    svg {
+                        font-size: 20px;
+                        cursor: pointer;
+                    }
+                }
             }
         }
     }

@@ -153,3 +153,17 @@ export const articleCategoryOptionApi = (): Promise<baseResponse<optionsType[]>>
 export const articleTagOptionApi = (): Promise<baseResponse<optionsType[]>> => {
     return useAxios.get('/api/article/tag/options')
 }
+
+interface ArticleUpdateRequest extends ArticleAddType {
+    id: number
+}
+
+// 更新文章
+export const articleUpdateApi = (data: ArticleUpdateRequest): Promise<baseResponse<string>> => {
+    return useAxios.put('/api/article', data)
+}
+
+// 删除文章
+export const articleRemoveApi = (id: number): Promise<baseResponse<string>> => {
+    return useAxios.delete(`/api/article/${id}`)
+}

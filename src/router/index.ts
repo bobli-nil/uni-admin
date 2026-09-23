@@ -74,6 +74,12 @@ const router = createRouter({
                             component: () =>
                                 import('@/views/web/platform/platform-article-add.vue'),
                         },
+                        {
+                            name: 'platformArticleEdit',
+                            path: 'articleEdit',
+                            component: () =>
+                                import('@/views/web/platform/platform-article-edit.vue'),
+                        },
                     ],
                 },
             ],

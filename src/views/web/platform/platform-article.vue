@@ -5,6 +5,9 @@ import { Message } from '@arco-design/web-vue'
 import type { listResponse } from '@/api'
 import { type ArticleListItem, type ArticleListRequest, articleListApi } from '@/api/article-api.ts'
 import { dateCurrentFormat } from '@/utils/date.ts'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const data = reactive<listResponse<ArticleListItem>>({
     count: 0,
@@ -33,6 +36,16 @@ getData()
 const checkStatus = (status: number) => {
     params.status = status
     getData()
+}
+
+const goArticle = (id: number) => {}
+
+const handleSelect = (id: number, val?: string | number | Record<string, any>) => {
+    console.log(id, val)
+    if (val === 'delete') {
+    } else {
+        router.push({ name: val as string, params: { id } })
+    }
 }
 </script>
 
@@ -63,7 +76,7 @@ const checkStatus = (status: number) => {
                 <f-a :class="{ active: params.status == 1 }" @click="checkStatus(1)">草稿箱</f-a>
             </div>
             <div class="articleList">
-                <div class="item" v-for="item in data.list">
+                <div class="item" v-for="item in data.list" @click="goArticle(item.id)">
                     <div class="cover">
                         <img v-if="item.cover" :src="item.cover" alt="" />
                     </div>
@@ -86,6 +99,17 @@ const checkStatus = (status: number) => {
                                 最后更新于{{ dateCurrentFormat(item.updatedAt) }}
                             </div>
                         </div>
+                    </div>
+                    <div class="more">
+                        <a-dropdown trigger="hover" @select="handleSelect(item.id, $event)">
+                            <icon-more size="20"></icon-more>
+                            <template #content>
+                                <a-doption value="platformArticleEdit">编辑文章</a-doption>
+                                <a-doption value="platformArticleDelete" style="color: red">
+                                    删除文章
+                                </a-doption>
+                            </template>
+                        </a-dropdown>
                     </div>
                 </div>
 
@@ -114,7 +138,7 @@ const checkStatus = (status: number) => {
     .head {
         display: flex;
         justify-content: space-between;
-        padding: 20px;
+        padding: 10px 20px;
         border-bottom: @f_border;
         align-items: center;
         .left {
@@ -134,8 +158,8 @@ const checkStatus = (status: number) => {
         }
     }
     .body {
-        padding: 20px;
         .menu {
+            padding: 20px 20px 10px 20px;
             :deep(a) {
                 color: var(--color-text-2);
                 margin-right: 20px;
@@ -148,10 +172,16 @@ const checkStatus = (status: number) => {
             }
         }
         .articleList {
-            margin-top: 20px;
+            padding: 10px 0 20px 0;
             .item {
                 display: flex;
-                margin-bottom: 20px;
+                position: relative;
+                padding: 20px;
+                border-bottom: @f_border;
+                cursor: pointer;
+                &:hover {
+                    background: var(--color-fill-2);
+                }
                 .cover {
                     img {
                         width: 160px;
@@ -194,6 +224,12 @@ const checkStatus = (status: number) => {
                             color: var(--color-text-2);
                         }
                     }
+                }
+                .more {
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
                 }
             }
 

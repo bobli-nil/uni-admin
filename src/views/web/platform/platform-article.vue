@@ -96,7 +96,7 @@ const handleSelect = async (id: number, val?: string | number | Record<string, a
                 <f-a :class="{ active: params.status == 2 }" @click="checkStatus(2)">审核中</f-a>
                 <f-a :class="{ active: params.status == 1 }" @click="checkStatus(1)">草稿箱</f-a>
             </div>
-            <div class="articleList">
+            <div class="article-list">
                 <div class="item" v-for="item in data.list" @click="goArticle(item.id)">
                     <div class="cover">
                         <img v-if="item.cover" :src="item.cover" alt="" />
@@ -208,7 +208,7 @@ const handleSelect = async (id: number, val?: string | number | Record<string, a
                 }
             }
         }
-        .articleList {
+        .article-list {
             padding: 10px 0 20px 0;
             .item {
                 display: flex;

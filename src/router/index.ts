@@ -102,6 +102,21 @@ const router = createRouter({
                         },
                     ],
                 },
+                {
+                    name: 'user',
+                    path: 'user/:id',
+                    meta: {
+                        title: '用户信息',
+                    },
+                    component: () => import('@/views/web/user/index.vue'),
+                    children: [
+                        {
+                            name: 'userArticle',
+                            path: 'article',
+                            component: () => import('@/views/web/user/article-list.vue'),
+                        },
+                    ],
+                },
             ],
         },
         // {

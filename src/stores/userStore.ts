@@ -17,6 +17,11 @@ export interface userInfoType {
     fansCount: number
     followCount: number
     place: string
+    codeAge: number
+    openCollect: boolean
+    openFollow: boolean
+    openFans: boolean
+    homeStyleID: number
 }
 
 interface userStore {
@@ -77,6 +82,11 @@ export const useUserStore = defineStore('user', (): userStore => {
             fansCount,
             followCount,
             place,
+            codeAge,
+            openCollect,
+            openFollow,
+            openFans,
+            homeStyleID,
         } = res.data
         const info = {
             userID,
@@ -89,6 +99,11 @@ export const useUserStore = defineStore('user', (): userStore => {
             fansCount,
             followCount,
             place,
+            codeAge,
+            openCollect,
+            openFollow,
+            openFans,
+            homeStyleID,
         }
         userInfo.value = info
         console.log('userInfo.value', userInfo.value)

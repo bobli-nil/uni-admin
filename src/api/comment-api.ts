@@ -13,6 +13,7 @@ export interface CommentListType {
     relation?: 1 | 2 | 3 | 4
     isMe: boolean
     createdAt: string
+    visible: boolean
 }
 
 export interface CommentListRequest extends paramsType {

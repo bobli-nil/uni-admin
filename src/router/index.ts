@@ -80,6 +80,26 @@ const router = createRouter({
                             component: () =>
                                 import('@/views/web/platform/platform-article-edit.vue'),
                         },
+                        {
+                            name: 'platformComment',
+                            path: 'comment',
+                            redirect: '/platform/comment/article',
+                            component: () => import('@/views/web/platform/comment/index.vue'),
+                            children: [
+                                {
+                                    name: 'platformCommentArticle',
+                                    path: 'article',
+                                    component: () =>
+                                        import('@/views/web/platform/comment/article-comment.vue'),
+                                },
+                                {
+                                    name: 'platformCommentMy',
+                                    path: 'me',
+                                    component: () =>
+                                        import('@/views/web/platform/comment/my-comment.vue'),
+                                },
+                            ],
+                        },
                     ],
                 },
             ],

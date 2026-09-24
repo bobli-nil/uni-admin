@@ -13,7 +13,7 @@ userCenterStore.getUserDetail()
         <f-main>
             <div class="container-menu">
                 <router-link :to="{ name: 'platformArticle' }">文章管理</router-link>
-                <router-link :to="{ name: 'userCenterAccount' }">评论管理</router-link>
+                <router-link :to="{ name: 'platformComment' }">评论管理</router-link>
             </div>
             <div class="view">
                 <router-view></router-view>

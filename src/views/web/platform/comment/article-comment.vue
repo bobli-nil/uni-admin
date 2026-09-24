@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import type { listResponse } from '@/api'
 import {
     commentListApi,
@@ -12,12 +12,23 @@ import FA from '@/components/common/f-a.vue'
 import FLabel from '@/components/common/f-label.vue'
 import { dateTimeFormat } from '@/utils/date.ts'
 import { relationOptions } from '@/options/options.ts'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const checkIdList = ref<number[]>([])
 
 const params = reactive<CommentListRequest>({
     type: 1,
 })
+
+watch(
+    () => route.query,
+    () => {
+        params.keyword = route.query.key as string
+        getData()
+    },
+)
 
 const data = reactive<listResponse<CommentListType>>({
     count: 0,

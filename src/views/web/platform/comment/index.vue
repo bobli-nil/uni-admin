@@ -1,10 +1,31 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+const key = ref('')
+
+const search = () => {
+    router.push({
+        name: route.name,
+        query: {
+            key: key.value,
+        },
+    })
+}
+</script>
 
 <template>
     <div class="comment-view">
         <div class="head">
             <div class="title">评论管理</div>
-            <a-input-search placeholder="搜索文章评论"></a-input-search>
+            <a-input-search
+                v-model="key"
+                @search="search"
+                @keydown.enter="search"
+                placeholder="搜索文章评论"
+            ></a-input-search>
         </div>
         <div class="body">
             <div class="menu">

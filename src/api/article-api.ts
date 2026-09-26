@@ -34,6 +34,7 @@ export interface ArticleListRequest extends paramsType {
     type: 1 | 2 | 3
     userID?: number
     collectID?: number
+    categoryID?: number
     status?: number
 }
 
@@ -43,6 +44,7 @@ export const articleListApi = (
 ): Promise<baseResponse<listResponse<ArticleListItem>>> => {
     return useAxios({
         url: '/api/article',
+        method: 'get',
         params,
     })
 }

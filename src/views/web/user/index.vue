@@ -94,7 +94,10 @@ const search = () => {
                         <router-link :to="{ name: 'userArticle' }">
                             {{ isMe ? '我的文章' : '他的文章' }}
                         </router-link>
-                        <router-link v-if="isMe || userBaseStore.userBase.openCollect" to="">
+                        <router-link
+                            v-if="isMe || userBaseStore.userBase.openCollect"
+                            :to="{ name: 'userArticleCollect' }"
+                        >
                             {{ isMe ? '我的收藏' : '他的收藏' }}
                         </router-link>
                         <router-link v-if="isMe || userBaseStore.userBase.openFollow" to="">

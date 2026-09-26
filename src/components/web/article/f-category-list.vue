@@ -7,12 +7,17 @@ import {
     type CategoryListItem,
     categoryRemoveApi,
 } from '@/api/category-api.ts'
-import { type baseResponse, type listResponse } from '@/api'
+import { type listResponse } from '@/api'
 import { Message } from '@arco-design/web-vue'
 import { useRoute } from 'vue-router'
+import FA from '@/components/common/f-a.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 interface Props {
     userId: number
+    isMe: boolean
 }
 const props = defineProps<Props>()
 const route = useRoute()
@@ -78,17 +83,37 @@ const remove = async (item: CategoryListItem) => {
     Message.success(res.msg)
     getCategoryData()
 }
+
+const go = (item: CategoryListItem) => {
+    if (Number(route.query.categoryID) === item.id) {
+        const { categoryID, ...rest } = route.query
+        router.replace({ query: rest })
+        return
+    }
+
+    router.push({
+        name: route.name,
+        params: {
+            ...route.params,
+        },
+        query: {
+            ...route.query,
+            categoryID: item.id,
+        },
+    })
+}
 </script>
 
 <template>
     <div class="f-category-com">
-        <div class="add">
+        <div v-if="isMe" class="add">
             <a-button long type="outline" @click="addCategory">
                 <template #icon><icon-plus></icon-plus></template>
                 创建
             </a-button>
         </div>
         <a-modal
+            v-if="isMe"
             :title="form.id ? '编辑分类' : '创建分类'"
             width="25%"
             v-model:visible="visible"
@@ -102,26 +127,30 @@ const remove = async (item: CategoryListItem) => {
                 v-for="item in categoryData.list"
                 :class="{ active: item.id === Number(route.query.categoryID) }"
             >
-                <a-trigger content-class="category-trigger" position="br" trigger="contextMenu">
-                    <router-link
-                        :to="{
-                            name: 'userArticle',
-                            params: { id: userId },
-                            query: {
-                                categoryID: item.id,
-                            },
-                        }"
-                    >
+                <a-trigger
+                    v-if="isMe"
+                    content-class="category-trigger"
+                    position="br"
+                    trigger="contextMenu"
+                >
+                    <f-a @click="go(item)">
                         <a-typography-text :ellipsis="{ css: true, rows: 1 }">
                             <span>{{ item.title }}</span>
                         </a-typography-text>
                         <span>{{ item.articleCount }}</span>
-                    </router-link>
+                    </f-a>
                     <template #content>
                         <div class="item" @click="showEdit(item)">编辑</div>
                         <div class="item delete" @click="remove(item)">删除</div>
                     </template>
                 </a-trigger>
+
+                <f-a v-else @click="go(item)">
+                    <a-typography-text :ellipsis="{ css: true, rows: 1 }">
+                        <span>{{ item.title }}</span>
+                    </a-typography-text>
+                    <span>{{ item.articleCount }}</span>
+                </f-a>
             </div>
         </div>
     </div>

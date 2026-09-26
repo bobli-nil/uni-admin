@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import FCategoryList from '@/components/web/article/f-category-list.vue'
 import { articleListApi, type ArticleListItem, type ArticleListRequest } from '@/api/article-api.ts'
 import type { listResponse } from '@/api'
 import { dateCurrentFormat } from '@/utils/date.ts'
 import { useRoute } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
+import { useUserBaseStore } from '@/stores/userBaseStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 
 const route = useRoute()
+const userBaseStore = useUserBaseStore()
+const userStore = useUserStore()
 
 const data = reactive<listResponse<ArticleListItem>>({
     count: 0,
@@ -29,14 +33,34 @@ const getData = async () => {
     Object.assign(data, res.data)
 }
 
-getData()
-
 const goArticle = (id: number) => {}
+
+watch(
+    () => route.query,
+    () => {
+        // 注意这里，categoryID 也可能是空字符串
+        if (route.query?.categoryID !== undefined) {
+            params.categoryID = Number(route.query.categoryID)
+        } else {
+            params.categoryID = undefined
+        }
+        if (route.query?.keyword !== undefined) {
+            params.keyword = route.query.keyword as string
+        }
+        getData()
+    },
+    {
+        immediate: true,
+    },
+)
 </script>
 
 <template>
     <div class="user-article-list-view">
-        <f-category-list :user-id="Number(route.params.id)"></f-category-list>
+        <f-category-list
+            :user-id="Number(route.params.id)"
+            :is-me="userBaseStore.userBase.userID === userStore.userInfo?.userID"
+        ></f-category-list>
         <div class="article-list">
             <div class="item" v-for="item in data.list" @click="goArticle(item.id)">
                 <div class="cover">

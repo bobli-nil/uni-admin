@@ -5,6 +5,7 @@ import { Message } from '@arco-design/web-vue'
 import { useRouter, useRoute } from 'vue-router'
 import { siteApi, type SiteResponse } from '@/api/site-api.ts'
 import type { baseResponse } from '@/api'
+import { useUserBaseStore } from '@/stores/userBaseStore.ts'
 
 export interface userInfoType {
     userID: number
@@ -29,6 +30,7 @@ interface userStore {
     siteInfo: Ref<SiteResponse | null>
     isLogin: ComputedRef<boolean>
     isAdmin: ComputedRef<boolean>
+    isMe: ComputedRef<boolean>
     login: (data: userLoginRequest) => Promise<baseResponse<string>>
     getUserInfo: () => Promise<null | userInfoType>
     logout: () => Promise<void>
@@ -36,12 +38,17 @@ interface userStore {
 }
 
 export const useUserStore = defineStore('user', (): userStore => {
+    const userBaseStore = useUserBaseStore()
+
     const router = useRouter()
     const route = useRoute()
     const userInfo = ref<userInfoType | null>(null)
     const siteInfo = ref<SiteResponse | null>(null)
     const isLogin = computed(() => !!userInfo.value)
     const isAdmin = computed(() => userInfo.value?.role === 1)
+    const isMe = computed(() => {
+        return userInfo.value?.userID === userBaseStore.userBase.userID
+    })
 
     // 登录
     const login = async (data: userLoginRequest): Promise<baseResponse<string>> => {
@@ -134,6 +141,7 @@ export const useUserStore = defineStore('user', (): userStore => {
         siteInfo,
         isLogin,
         isAdmin,
+        isMe,
         login,
         getUserInfo,
         logout,

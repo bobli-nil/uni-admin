@@ -168,7 +168,7 @@ const coverRemove = () => {
         </a-collapse>
 
         <div class="actions">
-            <a-button type="primary" @click="confirm()">
+            <a-button type="primary" @click="confirm(2)">
                 {{ articleId ? '更新文章' : '发布文章' }}
             </a-button>
             <a-button @click="confirm(1)">存为草稿</a-button>

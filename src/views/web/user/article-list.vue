@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
+import FCategoryList from '@/components/web/article/f-category-list.vue'
 import { articleListApi, type ArticleListItem, type ArticleListRequest } from '@/api/article-api.ts'
 import type { listResponse } from '@/api'
 import { dateCurrentFormat } from '@/utils/date.ts'
@@ -35,14 +36,7 @@ const goArticle = (id: number) => {}
 
 <template>
     <div class="user-article-list-view">
-        <div class="category">
-            <div class="add">
-                <a-button long type="outline">
-                    <template #icon><icon-plus></icon-plus></template>
-                    创建
-                </a-button>
-            </div>
-        </div>
+        <f-category-list :user-id="Number(route.params.id)"></f-category-list>
         <div class="article-list">
             <div class="item" v-for="item in data.list" @click="goArticle(item.id)">
                 <div class="cover">
@@ -95,14 +89,6 @@ const goArticle = (id: number) => {}
 .user-article-list-view {
     display: flex;
     height: 100%;
-    .category {
-        width: 150px;
-        padding: 10px;
-        border-right: @f_border;
-        :deep(.arco-btn) {
-            border-radius: 100px;
-        }
-    }
     .article-list {
         width: calc(100% - 150px);
         overflow-y: auto;

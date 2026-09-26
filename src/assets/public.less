@@ -35,3 +35,21 @@ body {
         z-index: 1;
     }
 }
+
+.category-trigger {
+    padding: 5px 0;
+    background: var(--color-bg-1);
+    border-radius: 5px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2);
+    border: @f_border;
+    cursor: pointer;
+    .item {
+        padding: 10px 20px;
+        &:hover {
+            background: var(--color-fill-1);
+        }
+        &.delete {
+            color: red;
+        }
+    }
+}

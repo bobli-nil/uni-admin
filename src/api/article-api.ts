@@ -167,13 +167,3 @@ export const articleUpdateApi = (data: ArticleUpdateRequest): Promise<baseRespon
 export const articleRemoveApi = (id: number): Promise<baseResponse<string>> => {
     return useAxios.delete(`/api/article/${id}`)
 }
-
-export interface CommentCreateRequest {
-    content: string
-    articleID: number
-    parentID: number
-}
-
-export const commentCreateApi = (data: CommentCreateRequest): Promise<baseResponse<string>> => {
-    return useAxios.post('/api/comment', data)
-}

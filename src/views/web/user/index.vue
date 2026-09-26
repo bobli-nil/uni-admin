@@ -2,18 +2,31 @@
 import FNav from '@/components/web/f-nav.vue'
 import FMain from '@/components/web/f-main.vue'
 import FA from '@/components/common/f-a.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useUserBaseStore } from '@/stores/userBaseStore.ts'
 import { useUserStore } from '@/stores/userStore'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 
 const route = useRoute()
+const router = useRouter()
 const userBaseStore = useUserBaseStore()
 const userStore = useUserStore()
 userBaseStore.getUserBaseInfo(Number(route.params.id))
 
 const isMe = computed(() => userBaseStore.userBase.userID === userStore.userInfo?.userID)
+const text = ref('')
+
+const search = () => {
+    router.push({
+        name: route.name,
+        query: {
+            ...route.query,
+            keyword: text.value,
+        },
+        params: route.params,
+    })
+}
 </script>
 
 <template>
@@ -27,7 +40,8 @@ const isMe = computed(() => userBaseStore.userBase.userID === userStore.userInfo
                 <div class="info">
                     <div class="nick">
                         <span>{{ userBaseStore.userBase.nickName }}</span>
-                        <span>码龄{{ userBaseStore.userBase.codeAge }}年</span>
+                        <!--                        <span></span>-->
+                        <a-tag>码龄{{ userBaseStore.userBase.codeAge }}年</a-tag>
                     </div>
                     <div class="data">
                         <span>
@@ -90,7 +104,12 @@ const isMe = computed(() => userBaseStore.userBase.userID === userStore.userInfo
                             {{ isMe ? '我的粉丝' : '他的粉丝' }}
                         </router-link>
                     </div>
-                    <a-input-search placeholder="搜TA的内容"></a-input-search>
+                    <a-input-search
+                        v-model="text"
+                        placeholder="搜TA的内容"
+                        @keydown.enter="search"
+                        @search="search"
+                    ></a-input-search>
                 </div>
                 <div class="body">
                     <router-view></router-view>
@@ -108,7 +127,7 @@ const isMe = computed(() => userBaseStore.userBase.userID === userStore.userInfo
         display: flex;
         background: var(--color-bg-1);
         border-radius: 5px;
-        padding: 10px;
+        padding: 16px 10px;
         margin-top: 20px;
         position: relative;
         .avatar {
@@ -135,6 +154,8 @@ const isMe = computed(() => userBaseStore.userBase.userID === userStore.userInfo
                     margin-right: 20px;
                     span:nth-child(1) {
                         font-size: 18px;
+                        font-weight: bold;
+                        margin-right: 3px;
                         color: var(--color-text-1);
                     }
                     span:nth-child(2) {
@@ -187,7 +208,7 @@ const isMe = computed(() => userBaseStore.userBase.userID === userStore.userInfo
             }
         }
         .body {
-            height: calc(100vh - 270px);
+            height: calc(100vh - 285px);
         }
     }
 }

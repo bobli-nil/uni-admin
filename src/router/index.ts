@@ -132,6 +132,11 @@ const router = createRouter({
                         },
                     ],
                 },
+                {
+                    name: 'articleDetail',
+                    path: 'article/:id',
+                    component: () => import('@/views/web/article/index.vue'),
+                },
             ],
         },
         // {

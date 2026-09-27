@@ -44,7 +44,12 @@ const getData = async () => {
     checkIDList.value = []
 }
 
-const goArticle = (id: number) => {}
+const goArticle = (id: number) => {
+    router.push({
+        name: 'articleDetail',
+        params: { id },
+    })
+}
 
 const isCheckHandler = () => {
     isCheckShow.value = !isCheckShow.value

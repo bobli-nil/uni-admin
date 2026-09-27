@@ -1,22 +1,15 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import {
-    categoryCreateUpdateApi,
-    type CategoryCreateUpdateRequest,
-    type CategoryListItem,
-    categoryRemoveApi,
-} from '@/api/category-api.ts'
 import { type listResponse } from '@/api'
 import { Message } from '@arco-design/web-vue'
 import { useRoute } from 'vue-router'
 import FA from '@/components/common/f-a.vue'
+import FCollectFormModal from '@/components/web/f-collect-form-modal.vue'
 import { useRouter } from 'vue-router'
 import {
     collectListApi,
-    type CollectListRequest,
     type CollectCreateUpdateRequest,
     type CollectListItem,
-    collectCreateUpdateApi,
     collectRemoveApi,
 } from '@/api/collect-api.ts'
 
@@ -61,20 +54,6 @@ const addCollect = () => {
     form.title = ''
     form.abstract = ''
     visible.value = true
-}
-
-const formRef = ref()
-
-const addCollectHandler = async () => {
-    const val = await formRef.value.validate()
-    if (val) return
-    let res = await collectCreateUpdateApi(form)
-    if (res.code) {
-        Message.error(res.msg)
-        return
-    }
-    Message.success(res.msg)
-    getCollectData()
 }
 
 const showEdit = (item: CollectListItem) => {
@@ -129,36 +108,14 @@ const go = (item: CollectListItem) => {
                 创建
             </a-button>
         </div>
-        <a-modal
+        <f-collect-form-modal
             v-if="isMe"
-            :title="form.id ? '编辑收藏夹' : '创建收藏夹'"
-            width="25%"
             v-model:visible="visible"
-            :on-before-ok="addCollectHandler"
-        >
-            <a-form
-                ref="formRef"
-                :model="form"
-                :label-col-props="{ span: 6 }"
-                :wrapper-col-props="{ span: 16 }"
-            >
-                <a-form-item
-                    label="收藏夹标题"
-                    field="title"
-                    validate-trigger="blur"
-                    :rules="[{ required: true, message: '请输入收藏夹标题' }]"
-                >
-                    <a-input v-model="form.title" placeholder="收藏夹标题"></a-input>
-                </a-form-item>
-                <a-form-item label="收藏夹简介">
-                    <a-textarea
-                        v-model="form.abstract"
-                        placeholder="收藏夹简介"
-                        :auto-size="{ minRows: 2, maxRows: 4 }"
-                    ></a-textarea>
-                </a-form-item>
-            </a-form>
-        </a-modal>
+            :id="form.id"
+            :title="form.title"
+            :abstract="form.abstract"
+            @ok="getCollectData"
+        ></f-collect-form-modal>
         <div class="list">
             <div
                 class="item"

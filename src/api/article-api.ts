@@ -169,3 +169,18 @@ export const articleUpdateApi = (data: ArticleUpdateRequest): Promise<baseRespon
 export const articleRemoveApi = (id: number): Promise<baseResponse<string>> => {
     return useAxios.delete(`/api/article/${id}`)
 }
+
+// 点赞/取消点赞
+export const articleDiggApi = (id: number): Promise<baseResponse<string>> => {
+    return useAxios.get('/api/article/digg/' + id)
+}
+
+export interface ArticleCollectRequest {
+    articleID: number
+    collectID?: number
+}
+
+// 收藏
+export const articleCollectApi = (data: ArticleCollectRequest): Promise<baseResponse<string>> => {
+    return useAxios.post('/api/article/collect', data)
+}

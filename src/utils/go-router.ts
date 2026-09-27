@@ -6,3 +6,10 @@ export const goArticleDetail = (id: number) => {
         params: { id },
     })
 }
+
+export const goUser = (id: number) => {
+    router.push({
+        name: 'userArticle',
+        params: { id },
+    })
+}

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watch } from 'vue'
 import FNav from '@/components/web/f-nav.vue'
 import FMain from '@/components/web/f-main.vue'
 import FA from '@/components/common/f-a.vue'
@@ -7,12 +8,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUserBaseStore } from '@/stores/userBaseStore.ts'
 import { useUserStore } from '@/stores/userStore'
 import { ref, computed } from 'vue'
+import { Message } from '@arco-design/web-vue'
+import type { baseResponse } from '@/api'
+import { focusUserApi, focusUserRemoveApi } from '@/api/focus-api.ts'
 
 const route = useRoute()
 const router = useRouter()
 const userBaseStore = useUserBaseStore()
 const userStore = useUserStore()
-userBaseStore.getUserBaseInfo(Number(route.params.id))
 
 const isMe = computed(() => userBaseStore.userBase.userID === userStore.userInfo?.userID)
 const text = ref('')
@@ -27,6 +30,36 @@ const search = () => {
         params: route.params,
     })
 }
+
+const focus = async (isFocus: boolean) => {
+    if (!userStore.isLogin) {
+        Message.warning('请登录')
+        return
+    }
+    const userID = userBaseStore.userBase.userID
+    let res: baseResponse<string>
+    if (isFocus) {
+        res = await focusUserApi({ focusUserID: userID })
+    } else {
+        res = await focusUserRemoveApi({ focusUserID: userID })
+    }
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+    Message.success(res.msg)
+    userBaseStore.getUserBaseInfo(userID)
+}
+
+watch(
+    () => route.params.id,
+    () => {
+        userBaseStore.getUserBaseInfo(Number(route.params.id))
+    },
+    {
+        immediate: true,
+    },
+)
 </script>
 
 <template>
@@ -66,9 +99,23 @@ const search = () => {
                 <div class="actions">
                     <template v-if="!isMe">
                         <f-a>
-                            <a-button type="outline" size="small">
+                            <a-button
+                                v-if="
+                                    !(
+                                        userBaseStore.userBase.relation === 2 ||
+                                        userBaseStore.userBase.relation === 4
+                                    )
+                                "
+                                type="outline"
+                                size="small"
+                                @click="focus(true)"
+                            >
                                 <template #icon><icon-plus /></template>
                                 关注
+                            </a-button>
+                            <a-button v-else type="primary" size="small" @click="focus(false)">
+                                <template #icon><icon-check /></template>
+                                已关注
                             </a-button>
                         </f-a>
                         <router-link to="">
@@ -100,10 +147,16 @@ const search = () => {
                         >
                             {{ isMe ? '我的收藏' : '他的收藏' }}
                         </router-link>
-                        <router-link v-if="isMe || userBaseStore.userBase.openFollow" to="">
+                        <router-link
+                            v-if="isMe || userBaseStore.userBase.openFollow"
+                            :to="{ name: 'userFocusList' }"
+                        >
                             {{ isMe ? '我的关注' : '他的关注' }}
                         </router-link>
-                        <router-link v-if="isMe || userBaseStore.userBase.openFans" to="">
+                        <router-link
+                            v-if="isMe || userBaseStore.userBase.openFans"
+                            :to="{ name: 'userFansList' }"
+                        >
                             {{ isMe ? '我的粉丝' : '他的粉丝' }}
                         </router-link>
                     </div>

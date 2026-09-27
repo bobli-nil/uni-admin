@@ -120,6 +120,16 @@ const router = createRouter({
                             path: 'collect',
                             component: () => import('@/views/web/user/collect-list.vue'),
                         },
+                        {
+                            name: 'userFansList',
+                            path: 'fans',
+                            component: () => import('@/views/web/user/fans-list.vue'),
+                        },
+                        {
+                            name: 'userFocusList',
+                            path: 'focus',
+                            component: () => import('@/views/web/user/focus-list.vue'),
+                        },
                     ],
                 },
             ],

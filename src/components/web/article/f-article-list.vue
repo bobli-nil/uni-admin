@@ -83,6 +83,14 @@ watch(
         immediate: true,
     },
 )
+
+watch(
+    () => route.params.id,
+    () => {
+        params.userID = Number(route.params.id)
+        getData()
+    },
+)
 </script>
 
 <template>

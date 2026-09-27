@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/userStore.ts'
 import { useRouter } from 'vue-router'
 import { showLogin } from '@/components/web/f-login.ts'
 import defaultAvatar from '@/assets/img/default-avatar.png'
+import { goUser } from '@/utils/go-router.ts'
 
 const userStore = useUserStore()
 console.log('userInfo', userStore.userInfo)
@@ -42,6 +43,7 @@ const login = () => {
                         <a-avatar
                             :image-url="userStore?.userInfo!.avatar || defaultAvatar"
                             :size="60"
+                            @click="goUser(userStore.userInfo?.userID)"
                         ></a-avatar>
                     </div>
                     <div class="nickname">{{ userStore.userInfo?.nickName }}</div>
@@ -103,6 +105,9 @@ const login = () => {
         left: 50%;
         top: -30px;
         transform: translateX(-50%);
+        .arco-avatar {
+            cursor: pointer;
+        }
     }
     .nickname {
         text-align: center;

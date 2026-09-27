@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import {
     categoryCreateUpdateApi,
     categoryListApi,
     type CategoryCreateUpdateRequest,
     type CategoryListItem,
     categoryRemoveApi,
+    type CategoryListRequest,
 } from '@/api/category-api.ts'
 import { type listResponse } from '@/api'
 import { Message } from '@arco-design/web-vue'
@@ -27,11 +28,13 @@ const categoryData = reactive<listResponse<CategoryListItem>>({
     list: [],
 })
 
+const params = reactive<CategoryListRequest>({
+    userID: props.userId,
+    type: 2,
+})
+
 const getCategoryData = async () => {
-    const res = await categoryListApi({
-        userID: props.userId,
-        type: 2,
-    })
+    const res = await categoryListApi(params)
     if (res.code) {
         Message.error(res.msg)
         return
@@ -40,6 +43,14 @@ const getCategoryData = async () => {
 }
 
 getCategoryData()
+
+watch(
+    () => props.userId,
+    () => {
+        params.userID = props.userId
+        getCategoryData()
+    },
+)
 
 const form = reactive<CategoryCreateUpdateRequest>({
     id: 0,

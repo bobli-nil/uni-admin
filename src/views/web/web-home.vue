@@ -7,7 +7,12 @@ import FMain from '@/components/web/f-main.vue'
 <template>
     <div class="web-home">
         <f-nav></f-nav>
-        <f-main>首页</f-main>
+        <f-main>
+            <div class="left">
+                <div class="article-list"></div>
+            </div>
+            <div class="right"></div>
+        </f-main>
         <f-footer></f-footer>
     </div>
 </template>

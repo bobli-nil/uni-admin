@@ -13,3 +13,10 @@ export const goUser = (id: number) => {
         params: { id },
     })
 }
+
+export const goArticleEdit = (id: number) => {
+    router.push({
+        name: 'platformArticleEdit',
+        params: { id },
+    })
+}

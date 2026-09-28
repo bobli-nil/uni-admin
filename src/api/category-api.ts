@@ -4,7 +4,7 @@ import type { baseResponse, paramsType, listResponse } from '@/api/index.ts'
 export interface CommentCreateRequest {
     content: string
     articleID: number
-    parentID: number
+    parentID?: number
 }
 
 export const commentCreateApi = (data: CommentCreateRequest): Promise<baseResponse<string>> => {

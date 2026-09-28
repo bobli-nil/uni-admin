@@ -3,15 +3,19 @@ import { onBeforeUnmount, onMounted, reactive, watch, ref } from 'vue'
 import FNav from '@/components/web/f-nav.vue'
 import FMain from '@/components/web/f-main.vue'
 import FArticleCollectModal from '@/components/web/article/f-article-collect-modal.vue'
+import ArticleComment from '@/components/web/comment/article-comment.vue'
 import { MdPreview, MdCatalog } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
-import { articleDetailApi, articleDiggApi } from '@/api/article-api.ts'
+import { articleDetailApi, articleDiggApi, articleLookApi } from '@/api/article-api.ts'
 import { Message } from '@arco-design/web-vue'
 import { type ArticleDetailType, articleCollectApi } from '@/api/article-api.ts'
 import { useRoute } from 'vue-router'
 import { dateTimeFormat } from '@/utils/date.ts'
+import { goArticleEdit, goUser } from '@/utils/go-router.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 
 const route = useRoute()
+const userStore = useUserStore()
 
 const data = reactive<ArticleDetailType>({
     id: 0,
@@ -38,6 +42,14 @@ const data = reactive<ArticleDetailType>({
     isDigg: false,
 })
 
+const look = async () => {
+    const res = await articleLookApi(data.id)
+    if (res.code) {
+        Message.error(res.msg)
+        return
+    }
+}
+
 const getData = async (articleId: number) => {
     const res = await articleDetailApi(articleId)
     if (res.code) {
@@ -45,6 +57,8 @@ const getData = async (articleId: number) => {
         return
     }
     Object.assign(data, res.data)
+
+    setTimeout(look, 5000)
 }
 
 watch(
@@ -116,17 +130,17 @@ const goTop = () => {
     })
 }
 
-const commentRef = ref<HTMLDivElement | null>(null)
-const textareaRef = ref()
+const articleCommentRef = ref()
 
 const goComment = () => {
-    const top = commentRef.value?.offsetTop || 0
+    const dom = document.querySelector('.article-comment-com') as HTMLDivElement
+    const top = dom.offsetTop || 0
     document.documentElement.scrollTo({
         top,
         behavior: 'smooth',
     })
     setTimeout(() => {
-        textareaRef.value?.focus()
+        articleCommentRef.value?.focus()
     }, 800)
 }
 </script>
@@ -142,7 +156,13 @@ const goComment = () => {
             <div class="article-container">
                 <div class="article-content">
                     <div class="head">
-                        <div class="title">{{ data.title }}</div>
+                        <div class="title">
+                            <span>{{ data.title }}</span>
+                            <icon-edit
+                                v-if="data.userId === userStore.userInfo?.userID"
+                                @click="goArticleEdit(data.id)"
+                            ></icon-edit>
+                        </div>
                         <div class="date">{{ dateTimeFormat(data.createdAt) }}</div>
                         <div class="tags">
                             <a-tag v-for="item in data.tagList">{{ item }}</a-tag>
@@ -152,24 +172,19 @@ const goComment = () => {
                         <MdPreview :model-value="data.content" :id="`id-${data.id}`"></MdPreview>
                     </div>
                 </div>
-
-                <div ref="commentRef" class="article-comment">
-                    <div class="add-comment">
-                        <a-textarea
-                            ref="textareaRef"
-                            placeholder="请输入评论内容"
-                            :auto-size="{ minRows: 5, maxRows: 6 }"
-                        ></a-textarea>
-                        <a-button type="primary" size="mini">发布评论</a-button>
-                    </div>
-                </div>
+                <article-comment
+                    v-if="data.openComment"
+                    ref="articleCommentRef"
+                    :article-id="Number(route.params.id)"
+                ></article-comment>
+                <div v-else class="close-comment">作者已关闭文章评论</div>
             </div>
             <div class="article-info">
                 <div class="user-info">
-                    <div class="user">
+                    <div class="user" @click="goUser(data.userId)">
                         <a-avatar :image-url="data.avatar"></a-avatar>
                     </div>
-                    <div class="nick">{{ data.nickname }}</div>
+                    <div class="nick" @click="goUser(data.userId)">{{ data.nickname }}</div>
                     <div class="data">
                         <div class="item">
                             <span>{{ data.lookCount }}</span>
@@ -200,7 +215,7 @@ const goComment = () => {
                 <div class="catalog-actions" :class="isFixed ? 'isFixed' : ''">
                     <div class="catalog">
                         <div class="head">目录</div>
-                        <div class="body">
+                        <div class="body scroll-bar">
                             <MdCatalog
                                 :scrollElementOffsetTop="60"
                                 :offsetTop="61"
@@ -275,20 +290,13 @@ const goComment = () => {
                 }
             }
         }
-        .article-comment {
-            margin-top: 20px;
-            border-radius: 5px;
+        .close-comment {
+            margin: 20px 0;
+            padding: 30px 20px;
+            text-align: center;
             background: var(--color-bg-1);
-            .add-comment {
-                padding: 20px;
-                position: relative;
-                .arco-btn {
-                    position: absolute;
-                    right: 30px;
-                    bottom: 30px;
-                    z-index: 1;
-                }
-            }
+            border-radius: 5px;
+            color: var(--color-text-2);
         }
     }
     .article-info {
@@ -300,9 +308,13 @@ const goComment = () => {
             display: flex;
             flex-direction: column;
             align-items: center;
+            .user {
+                cursor: pointer;
+            }
             .nick {
                 margin: 10px 0 20px 0;
                 color: var(--color-text-1);
+                cursor: pointer;
             }
             .data {
                 display: grid;
@@ -346,6 +358,9 @@ const goComment = () => {
                 }
                 .body {
                     padding: 10px 20px;
+                    max-height: calc(100vh - 240px);
+                    overflow-y: auto;
+                    overflow-x: hidden;
                     :deep(.md-editor-catalog-active) {
                         > span {
                             color: rgb(var(--arcoblue-6));
@@ -389,6 +404,19 @@ const goComment = () => {
                     font-size: 20px;
                     color: var(--color-text-2);
                 }
+            }
+        }
+    }
+}
+</style>
+
+<style lang="less">
+.article-detail-view {
+    .article-content {
+        .head {
+            .arco-icon {
+                margin-left: 10px;
+                cursor: pointer;
             }
         }
     }

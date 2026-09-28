@@ -184,3 +184,8 @@ export interface ArticleCollectRequest {
 export const articleCollectApi = (data: ArticleCollectRequest): Promise<baseResponse<string>> => {
     return useAxios.post('/api/article/collect', data)
 }
+
+// 查看文章详情
+export const articleLookApi = (articleID: number): Promise<baseResponse<string>> => {
+    return useAxios.post('/api/article/history', { articleID })
+}

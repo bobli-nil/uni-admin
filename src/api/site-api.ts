@@ -24,7 +24,7 @@ export interface SiteResponse {
     }
     about: {
         version: string
-        siteAbout: string
+        siteDate: string
         qq: string
         wechat: string
         gitee: string

@@ -2,6 +2,7 @@
 import FNav from '@/components/web/f-nav.vue'
 import FFooter from '@/components/web/f-footer.vue'
 import FMain from '@/components/web/f-main.vue'
+import About from '@/components/web/index/about.vue'
 import BannerList from '@/components/web/index/banner-list.vue'
 import ArticleSearchList from '@/components/web/index/article-search-list.vue'
 import TagList from '@/components/web/index/tag-list.vue'
@@ -17,6 +18,7 @@ import TagList from '@/components/web/index/tag-list.vue'
             </div>
             <div class="right">
                 <tag-list></tag-list>
+                <about></about>
             </div>
         </f-main>
         <f-footer></f-footer>

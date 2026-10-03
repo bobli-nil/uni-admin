@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import FNavMsg from '@/components/web/f-nav-msg.vue'
 import FNavAvatar from '@/components/web/f-nav-avatar.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 import { useRouter } from 'vue-router'
+import FTextSearchModal from '@/components/web/f-text-search-modal.vue'
+import { textSearchApi } from '@/api/search-api.ts'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -27,6 +29,17 @@ if (!noScroll) {
 const release = () => {
     router.push({ name: 'platformArticleAdd' })
 }
+
+const visible = ref(false)
+
+const textSearchRef = ref()
+const keyword = ref('')
+const search = () => {
+    visible.value = true
+    if (keyword.value) {
+        textSearchRef.value.setSearch(keyword.value)
+    }
+}
 </script>
 
 <template>
@@ -35,9 +48,18 @@ const release = () => {
             <div class="logo">
                 <div>BlogX</div>
             </div>
+            <f-text-search-modal
+                ref="textSearchRef"
+                v-model:visible="visible"
+            ></f-text-search-modal>
             <div class="center">
                 <icon-robot></icon-robot>
-                <a-input-search placeholder="搜索你喜欢的文章"></a-input-search>
+                <a-input-search
+                    v-model="keyword"
+                    placeholder="搜索你喜欢的文章"
+                    @search="search"
+                    @keydown.enter="search"
+                ></a-input-search>
             </div>
             <div class="right">
                 <f-nav-avatar></f-nav-avatar>

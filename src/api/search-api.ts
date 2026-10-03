@@ -45,3 +45,15 @@ export const tagListApi = (
 ): Promise<baseResponse<listResponse<TagListItem>>> => {
     return useAxios.get('/api/article/tags', { params })
 }
+
+export interface TextSearchListItem {
+    articleID: number
+    head: string
+    body: string
+    flag: string
+}
+
+// 全文搜索
+export const textSearchApi = (params: paramsType): Promise<baseResponse<TextSearchListItem>> => {
+    return useAxios.get('/api/text/search', { params })
+}

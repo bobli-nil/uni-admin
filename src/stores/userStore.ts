@@ -77,6 +77,7 @@ export const useUserStore = defineStore('user', (): userStore => {
         const res = await userInfoApi()
         if (res.code) {
             Message.error(res.msg)
+            localStorage.removeItem('token')
             return null
         }
         const {

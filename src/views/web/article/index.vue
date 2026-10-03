@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, reactive, watch, ref } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, watch, ref, nextTick } from 'vue'
 import FNav from '@/components/web/f-nav.vue'
 import FMain from '@/components/web/f-main.vue'
 import FArticleCollectModal from '@/components/web/article/f-article-collect-modal.vue'
@@ -50,6 +50,21 @@ const look = async () => {
     }
 }
 
+const articleScroll = () => {
+    const id = route.query.id
+    if (id) {
+        nextTick(() => {
+            const div = document.getElementById(id.toString()) as HTMLDivElement
+            if (div) {
+                document.documentElement.scrollTo({
+                    top: div.offsetTop,
+                    behavior: 'smooth',
+                })
+            }
+        })
+    }
+}
+
 const getData = async (articleId: number) => {
     const res = await articleDetailApi(articleId)
     if (res.code) {
@@ -59,6 +74,8 @@ const getData = async (articleId: number) => {
     Object.assign(data, res.data)
 
     setTimeout(look, 5000)
+
+    articleScroll()
 }
 
 watch(

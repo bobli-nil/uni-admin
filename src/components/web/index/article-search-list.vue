@@ -16,9 +16,9 @@ const data = reactive<listResponse<ArticleListItem>>({
 })
 
 const params = reactive<ArticleSearchRequest>({
-    type: 0,
+    type: 1,
     page: 1,
-    limit: 3,
+    limit: 10,
 })
 
 const getData = async () => {
@@ -41,21 +41,6 @@ const setType = (type: number) => {
 
 <template>
     <div class="article-search-list-com">
-        <div class="head">
-            <div class="left">
-                <span :class="{ active: params.type === 0 }" @click="setType(0)">猜你喜欢</span>
-                <span :class="{ active: params.type === 1 }" @click="setType(1)">最新发布</span>
-                <span :class="{ active: params.type === 2 }" @click="setType(2)">最多回复</span>
-                <span :class="{ active: params.type === 3 }" @click="setType(3)">最多点赞</span>
-                <span :class="{ active: params.type === 4 }" @click="setType(4)">最多收藏</span>
-            </div>
-            <a-input-search
-                v-model="params.keyword"
-                placeholder="搜索文章"
-                @search="getData"
-                @keydown.enter="getData"
-            ></a-input-search>
-        </div>
         <div class="list">
             <div class="item" v-for="item in data.list">
                 <div v-if="item.adminTop" class="admin-top"></div>
@@ -91,7 +76,7 @@ const setType = (type: number) => {
             </div>
         </div>
 
-        <div class="page">
+        <div v-if="data.count" class="page">
             <a-pagination
                 show-total
                 v-model:current="params.page"
@@ -105,39 +90,19 @@ const setType = (type: number) => {
 
 <style scoped lang="less">
 .article-search-list-com {
-    background-color: var(--color-bg-1);
-    border-radius: 5px;
-    .head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px;
-        border-bottom: @f_border;
-        :deep(.arco-input-wrapper) {
-            margin-right: 0;
-            width: 200px;
-            border-radius: 100px;
-        }
-        span {
-            margin-right: 20px;
-            color: var(--color-text-1);
-            cursor: pointer;
-            &.active {
-                color: rgb(var(--arcoblue-6));
-            }
-        }
-    }
     .list {
         .item {
-            padding: 10px 20px;
-            border-bottom: @f_border;
+            padding: 12px 20px 20px 20px;
+            margin-bottom: 20px;
+            background-color: var(--color-bg-1);
+            border-radius: 5px;
+            cursor: pointer;
             .top-info {
                 display: flex;
                 align-items: center;
-                cursor: pointer;
+                margin-bottom: 16px;
                 .nick {
                     margin-left: 10px;
-                    cursor: pointer;
                 }
                 .date {
                     margin-left: 20px;
@@ -152,7 +117,7 @@ const setType = (type: number) => {
                     height: 100px;
                     width: 177px;
                     flex-shrink: 0;
-                    margin-right: 10px;
+                    margin-right: 16px;
                     border-radius: 5px;
                     overflow: hidden;
                     cursor: pointer;
@@ -191,7 +156,9 @@ const setType = (type: number) => {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px 0;
+        padding: 16px 0;
+        background: var(--color-bg-1);
+        border-radius: 5px;
     }
 }
 </style>

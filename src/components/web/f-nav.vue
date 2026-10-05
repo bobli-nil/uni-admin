@@ -124,6 +124,7 @@ const goHome = () => {
                 margin-right: 20px;
             }
             :deep(.arco-btn) {
+                margin-left: 20px;
                 font-size: 12px;
                 border-radius: 100px;
                 .arco-icon {

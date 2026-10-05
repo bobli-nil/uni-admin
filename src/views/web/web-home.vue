@@ -3,7 +3,6 @@ import FNav from '@/components/web/f-nav.vue'
 import FFooter from '@/components/web/f-footer.vue'
 import FMain from '@/components/web/f-main.vue'
 import About from '@/components/web/index/about.vue'
-import BannerList from '@/components/web/index/banner-list.vue'
 import ArticleSearchList from '@/components/web/index/article-search-list.vue'
 import TagList from '@/components/web/index/tag-list.vue'
 </script>
@@ -13,7 +12,6 @@ import TagList from '@/components/web/index/tag-list.vue'
         <f-nav></f-nav>
         <f-main>
             <div class="left">
-                <banner-list></banner-list>
                 <article-search-list></article-search-list>
             </div>
             <div class="right">
@@ -35,9 +33,6 @@ import TagList from '@/components/web/index/tag-list.vue'
         padding: 20px 0;
         .left {
             width: calc(100% - 280px);
-            .article-search-list-com {
-                margin-top: 20px;
-            }
         }
         .right {
             width: 260px;

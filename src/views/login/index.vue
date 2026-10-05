@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { type userLoginRequest } from '@/api/user-api'
 import { useUserStore } from '@/stores/userStore'
+import FCaptcha from '@/components/web/f-captcha.vue'
 
 const userStore = useUserStore()
 const formRef = ref()
@@ -9,6 +10,8 @@ const formRef = ref()
 const model = reactive<userLoginRequest>({
     val: '',
     password: '',
+    captchaId: '',
+    captchaCode: '',
 })
 
 const login = async () => {
@@ -44,6 +47,15 @@ const login = async () => {
                         </template>
                     </a-input>
                 </a-form-item>
+                <a-form-item
+                    v-if="userStore.siteInfo?.login.captcha"
+                    content-class="captcha-item"
+                    field="captchaCode"
+                    :rules="[{ required: true, message: '请输入验证码' }]"
+                >
+                    <a-input v-model="model.captchaCode" placeholder="图形验证码"></a-input>
+                    <f-captcha ref="captchaRef" v-model="model.captchaId"></f-captcha>
+                </a-form-item>
                 <a-form-item>
                     <a-button type="primary" long @click="login">登录</a-button>
                 </a-form-item>
@@ -75,6 +87,16 @@ const login = async () => {
             font-weight: 600;
             color: @primary-6;
         }
+    }
+}
+</style>
+
+<style lang="less">
+.captcha-item {
+    img {
+        height: 30px;
+        width: 94px;
+        margin-left: 10px;
     }
 }
 </style>

@@ -324,15 +324,10 @@ router.beforeEach(async (to, from, next) => {
             next('/login')
         } else if (!userInfo) {
             userInfo = await userStore.getUserInfo()
-            if (!userInfo) {
-                window.localStorage.removeItem('token')
-                next('/login')
+            if (roleList.includes(userInfo?.role as number)) {
+                next()
             } else {
-                if (roleList.includes(userInfo.role)) {
-                    next()
-                } else {
-                    next('/noPermission')
-                }
+                next('/noPermission')
             }
         } else {
             if (roleList.includes(userInfo.role)) {
@@ -342,6 +337,9 @@ router.beforeEach(async (to, from, next) => {
             }
         }
     } else {
+        if (getToken() && !userInfo) {
+            userInfo = await userStore.getUserInfo()
+        }
         next()
     }
 })

@@ -5,7 +5,6 @@ import FNavAvatar from '@/components/web/f-nav-avatar.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 import { useRouter } from 'vue-router'
 import FTextSearchModal from '@/components/web/f-text-search-modal.vue'
-import { textSearchApi } from '@/api/search-api.ts'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -40,14 +39,16 @@ const search = () => {
         textSearchRef.value.setSearch(keyword.value)
     }
 }
+
+const goHome = () => {
+    router.push('/')
+}
 </script>
 
 <template>
     <div class="f-nav" :class="{ isShow }">
         <div class="container">
-            <div class="logo">
-                <div>BlogX</div>
-            </div>
+            <div class="logo" @click="goHome">拾遗笔记</div>
             <f-text-search-modal
                 ref="textSearchRef"
                 v-model:visible="visible"
@@ -93,6 +94,10 @@ const search = () => {
         align-items: center;
         .logo {
             width: 20%;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--color-text-1);
+            cursor: pointer;
         }
         .center {
             display: flex;

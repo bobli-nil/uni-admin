@@ -139,21 +139,19 @@ const router = createRouter({
                 },
             ],
         },
-        // {
-        //     name: 'login',
-        //     path: '/login',
-        //     meta: {
-        //         title: '首页',
-        //         role: [1, 2, 3],
-        //     },
-        //     component: () => import('@/views/login/index.vue'),
-        // },
+        {
+            name: 'login',
+            path: '/login',
+            meta: {
+                title: '登录',
+            },
+            component: () => import('@/views/login/index.vue'),
+        },
         {
             name: 'noPermission',
             path: '/noPermission',
             meta: {
                 title: '没有权限',
-                role: [1, 2, 3],
             },
             component: () => import('@/views/admin/no-permission/index.vue'),
         },
@@ -299,7 +297,6 @@ const router = createRouter({
             path: '/:pathMatch(.*)*',
             meta: {
                 title: '404',
-                role: [1, 2, 3],
             },
             component: () => import('@/views/web/404.vue'),
         },
@@ -310,34 +307,42 @@ export const getToken = (): string | null => {
     return localStorage.getItem('token')
 }
 
+const whiteList = ['/login']
+
 router.beforeEach(async (to, from, next) => {
     NProgress.start()
     const userStore = useUserStore()
     let userInfo = userStore.userInfo
-    console.log('路由拦截里的userInfo', userInfo)
-    console.log('to.meta', to.meta)
-    if (to.meta.role?.length === 0) {
-        if (getToken() && !userInfo) {
-            await userStore.getUserInfo()
-        }
+
+    if (whiteList.includes(to.path)) {
         next()
-    } else if (!getToken()) {
-        await showLogin()
-        next(to.path)
-    } else if (getToken() && !userInfo) {
-        // 获取用户信息
-        userInfo = await userStore.getUserInfo()
-        console.log('userInfo', userInfo)
-        if (!userInfo) {
-            window.localStorage.removeItem('token')
-            next('/login')
-        }
     }
 
-    if (to.meta?.role?.includes(userInfo?.role as number)) {
-        next()
+    const roleList = to.meta.role || []
+    if (roleList.length > 0) {
+        if (!getToken()) {
+            next('/login')
+        } else if (!userInfo) {
+            userInfo = await userStore.getUserInfo()
+            if (!userInfo) {
+                window.localStorage.removeItem('token')
+                next('/login')
+            } else {
+                if (roleList.includes(userInfo.role)) {
+                    next()
+                } else {
+                    next('/noPermission')
+                }
+            }
+        } else {
+            if (roleList.includes(userInfo.role)) {
+                next()
+            } else {
+                next('/noPermission')
+            }
+        }
     } else {
-        next('/noPermission')
+        next()
     }
 })
 

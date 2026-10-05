@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore.ts'
 import { useRouter } from 'vue-router'
-import { showLogin } from '@/components/web/f-login.ts'
 import defaultAvatar from '@/assets/img/default-avatar.png'
 import { goUser } from '@/utils/go-router.ts'
 
@@ -18,7 +17,7 @@ const goRouter = (name: string) => {
 }
 
 const login = () => {
-    showLogin()
+    router.push({ name: 'login' })
 }
 </script>
 

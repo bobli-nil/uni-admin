@@ -56,7 +56,7 @@ const goHome = () => {
                 <icon-robot></icon-robot>
                 <a-input-search
                     v-model="keyword"
-                    placeholder="搜索你喜欢的文章"
+                    placeholder="搜索文章"
                     @search="search"
                     @keydown.enter="search"
                 ></a-input-search>

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import FNavMsg from '@/components/web/f-nav-msg.vue'
+import { ref } from 'vue'
 import FNavAvatar from '@/components/web/f-nav-avatar.vue'
-import { useUserStore } from '@/stores/userStore.ts'
 import { useRouter } from 'vue-router'
 import FTextSearchModal from '@/components/web/f-text-search-modal.vue'
+import { useUserStore } from '@/stores/userStore.ts'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -64,9 +63,7 @@ const goHome = () => {
             </div>
             <div class="right">
                 <f-nav-avatar></f-nav-avatar>
-                <f-nav-msg></f-nav-msg>
-                <span class="history">历史</span>
-                <a-button type="primary" @click="release">
+                <a-button v-if="userStore.userInfo" type="primary" @click="release">
                     <icon-plus-circle></icon-plus-circle>
                     发布
                 </a-button>
@@ -84,6 +81,7 @@ const goHome = () => {
     z-index: 1000;
     display: flex;
     justify-content: center;
+    padding-right: 15px; // 滚动条高度
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.06);
     background-color: var(--color-bg-1);
     transition: all 0.3s;
@@ -119,9 +117,6 @@ const goHome = () => {
             align-items: center;
             justify-content: end;
             width: 30%;
-            .f-nav-avatar {
-                margin-right: 20px;
-            }
             .f-nav-msg-com {
                 margin-right: 20px;
             }

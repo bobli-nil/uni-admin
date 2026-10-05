@@ -44,21 +44,17 @@ const setType = (type: number) => {
         <div class="list">
             <div class="item" v-for="item in data.list">
                 <div v-if="item.adminTop" class="admin-top"></div>
-                <div class="top-info" @click="goUser(item.userId)">
+                <div class="top-info" @click.stop="goUser(item.userId)">
                     <a-avatar :image-url="item.userAvatar" :size="30"></a-avatar>
                     <span class="nick">{{ item.userNickname }}</span>
                     <span class="date">最后更新于{{ dateCurrentFormat(item.updatedAt) }}</span>
                 </div>
-                <div class="article-info">
+                <div class="article-info" @click="goArticleDetail(item.id)">
                     <div v-if="item.cover" class="cover" @click="goArticleDetail(item.id)">
                         <img :src="item.cover" alt="" />
                     </div>
                     <div class="info">
-                        <div
-                            class="title"
-                            v-html="item.title"
-                            @click="goArticleDetail(item.id)"
-                        ></div>
+                        <div class="title" v-html="item.title"></div>
                         <div class="abs">
                             <a-typography-text :ellipsis="{ rows: 2, css: true }">
                                 <span v-html="item.abstract"></span>
@@ -85,6 +81,10 @@ const setType = (type: number) => {
                 @change="getData"
             ></a-pagination>
         </div>
+
+        <div v-else class="empty">
+            <a-empty></a-empty>
+        </div>
     </div>
 </template>
 
@@ -97,6 +97,11 @@ const setType = (type: number) => {
             background-color: var(--color-bg-1);
             border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s;
+            &:hover {
+                box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.05);
+                transform: translateY(-2px);
+            }
             .top-info {
                 display: flex;
                 align-items: center;
@@ -159,6 +164,12 @@ const setType = (type: number) => {
         padding: 16px 0;
         background: var(--color-bg-1);
         border-radius: 5px;
+    }
+    .empty {
+        display: flex;
+        align-items: center;
+        padding: 20px 0;
+        margin-top: 20%;
     }
 }
 </style>

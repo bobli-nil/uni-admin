@@ -12,7 +12,7 @@ const about = computed(() => {
 </script>
 
 <template>
-    <f-card title="关于我们" class="about-com">
+    <f-card title="关于本站" class="about-com">
         <div class="item" v-if="about.siteDate">
             <span>建站日期</span>
             <span>{{ about.siteDate }}</span>

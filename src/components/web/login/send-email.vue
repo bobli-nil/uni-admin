@@ -25,49 +25,52 @@ const form = reactive<SendEmailRequest>({
     captchaCode: '',
 })
 
+const loading = ref(false)
+
 const captchaRef = ref()
 
 const handler = async () => {
     const value = await formRef.value.validate()
-    console.log('value', value)
     if (value) return
 
     if (props.type) {
         form.type = props.type
     }
+    loading.value = true
     const res = await sendEmailApi(form)
     if (res.code) {
         Message.error(res.msg)
         captchaRef.value?.getData()
         return
     }
+    loading.value = false
     emits('ok', res.data)
 }
 </script>
 
 <template>
-    <Form
+    <a-form
         ref="formRef"
         :model="form"
         :label-col-props="{ span: 0 }"
         :wrapper-col-props="{ span: 24 }"
     >
-        <FormItem field="email" :rules="[{ required: true, message: '请输入邮箱' }]">
-            <Input v-model="form.email" placeholder="邮箱"></Input>
-        </FormItem>
-        <FormItem
+        <a-form-item field="email" :rules="[{ required: true, message: '请输入邮箱' }]">
+            <a-input v-model="form.email" placeholder="邮箱"></a-input>
+        </a-form-item>
+        <a-form-item
             v-if="userStore.siteInfo?.login.captcha"
             content-class="captcha-item"
             field="captchaCode"
             :rules="[{ required: true, message: '请输入验证码' }]"
         >
-            <Input v-model="form.captchaCode" placeholder="图形验证码"></Input>
+            <a-input v-model="form.captchaCode" placeholder="图形验证码"></a-input>
             <f-captcha ref="captchaRef" v-model="form.captchaId"></f-captcha>
-        </FormItem>
-        <FormItem>
-            <Button type="primary" long @click="handler">验证邮箱</Button>
-        </FormItem>
-    </Form>
+        </a-form-item>
+        <a-form-item>
+            <a-button :loading="loading" type="primary" long @click="handler">验证邮箱</a-button>
+        </a-form-item>
+    </a-form>
 </template>
 
 <style scoped lang="less">

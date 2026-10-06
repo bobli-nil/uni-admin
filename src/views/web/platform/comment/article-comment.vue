@@ -7,7 +7,7 @@ import CommentList from '@/components/web/article/comment-list.vue'
 import { dateTimeFormat } from '@/utils/date.ts'
 import { relationOptions } from '@/options/options.ts'
 import { reactive } from 'vue'
-import { commentCreateApi, type CommentCreateRequest } from '@/api/article-api.ts'
+import { commentCreateApi, type CommentCreateRequest } from '@/api/category-api.ts'
 import { Message } from '@arco-design/web-vue'
 
 const form = reactive<CommentCreateRequest>({

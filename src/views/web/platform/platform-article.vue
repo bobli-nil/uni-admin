@@ -76,7 +76,7 @@ const handleSelect = async (id: number, val?: string | number | Record<string, a
             <div class="left">
                 <div class="title">我的文章</div>
                 <router-link :to="{ name: 'platformArticleAdd' }">
-                    <a-button type="primary">发布文章</a-button>
+                    <a-button type="primary" icon="icon-plus">发布文章</a-button>
                 </router-link>
             </div>
             <div class="right">

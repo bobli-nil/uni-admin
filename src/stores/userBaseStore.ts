@@ -26,6 +26,7 @@ export const useUserBaseStore = defineStore('userBaseStore', (): UserBaseStore =
         openCollect: false,
         openFans: false,
         homeStyleID: 0,
+        relation: 0,
     })
 
     const getUserBaseInfo = async (id: number) => {

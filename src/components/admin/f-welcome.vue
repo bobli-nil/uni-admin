@@ -52,7 +52,7 @@ getData()
 <template>
     <div class="f-welcome">
         <div class="title">
-            {{ welcomeTitle }}，{{ userStore?.userInfo?.nickname }}，请开始一天的工作吧
+            {{ welcomeTitle }}，{{ userStore?.userInfo?.nickName }}，请开始一天的工作吧
         </div>
         <div class="weather">上海 · 上海市 今日 阴，25℃，天气温和，适合户外运动</div>
         <div class="statistics">

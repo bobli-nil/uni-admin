@@ -15,6 +15,11 @@ const router = createRouter({
                 {
                     name: 'web-home',
                     path: '',
+                    meta: {
+                        title: '首页列表',
+                        role: [],
+                        keepAlive: true,
+                    },
                     component: () => import('@/views/web/web-home.vue'),
                 },
                 {
